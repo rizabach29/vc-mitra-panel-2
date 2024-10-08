@@ -16,6 +16,7 @@ import dynamic from "next/dynamic";
 import InternalLink from "./internal-link";
 
 interface Props extends IUseCategoryData {
+  appName: string;
   session: Session | null;
 }
 
@@ -68,7 +69,7 @@ function DetailCategory(props: Props) {
         <div className="lg:grid lg:grid-cols-5 lg:gap-4 w-full">
           <div className="col-span-2 my-0.5">
             <div className="md:sticky md:top-16">
-              <Header category={props.data.category} />
+              <Header name={props.appName} category={props.data.category} />
               <div className="hidden md:block mt-4">
                 <InternalLink />
               </div>

@@ -14,6 +14,7 @@ import { Metadata } from "next";
 import { GetCredHeader } from "../api/api-utils";
 import { headers } from "next/headers";
 import { ISiteProfile } from "@/types/utils";
+import Head from "next/head";
 
 export async function generateMetadata(): Promise<Metadata> {
   var credentialHeader = GetCredHeader();
@@ -71,27 +72,56 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function Page() {
   const session = await getServerSession(options);
+  var url = headers().get("host") ?? "";
 
   return (
-    <div className="md:pt-4 px-2 flex w-full justify-center">
-      <div className="max-w-7xl w-full flex flex-col justify-center items-center">
-        <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Transaksi</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <h1 className="hidden">Cek Pesananku</h1>
-        <div className="max-w-5xl w-full">
-          {session ? <AuthPage /> : <PublicPage />}
+    <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": url, name: "Home" },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": url + "/transaksi",
+                    name: "List Transaksi",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </Head>
+      <div className="md:pt-4 px-2 flex w-full justify-center">
+        <div className="max-w-7xl w-full flex flex-col justify-center items-center">
+          <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Transaksi</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <h1 className="hidden">Cek Pesananku</h1>
+          <div className="max-w-5xl w-full">
+            {session ? <AuthPage /> : <PublicPage />}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

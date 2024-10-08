@@ -114,6 +114,7 @@ export interface IAccount {
 
 export interface ITransaction {
   product?: TProductItem;
+  products: TProductItem[];
   category?: IProductCategory | null;
   promo?: IPromo;
   payment?: IPayment;

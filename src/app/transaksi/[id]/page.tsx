@@ -13,6 +13,7 @@ import {
 import BackHeader from "@/components/header/back-header";
 import { Metadata } from "next";
 import { headers } from "next/headers";
+import Head from "next/head";
 
 export async function generateMetadata(): Promise<Metadata> {
   var logo_url = headers().get("x-logo") ?? "";
@@ -72,8 +73,44 @@ const getData = async () => {
 
 async function DetailPage({ params }: { params: { id: string } }) {
   var profile: ISiteProfile | undefined = await getData();
+  var url = headers().get("host") ?? "";
+
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": url, name: "Home" },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": url + "/transaksi",
+                    name: "List Transaksi",
+                  },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  item: {
+                    "@id": url + "/transaksi/",
+                    name: "Detail Transaksi",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </Head>
       <BackHeader title="Detail Transaksi" />
       <div className="pt-4 px-2 flex w-full justify-center">
         <div className="max-w-7xl w-full flex flex-col justify-center items-center">

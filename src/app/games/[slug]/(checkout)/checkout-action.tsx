@@ -177,6 +177,7 @@ function CheckoutAction({
         </div>
       </div>
       <Purchase
+        products={data.products}
         payment={data.payment}
         onOpenChange={setIsCheckoutOpen}
         isOpen={isCheckoutOpen}

@@ -35,13 +35,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Home() {
+  var name = headers().get("x-name") ?? "";
+
   return (
     <>
       <div className="bg-background">
         <h1 className="hidden">Beli Voucher & Top Up Game Murah</h1>
-        <CarouselWrapper />
+        <CarouselWrapper name={name} />
         <FlashSaleWrapper />
-        <ListGame />
+        <ListGame name={name} />
       </div>
     </>
   );

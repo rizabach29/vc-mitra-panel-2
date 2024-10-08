@@ -7,7 +7,6 @@ export async function generateMetadata(): Promise<Metadata> {
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";
 
-  var url = headers().get("x-url") ?? "";
   var title = `Masuk/Login | ${name}`;
   var description = `Masuk/login dan temukan semua voucher/top up game dan produk digital lainnya yang kamu butuhkan hanya di ${name}.`;
 
@@ -36,5 +35,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+  var name = headers().get("x-name") ?? "";
+
+  return (
+    <>
+      <h1 className="hidden">Login {name}</h1>
+      {children}
+    </>
+  );
 }

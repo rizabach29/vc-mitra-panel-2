@@ -37,6 +37,7 @@ export function Purchase({
   form,
   payment,
   account,
+  products,
 }: IDetailProp) {
   const [success, setSuccess] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -126,6 +127,7 @@ export function Purchase({
             </Alert>
           )}
           <TransactionDetail
+            products={products}
             payment={payment}
             category={category}
             form={form}

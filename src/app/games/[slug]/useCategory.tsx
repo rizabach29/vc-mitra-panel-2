@@ -52,6 +52,10 @@ function useCategory(id: string): IUseCategoryData {
         if (res.ok) {
           result = await res.json();
           setProducts(result.data);
+          dispatch({
+            action: "SET_PRODUCTS",
+            payload: result.data,
+          });
 
           var selectedItem = searchParams.get("item");
           if (result.data && selectedItem) {

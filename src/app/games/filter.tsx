@@ -1,5 +1,3 @@
-"use client";
-
 import { debounce } from "@/Helpers";
 import { IProductCategory } from "@/Type";
 import { Combobox, TValue } from "@/components/ui/combobox";
@@ -53,8 +51,6 @@ function Filter({ onChange }: { onChange: (val: TValue | undefined) => void }) {
   const doSearch = debounce((e: string) => {
     setSearch(e);
   }, 500);
-
-  console.log(search);
 
   return (
     <div className="md:flex md:space-x-1 space-y-1 md:space-y-0 w-full">
