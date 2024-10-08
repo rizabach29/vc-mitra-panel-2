@@ -54,7 +54,8 @@ function MobileHeader({ profile }: { profile?: ISiteProfile }) {
               {profile?.logo_url && (
                 <Image
                   src={profile?.logo_url}
-                  alt="logo"
+                  alt={`logo ${profile.name}`}
+                  title={`logo ${profile.name}`}
                   width={29}
                   height={29}
                 />

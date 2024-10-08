@@ -117,9 +117,10 @@ export default function ListGame({ name }: { name: string }) {
                       <div className="overflow-clip h-20 md:h-28 w-auto rounded-xl bg-background aspect-square flex justify-center items-center">
                         {val.image_url !== "" ? (
                           <Image
-                            height={1000}
-                            width={1000}
+                            height={500}
+                            width={500}
                             alt={`${name} ${val.name}`}
+                            title={`${name} ${val.name}`}
                             className="rounded-xl w-full hover:scale-125 transition duration-300"
                             src={val.image_url}
                           />

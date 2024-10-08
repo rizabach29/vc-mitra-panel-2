@@ -52,6 +52,7 @@ function CarouselV2({ data, name }: { data: IBanner[]; name: string }) {
                   key={index}
                   src={item.image_url}
                   alt={`promo diskon/cashback ${name}`}
+                  title={`promo diskon/cashback ${name}`}
                   height={2000}
                   width={6000}
                   style={{ aspectRatio: 3 / 1 }}

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
 export default function robots(): MetadataRoute.Sitemap {
-  var url = headers().get("host") ?? "/";
+  var url = headers().get("x-url") ?? "/";
   url = "https://" + url;
   return [
     {

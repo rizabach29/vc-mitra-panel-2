@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
 export default function robots(): MetadataRoute.Robots {
-  var url = headers().get("host") ?? "/";
+  var url = headers().get("x-url") ?? "/";
   url = "https://" + url;
 
   return {
@@ -10,6 +10,9 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       disallow: ["/transaksi/", "/profile/", "/saldo/"],
     },
-    sitemap: url + "/sitemap.xml",
+    sitemap: [
+      url + "/sitemaps/sitemap-produk/sitemap.xml",
+      url + "/sitemaps/sitemap-general/sitemap.xml",
+    ],
   };
 }

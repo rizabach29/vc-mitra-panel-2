@@ -18,7 +18,6 @@ import Head from "next/head";
 
 export async function generateMetadata(): Promise<Metadata> {
   var credentialHeader = GetCredHeader();
-  var baseUrl = headers().get("host") ?? "/";
   var header = {
     "Content-Type": "application/json",
     "X-Sign": credentialHeader.sign,

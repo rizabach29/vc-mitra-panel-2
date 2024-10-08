@@ -13,7 +13,6 @@ export async function generateMetadata(): Promise<Metadata> {
     "X-Timestamp": credentialHeader.timestamp.toString(),
   };
 
-  var url = headers().get("x-url") ?? "";
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";

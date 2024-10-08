@@ -22,7 +22,8 @@ function Header({
             <Image
               width={900}
               height={300}
-              alt={`promo ${name} ${category.name}`}
+              alt={`${name} ${category.name}`}
+              title={`${name} ${category.name}`}
               src={category?.banner_url}
               style={{ aspectRatio: 3 / 1 }}
               className={`object-cover w-full md:rounded-xl rounded-t-xl border`}
