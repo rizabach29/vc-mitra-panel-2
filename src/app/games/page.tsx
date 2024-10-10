@@ -3,9 +3,11 @@ import { headers } from "next/headers";
 import Script from "next/script";
 import ListCategory from "./list";
 
+export const revalidate = 3600;
+
 export async function generateMetadata(): Promise<Metadata> {
   var host = headers().get("host") ?? "";
-  var url = host + "/games";
+  var url = "http://" + host + "/games";
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";

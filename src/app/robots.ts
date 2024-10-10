@@ -10,9 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       disallow: ["/transaksi/", "/profile/", "/saldo/"],
     },
-    sitemap: [
-      url + "/sitemaps/sitemap-produk/sitemap.xml",
-      url + "/sitemaps/sitemap-general/sitemap.xml",
-    ],
+    sitemap: url + "/sitemap.xml",
   };
 }

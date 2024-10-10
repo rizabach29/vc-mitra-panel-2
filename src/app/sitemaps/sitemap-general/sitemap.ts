@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 
 export default function robots(): MetadataRoute.Sitemap {
   var url = headers().get("host") ?? "";
+  url = "http://www." + url;
   return [
     {
       url: url + "/games",
