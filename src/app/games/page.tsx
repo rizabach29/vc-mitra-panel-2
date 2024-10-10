@@ -4,7 +4,8 @@ import Script from "next/script";
 import ListCategory from "./list";
 
 export async function generateMetadata(): Promise<Metadata> {
-  var url = headers().get("x-url") ?? "";
+  var host = headers().get("host") ?? "";
+  var url = host + "/games";
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";

@@ -23,6 +23,10 @@ export async function generateMetadata(): Promise<Metadata> {
   var url = headers().get("x-url") ?? "";
   var split = url.split("/");
   var slug = split[split.length - 1];
+
+  var host = headers().get("host") ?? "";
+  url = host + "/games/" + slug;
+
   var re = await fetch(
     `${process.env.NEXT_API_URL}/v2/panel/category/${slug}`,
     {

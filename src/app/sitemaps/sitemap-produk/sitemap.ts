@@ -4,8 +4,7 @@ import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
 export default async function robots(): Promise<MetadataRoute.Sitemap> {
-  var url = headers().get("x-url") ?? "/";
-  url = "https://" + url;
+  var url = headers().get("host") ?? "";
 
   var credentialHeader = GetCredHeader();
   var header = {

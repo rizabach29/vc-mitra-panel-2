@@ -2,7 +2,8 @@ import { headers } from "next/headers";
 import { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
-  var url = headers().get("x-url") ?? "";
+  var host = headers().get("host") ?? "";
+  var url = host + "/auth/register";
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";

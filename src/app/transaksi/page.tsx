@@ -38,7 +38,8 @@ export async function generateMetadata(): Promise<Metadata> {
     var setting: ISiteProfile = data.data;
     var description = setting.description;
 
-    var url = headers().get("x-url") ?? "";
+    var host = headers().get("host") ?? "";
+    var url = host + "/transaksi";
     var title = `Daftar Pesanan | ${setting.name}`;
     description = `Temukan semua daftar pesanan kamu di ${setting.name}.`;
 

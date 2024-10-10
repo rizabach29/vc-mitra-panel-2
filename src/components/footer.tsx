@@ -101,8 +101,12 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
                                   link = "mailto:" + item.value;
                                 else if (item.key === "telegram")
                                   link = "https://telegram.me/" + item.value;
-                                else if (item.key === "whatsapp")
-                                  link = "https://wa.me/" + item.value;
+                                else if (item.key === "whatsapp") {
+                                  let val = item.value;
+                                  if (item.value[0] == "0")
+                                    val = "62" + item.value.substring(1);
+                                  link = "https://wa.me/" + val;
+                                }
 
                                 if (link) router.push(link);
                               }}

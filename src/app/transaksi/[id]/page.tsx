@@ -21,6 +21,11 @@ export async function generateMetadata(): Promise<Metadata> {
   var name = headers().get("x-name") ?? "";
 
   var url = headers().get("x-url") ?? "";
+  var split = url.split("/");
+  var slug = split[split.length - 1];
+
+  var host = headers().get("host") ?? "";
+  url = host + "/transaksi/" + slug;
   var title = `Detail Pesanan | ${name}`;
   var description = `Lihat detail pesanan kamu di ${name}.`;
 
