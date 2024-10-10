@@ -119,8 +119,8 @@ export default function ListGame({ name }: { name: string }) {
                           <Image
                             height={500}
                             width={500}
-                            alt={`${name} ${val.name}`}
-                            title={`${name} ${val.name}`}
+                            alt={`${val.name} ${name}`}
+                            title={`${val.name} ${name}`}
                             className="rounded-xl w-full hover:scale-125 transition duration-300"
                             src={val.image_url}
                           />

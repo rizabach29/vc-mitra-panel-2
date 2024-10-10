@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
 export default function robots(): MetadataRoute.Robots {
-  var url = headers().get("x-url") ?? "/";
-  url = "https://" + url;
+  var url = headers().get("host") ?? "/";
+  url = "http://" + url;
 
   return {
     rules: {

@@ -22,8 +22,8 @@ function Header({
             <Image
               width={900}
               height={300}
-              alt={`${name} ${category.name}`}
-              title={`${name} ${category.name}`}
+              alt={`${category.name} ${name}`}
+              title={`${category.name} ${name}`}
               src={category?.banner_url}
               style={{ aspectRatio: 3 / 1 }}
               className={`object-cover w-full md:rounded-xl rounded-t-xl border`}
@@ -41,7 +41,7 @@ function Header({
                 <Image
                   width={300}
                   height={300}
-                  alt={`${name} ${category.name}`}
+                  alt={`${category.name} ${name}`}
                   title={category.name}
                   className="h-auto w-12 md:w-16 absolute"
                   src={

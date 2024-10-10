@@ -65,9 +65,9 @@ function Page() {
       <BackHeader title="Daftar" />
       <div className="relative h-full md:pt-12 flex md:items-center justify-center w-full px-0 bg-background md:bg-transparent">
         <div className="md:border p-8 md:rounded-xl md:shadow-md w-full max-w-md md:bg-background">
-          <h1 className="pt-4 text-2xl text-center font-semibold tracking-tight text-primary">
+          <p className="pt-4 text-2xl text-center font-semibold tracking-tight text-primary">
             Register
-          </h1>
+          </p>
           <form className="w-full max-w-md grid gap-4 pt-4" onSubmit={onSubmit}>
             <div className="grid w-full max-w-sm gap-1.5">
               <Label htmlFor="nama" className="text-left">

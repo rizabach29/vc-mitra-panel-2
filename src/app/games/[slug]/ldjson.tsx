@@ -4,6 +4,7 @@ import TransactionContext, {
   ITransactionContext,
 } from "@/infrastructures/context/transaction/transaction.context";
 import { format } from "date-fns";
+import { id } from "date-fns/locale";
 import Script from "next/script";
 import React, { useContext, useMemo, useState } from "react";
 
@@ -11,29 +12,37 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
   const { data } = useContext(TransactionContext) as ITransactionContext;
   const [date, _] = useState(new Date());
 
-  const minimal = useMemo(() => {
-    if (data.products.length > 0)
-      return Math.min(...data.products.map((i) => i.price));
-    return 0;
+  const product = useMemo(() => {
+    if (data.products.length > 0) {
+      const min = Math.min(...data.products.map((i) => i.price));
+      const max = Math.max(...data.products.map((i) => i.price));
+      return {
+        min,
+        max,
+      };
+    }
+    return {
+      min: 0,
+      max: 0,
+    };
   }, [data.products]);
 
-  const maximal = useMemo(() => {
-    if (data.products.length > 0)
-      return Math.max(...data.products.map((i) => i.price));
-    return 0;
-  }, [data.products]);
-
-  const ratingValue = useMemo(() => {
+  const rating = useMemo(() => {
     let base = 4.7;
 
-    return base + (date.getMonth() % 3);
+    return {
+      ratingValue: base + (date.getMonth() % 3),
+      reviewCount: format(date, "yyMMdd"),
+    };
   }, [date.getMonth]);
 
-  const reviewCount = useMemo(() => {
-    return format(date, "yyMMdd");
+  const month = useMemo(() => {
+    return format(new Date(date), "MMMM", {
+      locale: id,
+    });
   }, [date.getMonth]);
 
-  if (minimal && maximal)
+  if (product.min && product.max)
     return (
       <>
         <Script
@@ -62,7 +71,7 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
                   position: 2,
                   item: {
                     "@id": url + "/games/" + data.category?.key,
-                    name: "Daftar Produk",
+                    name: data.category?.name,
                   },
                 },
               ],
@@ -78,10 +87,10 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
               "@type": "Product",
               name: `Beli/Top Up ${
                 data.category?.name
-              } Termurah ${date.getMonth()} ${date.getFullYear()} | ${appName}`,
+              } Termurah ${month} ${date.getFullYear()} | ${appName}`,
               description: `Daftar harga voucher/top up ${
                 data.category?.name
-              } murah ${date.getMonth()} ${date.getFullYear()} di ${appName}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`,
+              } murah ${month} ${date.getFullYear()} di ${appName}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`,
               image: data.category?.image_url,
               url: url + "/games/" + data.category?.key,
               brand: {
@@ -92,14 +101,14 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
                 "@type": "AggregateOffer",
                 availability: "https://schema.org/InStock",
                 priceCurrency: "IDR",
-                lowPrice: minimal,
-                highPrice: maximal,
+                lowPrice: product.min,
+                highPrice: product.max,
                 offerCount: data.products.length,
               },
               aggregateRating: {
                 "@type": "AggregateRating",
-                ratingValue,
-                reviewCount,
+                ratingValue: rating.ratingValue,
+                reviewCount: rating.reviewCount,
                 bestRating: "5",
                 worstRating: "1",
               },

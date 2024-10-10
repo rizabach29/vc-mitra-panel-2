@@ -31,7 +31,7 @@ export default async function middleware(
 
   var res = NextResponse.next();
   var url = new URL(req.url);
-  url.hostname = process.env.NEXT_URL ?? "";
+  url.hostname = req.headers.get("host") ?? "";
   res.headers.set("x-url", url.href);
 
   var credentialHeader = GetCredHeader();
