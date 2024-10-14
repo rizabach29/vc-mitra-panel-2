@@ -7,7 +7,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   var host = headers().get("host") ?? "";
-  var url = "http://" + host + "/games";
+  var url = "https://" + host + "/games";
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";

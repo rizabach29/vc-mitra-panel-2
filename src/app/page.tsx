@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 
 export async function generateMetadata(): Promise<Metadata> {
   var url = headers().get("host") ?? "";
-  url = "http://" + url;
+  url = "https://" + url;
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";

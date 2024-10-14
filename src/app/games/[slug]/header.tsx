@@ -42,7 +42,7 @@ function Header({
                   width={300}
                   height={300}
                   alt={`${category.name} ${name}`}
-                  title={category.name}
+                  title={`${category.name} ${name}`}
                   className="h-auto w-12 md:w-16 absolute"
                   src={
                     category.image_url ??
@@ -50,9 +50,9 @@ function Header({
                   }
                 />
               </div>
-              <h2 className="text-lg w-fit text-ellipsis font-bold ml-3 md:ml-0 text-primary p-0 md:hidden">
+              <p className="text-lg w-fit text-ellipsis font-bold ml-3 md:ml-0 text-primary p-0 md:hidden">
                 {category.name}
-              </h2>
+              </p>
             </div>
             <div className="mt-4 md:mt-0 w-full pr-2">
               <Description description={category?.description} />

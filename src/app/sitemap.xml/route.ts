@@ -5,7 +5,7 @@ const generateSitemapLink = (url: string) =>
 
 export async function GET() {
   var url = headers().get("host") ?? "";
-  url = "http://www." + url;
+  url = "https://" + url;
 
   const sitemapIndexXML = `<?xml version="1.0" encoding="UTF-8"?>
     <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

@@ -16,18 +16,6 @@ function TransactionProvider({ children }: { children: React.ReactNode }) {
     products: [],
   });
 
-  // Local Storage: setting & getting data
-  // useEffect(() => {
-  //     const data = localStorage.getItem("transaction");
-  //     if (data) {
-  //         setTransaction(JSON.parse(data));
-  //     }
-  // }, []);
-
-  // useEffect(() => {
-  //     localStorage.setItem("transaction", JSON.stringify(transaction));
-  // }, [transaction]);
-
   const dispatch = (data: TransactionDispatch) => {
     switch (data.action) {
       case "SET_CATEGORY":

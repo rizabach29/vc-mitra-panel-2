@@ -3,11 +3,11 @@ import { IProductCategory } from "@/Type";
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
-export const revalidate = 86400;
+export const revalidate = 43200;
 
-export default async function robots(): Promise<MetadataRoute.Sitemap> {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   var url = headers().get("host") ?? "";
-  url = "http://www." + url;
+  url = "https://" + url;
 
   var credentialHeader = GetCredHeader();
   var header = {

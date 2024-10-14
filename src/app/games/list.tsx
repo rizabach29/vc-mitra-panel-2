@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TProductItem } from "@/Type";
 import ProductCard from "./[slug]/(product)/product-card";
 import Loading from "../loading";
@@ -16,8 +16,6 @@ import {
 } from "@/components/ui/breadcrumb";
 
 function ListCategory() {
-  const [total, setTotal] = useState(0);
-  const [pageIndex, setPageIndex] = useState(1);
   const [data, setData] = useState<TProductItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<TValue | undefined>();
@@ -25,7 +23,6 @@ function ListCategory() {
 
   const getList = async () => {
     let searchParams = new URLSearchParams({
-      page_num: `${pageIndex}`,
       page_size: "30",
     });
 
@@ -40,13 +37,11 @@ function ListCategory() {
 
         if (dataJson.data) {
           setData(dataJson.data);
-          setTotal(dataJson.data.length);
           window.scrollTo({ top: 0, behavior: "smooth" });
           setLoading(false);
           return;
         }
         setData([]);
-        setTotal(0);
       }
     }
     setLoading(false);
@@ -56,7 +51,7 @@ function ListCategory() {
     (async () => {
       await getList();
     })();
-  }, [pageIndex, category]);
+  }, [category]);
 
   return (
     <div className="flex justify-center w-full px-2">

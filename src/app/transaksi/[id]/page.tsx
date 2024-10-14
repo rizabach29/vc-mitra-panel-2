@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   var slug = split[split.length - 1];
 
   var host = headers().get("host") ?? "";
-  url = "http://" + host + "/transaksi/" + slug;
+  url = "https://" + host + "/transaksi/" + slug;
   var title = `Detail Pesanan | ${name}`;
   var description = `Lihat detail pesanan kamu di ${name}.`;
 
