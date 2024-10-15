@@ -68,7 +68,7 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
                 },
                 {
                   "@type": "ListItem",
-                  position: 2,
+                  position: 3,
                   item: {
                     "@id": url + "/games/" + data.category?.key,
                     name: data.category?.name,

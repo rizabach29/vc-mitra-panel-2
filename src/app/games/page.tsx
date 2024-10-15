@@ -14,12 +14,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     manifest: "/api/manifest.json",
-    title: `Beli Voucher & Top Up Game Murah di ${name}`,
+    title: `Beli Voucher & Top Up Game Terlengkap di ${name}`,
     description: `Temukan semua kebutuhan digital kamu di ${name}, mulai dari beli voucher/top up game, pulsa, platform streaming, dan lainnya!`,
     keywords: keywords,
     openGraph: {
       images: [logo_url],
-      title: `Beli Voucher & Top Up Game Murah di ${name}`,
+      title: `Beli Voucher & Top Up Game Terlengkap di ${name}`,
       url,
       type: "website",
     },
