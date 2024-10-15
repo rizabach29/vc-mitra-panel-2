@@ -24,7 +24,7 @@ export default async function sitemap() {
     headers: header,
   });
 
-  var detailProducts: any[] = [];
+  let detailProducts: any[] = [];
 
   if (re.ok) {
     var result = await re.json();
@@ -77,7 +77,5 @@ export default async function sitemap() {
     },
   ];
 
-  base.concat(detailProducts);
-
-  return base;
+  return [...base, ...detailProducts];
 }
