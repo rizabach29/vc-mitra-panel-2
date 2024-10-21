@@ -16,27 +16,31 @@ function Pagination(props: TPaginationProp) {
         Total {props.meta.total} data
       </p>
       <div className="flex items-center justify-end space-x-2">
+        {props.meta.page > 1 && total > 0 ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => props.onChange(props.meta.page - 1)}
+            disabled={props.meta.page == 1}
+            className="bg-background flex items-center justify-center"
+          >
+            <span>Prev</span>
+          </Button>
+        ) : null}
         <p className="text-xs mr-2">
           Page {props.meta.page} of {total}
         </p>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => props.onChange(props.meta.page - 1)}
-          disabled={props.meta.page == 1}
-          className="flex items-center justify-center"
-        >
-          <span>Prev</span>
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => props.onChange(props.meta.page + 1)}
-          disabled={props.meta.page >= total}
-          className="flex justify-center items-center"
-        >
-          <span>Next</span>
-        </Button>
+        {props.meta.page < total && total > 0 ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => props.onChange(props.meta.page + 1)}
+            disabled={props.meta.page >= total}
+            className="bg-background flex justify-center items-center"
+          >
+            <span>Next</span>
+          </Button>
+        ) : null}
       </div>
     </div>
   );

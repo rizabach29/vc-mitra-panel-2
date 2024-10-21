@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { PrinterIcon } from "@heroicons/react/24/outline";
 import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -21,6 +20,8 @@ function PrintInvoice(data: Props) {
   const componentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    pageStyle:
+      "@media print { body { -webkit-print-color-adjust: exact; } @page { margin-top: 15mm; margin-bottom: 15mm; }}",
   });
 
   return (
