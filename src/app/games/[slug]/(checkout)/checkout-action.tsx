@@ -173,9 +173,7 @@ function CheckoutAction({
           </div>
           <div className="flex justify-between">
             <p className="text-muted-foreground text-xs">Biaya Payment</p>
-            <p className="text-foreground font-medium text-md">
-              {priceMask(data.payment?.fee_amount)}
-            </p>
+            <p className="text-foreground font-medium text-md">{getFee()}</p>
           </div>
         </div>
       </div>

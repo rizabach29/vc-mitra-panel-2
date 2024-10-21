@@ -83,6 +83,7 @@ export function Purchase({
     });
 
     onOpenChange(false);
+    var data = await res.json();
     if (res.ok) {
       toast({
         title: "Success",
@@ -90,7 +91,6 @@ export function Purchase({
         variant: "success",
       });
 
-      var data = await res.json();
       setLoading(false);
       router.push(`/transaksi/${data.data.transaction_code}`);
       return;
@@ -100,7 +100,7 @@ export function Purchase({
     setLoading(false);
     return toast({
       title: "Failed",
-      description: "Checkout Failed",
+      description: data.data,
       variant: "destructive",
     });
   };
