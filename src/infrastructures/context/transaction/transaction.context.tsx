@@ -10,7 +10,7 @@ export type TransactionSetCategory = {
 };
 export type TransactionSetProduct = {
   action: "SET_PRODUCT";
-  payload: TProductItem;
+  payload: TProductItem | undefined;
 };
 export type TransactionSetProducts = {
   action: "SET_PRODUCTS";

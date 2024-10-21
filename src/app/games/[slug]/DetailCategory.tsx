@@ -70,7 +70,7 @@ function DetailCategory(props: Props) {
           <div className="col-span-2 my-0.5">
             <div className="md:sticky md:top-16">
               <Header name={props.appName} category={props.data.category} />
-              <div className="hidden md:block mt-4">
+              <div className="hidden lg:block mt-4">
                 <InternalLink />
               </div>
             </div>

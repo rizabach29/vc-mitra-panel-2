@@ -65,7 +65,11 @@ function useCategory(id: string): IUseCategoryData {
                 (i: TProductItem) => i.key == selectedItem
               ),
             });
-          }
+          } else
+            dispatch({
+              action: "SET_PRODUCT",
+              payload: undefined,
+            });
         }
       }
     } else

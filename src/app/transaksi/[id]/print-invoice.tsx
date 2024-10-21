@@ -211,6 +211,9 @@ function PrintInvoice(data: Props) {
                   <>
                     {data.payment_information.guide ? (
                       <div className="w-full bg-background h-full px-4 pt-4 pb-6 rounded-lg border flex-1 text-muted-foreground">
+                        <p className="font-medium text-lg text-primary mb-4">
+                          Cara Pembayaran
+                        </p>
                         <div
                           dangerouslySetInnerHTML={{
                             __html: data.payment_information.guide,

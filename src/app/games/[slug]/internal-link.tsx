@@ -7,12 +7,12 @@ function InternalLink() {
   const [data, setData] = useState<IProductCategory[]>([]);
 
   const getData = async () => {
-    const max = 4;
-    const min = 1;
-    var num = Math.floor(Math.random() * (max - min + 1) + min);
+    const listChar = ["a", "i", "u", "e", "o"];
+    var num = Math.floor(Math.random() * (listChar.length - 1 + 1) + 0);
     let searchParams = new URLSearchParams({
-      page: `${num}`,
+      page: `${1}`,
       limit: "10",
+      search: `${listChar[num]}`,
     });
 
     var res = await fetch(`/api/products/categories?` + searchParams);

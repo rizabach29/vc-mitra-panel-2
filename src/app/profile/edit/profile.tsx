@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 function Profile() {
@@ -14,6 +15,7 @@ function Profile() {
   const [name, setName] = useState<string>(session?.profile?.email ?? "");
   const [phone, setPhone] = useState<string>(session?.profile?.phone ?? "");
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (status && session) {
@@ -40,16 +42,6 @@ function Profile() {
     });
 
     if (!response.ok) {
-      if (session) {
-        await update({
-          ...session,
-          profile: {
-            ...session.profile,
-            body,
-          },
-        });
-        reloadSession();
-      }
       const res = await response.json();
       return toast({
         title: "Failed",
@@ -58,11 +50,24 @@ function Profile() {
       });
     }
 
-    return toast({
+    if (session) {
+      let res = await update({
+        ...session,
+        profile: {
+          ...session.profile,
+          body,
+        },
+      });
+      reloadSession();
+    }
+    toast({
       title: "Success",
       description: "Update profile success",
       variant: "success",
     });
+
+    router.refresh();
+    return;
   };
 
   return (
@@ -99,7 +104,7 @@ function Profile() {
               setPhone(`${e}`);
             }}
             autoFocus={false}
-            value={phone}
+            value={phone[0] == "0" ? "62" + phone.substring(1) : phone}
             placeholder="Contoh: 81XXXXXXXXX"
           />
         </div>

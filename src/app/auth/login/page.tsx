@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
+import { PasswordInput } from "@/components/ui/custom-input";
 
 function Page() {
   const [loading, setLoading] = useState(false);
@@ -68,10 +69,9 @@ function Page() {
             <Label htmlFor="passwor" className="text-left">
               Password
             </Label>
-            <Input
+            <PasswordInput
               className="bg-background"
               id="password"
-              type="password"
               name="password"
               placeholder="🔐 Masukan Password..."
               onChange={(e) => setPassword(e.target.value)}

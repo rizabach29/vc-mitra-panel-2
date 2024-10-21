@@ -8,7 +8,6 @@ export type TPaginationProp = {
 };
 
 function Pagination(props: TPaginationProp) {
-  console.log(props.meta);
   var total = Math.ceil(props.meta.total / props.meta.limit);
 
   return (

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
-import { PhoneInputIndo } from "@/components/ui/custom-input";
+import { PasswordInput, PhoneInputIndo } from "@/components/ui/custom-input";
 import { useRouter } from "next/navigation";
 import BackHeader from "@/components/header/back-header";
 
@@ -45,9 +45,10 @@ function Page() {
 
     if (!res.ok) {
       setLoading(false);
+      const body = await res.json();
       return toast({
         title: "Failed",
-        description: "Registrasi Akun Gagal",
+        description: body.data,
         variant: "destructive",
       });
     }
@@ -112,10 +113,9 @@ function Page() {
               <Label htmlFor="password" className="text-left">
                 Password
               </Label>
-              <Input
+              <PasswordInput
                 className="bg-background"
                 id="password"
-                type="password"
                 name="password"
                 placeholder="Minimum 8 digit sandi"
                 onChange={(e) => setPassword(e.target.value)}
@@ -125,10 +125,9 @@ function Page() {
               <Label htmlFor="password" className="text-left">
                 Ketik Ulang Sandi
               </Label>
-              <Input
+              <PasswordInput
                 className="bg-background"
                 id="password"
-                type="password"
                 name="password"
                 placeholder="Minimum 8 digit sandi"
                 onChange={(e) => setConfirmPassword(e.target.value)}

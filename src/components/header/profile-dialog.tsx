@@ -32,9 +32,7 @@ function ProfileDialog() {
           <div className="px-4 py-3 w-full rounded-xl space-y-1 bg-slate-100">
             <div className="flex justify-between items-end">
               <div className="flex space-x-1 text-xs items-center">
-                <p className="text-xs text-muted-foreground p-0">
-                  Saldo Points
-                </p>
+                <p className="text-xs text-muted-foreground p-0">Saldo Point</p>
                 <InfoTooltip className="w-3 h-3 text-muted-foreground">
                   <p className="text-xs">Ini Merupakan Saldo Refund</p>
                 </InfoTooltip>

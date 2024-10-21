@@ -70,15 +70,24 @@ export interface ITransactionHistoryDetail {
 }
 
 // =========== TRANSACTION CONTEXT ================
-export interface IPayment {
-  payment_method: "VIRTUAL_ACCOUNT" | "EWALLET" | "QR_CODE";
+interface BasePayment {
   payment_channel: string;
   name: string;
   image_url: string;
   fee_percent: number;
   fee_amount: number;
-  saldo?: number;
 }
+
+interface GeneralPayment extends BasePayment {
+  payment_method: "VIRTUAL_ACCOUNT" | "EWALLET" | "QR_CODE";
+}
+
+interface SaldoPayment extends BasePayment {
+  payment_method: "SALDO";
+  saldo: number;
+}
+
+export type IPayment = SaldoPayment | GeneralPayment;
 
 export interface IPaymentGroup {
   name: string;
