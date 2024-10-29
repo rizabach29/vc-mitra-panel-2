@@ -91,6 +91,7 @@ function Profile() {
             id="email"
             name="email"
             type="email"
+            disabled={true}
             autoFocus={false}
             placeholder="Masukan Email"
             onChange={(e) => setEmail(e.target.value)}
@@ -104,6 +105,7 @@ function Profile() {
               setPhone(`${e}`);
             }}
             autoFocus={false}
+            disabled={true}
             value={phone[0] == "0" ? "62" + phone.substring(1) : phone}
             placeholder="Contoh: 81XXXXXXXXX"
           />
