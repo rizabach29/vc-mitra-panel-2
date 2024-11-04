@@ -33,8 +33,6 @@ function Profile() {
   const handleSubmit = async () => {
     const body = {
       name,
-      email,
-      phone: `62${phone}`,
     };
     const response = await fetch("/api/profile", {
       method: "POST",
