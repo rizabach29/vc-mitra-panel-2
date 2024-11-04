@@ -83,11 +83,11 @@ function Page() {
               {loading ? "Loading..." : "Login"}
             </Button>
             <div className="flex flex-col -space-y-2 items-center justify-center">
-              <Link href="/auth/reset-password">
+              {/* <Link href="/auth/reset-password">
                 <Button variant="link" size="sm" className="w-full font-normal">
                   Lupa Password?
                 </Button>
-              </Link>
+              </Link> */}
               <div className="flex items-center justify-center space-x-1 pt-2">
                 <p className="text-xs">Belum Punya Akun? </p>
                 <Link
