@@ -41,7 +41,7 @@ export default function RootTemplateLayout({
       document.head.prepend(qchatInit);
       document.head.prepend(qchatWidget);
       qchatInit.onload = function () {
-        qchatInitialize({
+        window.qchatInitialize({
           id: process.env.NEXT_PUBLIC_QONTAK_ID,
           code: process.env.NEXT_PUBLIC_QONTAK_CODE,
         });
