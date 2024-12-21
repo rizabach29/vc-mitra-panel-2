@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 import { Card } from "./ui/card";
 import { Table, TableBody, TableCell, TableFooter, TableRow } from "./ui/table";
 import Image from "next/image";
-import { getTotalPrice, priceMask } from "@/Helpers";
+import { getFeePrice, getTotalPrice, priceMask } from "@/Helpers";
 import { useSession } from "next-auth/react";
 import { ITransaction } from "@/types/transaction";
 
@@ -134,13 +134,13 @@ function TransactionDetail({
                   </TableCell>
                 </TableRow>
               ) : null}
-              {payment && payment.fee_amount ? (
+              {payment && (payment.fee_amount || payment.fee_percent) ? (
                 <TableRow>
                   <TableCell>
                     Biaya Payment ({payment.payment_channel})
                   </TableCell>
                   <TableCell className="text-right">
-                    {`+ ${priceMask(payment.fee_amount)}`}
+                    {`+ ${priceMask(getFeePrice(product, payment))}`}
                   </TableCell>
                 </TableRow>
               ) : null}

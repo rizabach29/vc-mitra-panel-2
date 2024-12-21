@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
-import { PhoneInputIndo } from "@/components/ui/custom-input";
+import { PasswordInput, PhoneInputIndo } from "@/components/ui/custom-input";
 import { useRouter } from "next/navigation";
 import BackHeader from "@/components/header/back-header";
 
@@ -45,9 +45,10 @@ function Page() {
 
     if (!res.ok) {
       setLoading(false);
+      const body = await res.json();
       return toast({
         title: "Failed",
-        description: "Registrasi Akun Gagal",
+        description: body.data,
         variant: "destructive",
       });
     }
@@ -65,9 +66,9 @@ function Page() {
       <BackHeader title="Daftar" />
       <div className="relative h-full md:pt-12 flex md:items-center justify-center w-full px-0 bg-background md:bg-transparent">
         <div className="md:border p-8 md:rounded-xl md:shadow-md w-full max-w-md md:bg-background">
-          <h1 className="pt-4 text-2xl text-center font-semibold tracking-tight text-primary">
+          <p className="pt-4 text-2xl text-center font-semibold tracking-tight text-primary">
             Register
-          </h1>
+          </p>
           <form className="w-full max-w-md grid gap-4 pt-4" onSubmit={onSubmit}>
             <div className="grid w-full max-w-sm gap-1.5">
               <Label htmlFor="nama" className="text-left">
@@ -112,10 +113,9 @@ function Page() {
               <Label htmlFor="password" className="text-left">
                 Password
               </Label>
-              <Input
+              <PasswordInput
                 className="bg-background"
                 id="password"
-                type="password"
                 name="password"
                 placeholder="Minimum 8 digit sandi"
                 onChange={(e) => setPassword(e.target.value)}
@@ -125,13 +125,12 @@ function Page() {
               <Label htmlFor="password" className="text-left">
                 Ketik Ulang Sandi
               </Label>
-              <Input
+              <PasswordInput
                 className="bg-background"
                 id="password"
-                type="password"
                 name="password"
                 placeholder="Minimum 8 digit sandi"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
 

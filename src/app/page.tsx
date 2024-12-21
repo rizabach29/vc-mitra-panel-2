@@ -5,7 +5,8 @@ import { Metadata } from "next";
 import { headers } from "next/headers";
 
 export async function generateMetadata(): Promise<Metadata> {
-  var url = headers().get("x-url") ?? "";
+  var url = headers().get("host") ?? "";
+  url = "https://" + url;
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";
@@ -35,13 +36,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Home() {
+  var name = headers().get("x-name") ?? "";
+
   return (
     <>
       <div className="bg-background">
         <h1 className="hidden">Beli Voucher & Top Up Game Murah</h1>
-        <CarouselWrapper />
+        <CarouselWrapper name={name} />
         <FlashSaleWrapper />
-        <ListGame />
+        <ListGame name={name} />
       </div>
     </>
   );

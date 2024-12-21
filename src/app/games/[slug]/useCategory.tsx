@@ -52,6 +52,10 @@ function useCategory(id: string): IUseCategoryData {
         if (res.ok) {
           result = await res.json();
           setProducts(result.data);
+          dispatch({
+            action: "SET_PRODUCTS",
+            payload: result.data,
+          });
 
           var selectedItem = searchParams.get("item");
           if (result.data && selectedItem) {
@@ -61,7 +65,11 @@ function useCategory(id: string): IUseCategoryData {
                 (i: TProductItem) => i.key == selectedItem
               ),
             });
-          }
+          } else
+            dispatch({
+              action: "SET_PRODUCT",
+              payload: undefined,
+            });
         }
       }
     } else

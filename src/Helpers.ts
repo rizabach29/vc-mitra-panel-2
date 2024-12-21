@@ -45,19 +45,44 @@ function debounce<Params extends any[]>(
 const getTotalPrice = (
   product: TProductItem,
   promo?: IPromo,
-  bank?: IPayment
+  payment?: IPayment
 ) => {
-  let num = 0;
+  let total = 0;
 
-  num += product.price;
-  if (product.discounted_price) num = product.discounted_price;
-  if (promo) {
-    if (!promo.is_discount_percent) num -= promo.discount_amount;
-    else num -= (promo.discount_percent * product.price) / 100;
+  if (product) {
+    total = product.discounted_price || product.price;
+
+    if (promo) {
+      if (!promo.is_discount_percent) total -= promo.discount_amount;
+      else total -= (promo.discount_percent * product.price) / 100;
+    }
+
+    let fee = 0;
+    if (payment)
+      fee = payment.fee_percent
+        ? (total * payment.fee_percent) / 100
+        : payment.fee_amount;
+
+    total += fee;
   }
-  if (bank && bank.fee_amount) num += bank.fee_amount;
 
-  return num;
+  return total;
+};
+
+const getFeePrice = (product?: TProductItem, payment?: IPayment) => {
+  if (payment) {
+    if (payment?.fee_percent) {
+      if (product) {
+        let total = product.discounted_price || product.price;
+
+        return (total * payment.fee_percent) / 100;
+      }
+      return 0;
+    }
+    return payment.fee_amount;
+  }
+
+  return 0;
 };
 
 function nFormatter(num: number) {
@@ -142,4 +167,5 @@ export {
   nFormatter,
   nPlainFormatter,
   getTotalPrice,
+  getFeePrice,
 };

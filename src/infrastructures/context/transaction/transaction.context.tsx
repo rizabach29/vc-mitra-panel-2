@@ -10,7 +10,11 @@ export type TransactionSetCategory = {
 };
 export type TransactionSetProduct = {
   action: "SET_PRODUCT";
-  payload: TProductItem;
+  payload: TProductItem | undefined;
+};
+export type TransactionSetProducts = {
+  action: "SET_PRODUCTS";
+  payload: TProductItem[];
 };
 export type TransactionSetPromo = {
   action: "SET_PROMO";
@@ -37,6 +41,7 @@ export type TransactionDispatch =
   | TransactionSetCategory
   | TransactionSetForm
   | TransactionSetProduct
+  | TransactionSetProducts
   | TransactionSetPromo
   | TransactionSetAccount
   | TransactionSetProfile

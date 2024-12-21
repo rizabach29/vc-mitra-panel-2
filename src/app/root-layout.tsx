@@ -33,6 +33,20 @@ export default function RootTemplateLayout({
 
   useEffect(() => {
     get();
+    if (typeof window === "object") {
+      const qchatInit = document.createElement("script");
+      qchatInit.src = "https://webchat.qontak.com/qchatInitialize.js";
+      const qchatWidget = document.createElement("script");
+      qchatWidget.src = "https://webchat.qontak.com/js/app.js";
+      document.head.prepend(qchatInit);
+      document.head.prepend(qchatWidget);
+      qchatInit.onload = function () {
+        qchatInitialize({
+          id: process.env.NEXT_PUBLIC_QONTAK_ID,
+          code: process.env.NEXT_PUBLIC_QONTAK_CODE,
+        });
+      };
+    }
   }, []);
 
   if (loading) return <Loading />;

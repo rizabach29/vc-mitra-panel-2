@@ -10,6 +10,8 @@ import {
 import { GetCredHeader } from "../api/api-utils";
 import { ISiteProfile } from "@/types/utils";
 import BackHeader from "@/components/header/back-header";
+import Head from "next/head";
+import { headers } from "next/headers";
 
 const getData = async () => {
   const credentialHeader = GetCredHeader();
@@ -36,8 +38,36 @@ const getData = async () => {
 
 async function Page() {
   var data: ISiteProfile | undefined = await getData();
+  var url = headers().get("host") ?? "";
+
   return (
     <>
+      <Head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": url, name: "Home" },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": url + "/kebijakan",
+                    name: "Kebijakan",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </Head>
       <BackHeader title="Kebijakan Privasi" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
@@ -56,7 +86,9 @@ async function Page() {
             <div className="bg-background rounded-lg p-4 w-full">
               <div className="w-full space-y-4">
                 <div className="bg-background rounded-lg w-full hidden md:block">
-                  <h3 className="font-semibold text-primary">Kebijakan Privasi</h3>
+                  <h3 className="font-semibold text-primary">
+                    Kebijakan Privasi
+                  </h3>
                 </div>
                 {data ? (
                   <div

@@ -1,4 +1,4 @@
-import { getTotalPrice, priceMask } from "@/Helpers";
+import { getFeePrice, getTotalPrice, priceMask } from "@/Helpers";
 import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
@@ -110,6 +110,11 @@ function CheckoutAction({
     return priceMask(num);
   }, [data.product, data.promo, data.payment]);
 
+  const getFee = useCallback(() => {
+    let num = getFeePrice(data.product, data.payment);
+    return priceMask(num);
+  }, [data.product, data.payment]);
+
   return (
     <>
       <div className="sticky bottom-12 border md:bottom-0 w-full pb-1 shadow pt-2 rounded-xl bg-background px-4">
@@ -125,9 +130,7 @@ function CheckoutAction({
             </div>
             <div className="hidden md:block">
               <p className="text-muted-foreground text-xs">Biaya Payment</p>
-              <p className="text-foreground font-medium text-md">
-                {priceMask(data.payment?.fee_amount)}
-              </p>
+              <p className="text-foreground font-medium text-md">{getFee()}</p>
             </div>
             <div>
               <div className="flex items-center space-x-1">
@@ -170,13 +173,12 @@ function CheckoutAction({
           </div>
           <div className="flex justify-between">
             <p className="text-muted-foreground text-xs">Biaya Payment</p>
-            <p className="text-foreground font-medium text-md">
-              {priceMask(data.payment?.fee_amount)}
-            </p>
+            <p className="text-foreground font-medium text-md">{getFee()}</p>
           </div>
         </div>
       </div>
       <Purchase
+        products={data.products}
         payment={data.payment}
         onOpenChange={setIsCheckoutOpen}
         isOpen={isCheckoutOpen}

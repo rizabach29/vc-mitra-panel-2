@@ -13,19 +13,8 @@ function TransactionProvider({ children }: { children: React.ReactNode }) {
       email: session?.profile?.email ?? "",
       noWhatsapp: session?.profile?.phone ?? "",
     },
+    products: [],
   });
-
-  // Local Storage: setting & getting data
-  // useEffect(() => {
-  //     const data = localStorage.getItem("transaction");
-  //     if (data) {
-  //         setTransaction(JSON.parse(data));
-  //     }
-  // }, []);
-
-  // useEffect(() => {
-  //     localStorage.setItem("transaction", JSON.stringify(transaction));
-  // }, [transaction]);
 
   const dispatch = (data: TransactionDispatch) => {
     switch (data.action) {
@@ -50,6 +39,9 @@ function TransactionProvider({ children }: { children: React.ReactNode }) {
         return;
       case "SET_PRODUCT":
         setTransaction((prev) => ({ ...prev, product: data.payload }));
+        return;
+      case "SET_PRODUCTS":
+        setTransaction((prev) => ({ ...prev, products: data.payload }));
         return;
       case "SET_PROMO":
         setTransaction((prev) => ({ ...prev, promo: data.payload }));

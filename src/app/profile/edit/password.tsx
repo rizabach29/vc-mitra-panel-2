@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { PasswordInput } from "@/components/ui/custom-input";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
@@ -54,8 +55,8 @@ function Password() {
       method: "POST",
       body: JSON.stringify({
         username: session?.profile.email,
-        password,
-        newPassword,
+        old_password: password,
+        password: newPassword,
       }),
     });
 
@@ -80,10 +81,9 @@ function Password() {
       <div className="h-full w-full my-4 space-y-3">
         <div className="w-full space-y-1">
           <Label htmlFor="invoice">Ketik Sandi Lama</Label>
-          <Input
+          <PasswordInput
             id="old-password"
             name="old-password"
-            type="password"
             autoFocus={false}
             placeholder="Tulis Sandi"
             onChange={(e) => setPassword(e.target.value)}
@@ -92,10 +92,9 @@ function Password() {
         </div>
         <div className="w-full space-y-1">
           <Label htmlFor="invoice">Ketik Sandi Baru</Label>
-          <Input
+          <PasswordInput
             id="new-password"
             name="new-password"
-            type="password"
             autoFocus={false}
             placeholder="Minimum 8 Digit Sandi"
             onChange={(e) => setNewPassword(e.target.value)}
@@ -104,10 +103,9 @@ function Password() {
         </div>
         <div className="w-full space-y-1">
           <Label htmlFor="invoice">Ketik Ulang Sandi Baru</Label>
-          <Input
+          <PasswordInput
             id="new-confirm-password"
             name="new-confirm-password"
-            type="password"
             autoFocus={false}
             placeholder="Minimum 8 Digit Sandi"
             onChange={(e) => setNewConfirmPassword(e.target.value)}

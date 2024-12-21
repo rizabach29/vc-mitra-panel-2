@@ -37,6 +37,7 @@ export function Purchase({
   form,
   payment,
   account,
+  products,
 }: IDetailProp) {
   const [success, setSuccess] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -82,6 +83,7 @@ export function Purchase({
     });
 
     onOpenChange(false);
+    var data = await res.json();
     if (res.ok) {
       toast({
         title: "Success",
@@ -89,7 +91,6 @@ export function Purchase({
         variant: "success",
       });
 
-      var data = await res.json();
       setLoading(false);
       router.push(`/transaksi/${data.data.transaction_code}`);
       return;
@@ -99,7 +100,7 @@ export function Purchase({
     setLoading(false);
     return toast({
       title: "Failed",
-      description: "Checkout Failed",
+      description: data.data,
       variant: "destructive",
     });
   };
@@ -126,6 +127,7 @@ export function Purchase({
             </Alert>
           )}
           <TransactionDetail
+            products={products}
             payment={payment}
             category={category}
             form={form}

@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
 
-export default function ListGame() {
+export default function ListGame({ name }: { name: string }) {
   const [group, setGroup] = useState<TProductGroup>({
     id: "",
     name: "All",
@@ -117,9 +117,10 @@ export default function ListGame() {
                       <div className="overflow-clip h-20 md:h-28 w-auto rounded-xl bg-background aspect-square flex justify-center items-center">
                         {val.image_url !== "" ? (
                           <Image
-                            height={1000}
-                            width={1000}
-                            alt={val.name}
+                            height={500}
+                            width={500}
+                            alt={`${val.name} ${name}`}
+                            title={`${val.name} ${name}`}
                             className="rounded-xl w-full hover:scale-125 transition duration-300"
                             src={val.image_url}
                           />

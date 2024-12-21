@@ -21,8 +21,11 @@ function HelpButton() {
           if (item.key === "email") item.value = "mailto:" + item.value;
           else if (item.key === "telegram")
             item.value = "https://telegram.me/" + item.value;
-          else if (item.key === "whatsapp")
-            item.value = "https://wa.me/" + item.value;
+          else if (item.key === "whatsapp") {
+            let val = item.value;
+            if (item.value[0] == "0") val = "62" + item.value.substring(1);
+            item.value = "https://wa.me/" + val;
+          }
 
           return item;
         });

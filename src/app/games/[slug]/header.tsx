@@ -4,7 +4,13 @@ import React from "react";
 import Description from "./collapsible-description";
 import Image from "next/image";
 
-function Header({ category }: { category: IProductCategory }) {
+function Header({
+  category,
+  name,
+}: {
+  category: IProductCategory;
+  name: string;
+}) {
   return (
     <Card className="w-full mt-2 h-full min-w-fit mb-3 ">
       <CardContent className="p-0">
@@ -16,7 +22,8 @@ function Header({ category }: { category: IProductCategory }) {
             <Image
               width={900}
               height={300}
-              alt={category.name}
+              alt={`${category.name} ${name}`}
+              title={`${category.name} ${name}`}
               src={category?.banner_url}
               style={{ aspectRatio: 3 / 1 }}
               className={`object-cover w-full md:rounded-xl rounded-t-xl border`}
@@ -34,8 +41,8 @@ function Header({ category }: { category: IProductCategory }) {
                 <Image
                   width={300}
                   height={300}
-                  alt={category.name}
-                  title={category.name}
+                  alt={`${category.name} ${name}`}
+                  title={`${category.name} ${name}`}
                   className="h-auto w-12 md:w-16 absolute"
                   src={
                     category.image_url ??
@@ -43,9 +50,9 @@ function Header({ category }: { category: IProductCategory }) {
                   }
                 />
               </div>
-              <h2 className="text-lg w-fit text-ellipsis font-bold ml-3 md:ml-0 text-primary p-0 md:hidden">
+              <p className="text-lg w-fit text-ellipsis font-bold ml-3 md:ml-0 text-primary p-0 md:hidden">
                 {category.name}
-              </h2>
+              </p>
             </div>
             <div className="mt-4 md:mt-0 w-full pr-2">
               <Description description={category?.description} />

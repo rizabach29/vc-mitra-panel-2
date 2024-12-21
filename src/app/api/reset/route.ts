@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       headers: GetAuthHeader(req),
       body: JSON.stringify({
         email: body.username,
-        password: body.password,
+        password: body.old_password,
       }),
     }
   );
@@ -26,7 +26,8 @@ export async function POST(req: NextRequest) {
       method: "post",
       headers: GetAuthHeader(req),
       body: JSON.stringify({
-        password: body.newPassword,
+        old_password: body.old_password,
+        password: body.password,
       }),
     }
   );

@@ -1,117 +1,74 @@
-"use client";
-import React, { useContext, useEffect, useState } from "react";
-import { IProductCategory, TProductItem } from "@/Type";
-import ProductCard from "./[slug]/(product)/product-card";
-import Image from "next/image";
-import Loading from "../loading";
-import { useRouter } from "next/navigation";
-import Filter from "./filter";
-import { TValue } from "@/components/ui/combobox";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+import { Metadata } from "next";
+import { headers } from "next/headers";
+import Script from "next/script";
+import ListCategory from "./list";
 
-function Page() {
-  const [total, setTotal] = useState(0);
-  const [pageIndex, setPageIndex] = useState(1);
-  const [data, setData] = useState<TProductItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState<TValue | undefined>();
-  const route = useRouter();
+export const revalidate = 3600;
 
-  const getList = async () => {
-    let searchParams = new URLSearchParams({
-      page_num: `${pageIndex}`,
-      page_size: "30",
-    });
+export async function generateMetadata(): Promise<Metadata> {
+  var host = headers().get("host") ?? "";
+  var url = "https://" + host + "/games";
+  var logo_url = headers().get("x-logo") ?? "";
+  var keywords = headers().get("x-keywords") ?? "";
+  var name = headers().get("x-name") ?? "";
 
-    setLoading(true);
-    if (category) {
-      var res = await fetch(
-        `/api/products/items/${category.value}?` + searchParams
-      );
-
-      if (res.ok) {
-        const dataJson = await res.json();
-
-        if (dataJson.data) {
-          setData(dataJson.data);
-          setTotal(dataJson.data.length);
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          setLoading(false);
-          return;
-        }
-        setData([]);
-        setTotal(0);
-      }
-    }
-    setLoading(false);
+  return {
+    manifest: "/api/manifest.json",
+    title: `Beli Voucher & Top Up Game Terlengkap di ${name}`,
+    description: `Temukan semua kebutuhan digital kamu di ${name}, mulai dari beli voucher/top up game, pulsa, platform streaming, dan lainnya!`,
+    keywords: keywords,
+    openGraph: {
+      images: [logo_url],
+      title: `Beli Voucher & Top Up Game Terlengkap di ${name}`,
+      url,
+      type: "website",
+    },
+    icons: {
+      icon: logo_url,
+    },
+    alternates: {
+      canonical: url,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
   };
-
-  useEffect(() => {
-    (async () => {
-      await getList();
-    })();
-  }, [pageIndex, category]);
-
-  return (
-    <div className="flex justify-center w-full px-2">
-      <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
-        <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Daftar Produk</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <div className="max-w-5xl w-full bg-background md:px-4 rounded-xl">
-          <div className="flex px-2 sticky top-12 py-4 bg-background rounded-b-xl flex-col space-y-1.5 mb-3 z-10">
-            <h1 className="font-semibold text-primary text-2xl">Produk</h1>
-            <Filter onChange={setCategory} />
-          </div>
-          <div className="min-h-[68vh] bg-background pb-8">
-            {loading ? (
-              <Loading />
-            ) : (
-              <>
-                {data.length > 0 ? (
-                  <div className="grid sm:grid-cols-4 md:grid-cols-5 grid-cols-2 gap-2 mx-2">
-                    {data.map((item, idx) => (
-                      <div className="w-full h-full" key={`${idx}`}>
-                        <ProductCard
-                          // category={item.category_alias}
-                          discountedPrice={item.discounted_price}
-                          name={item.name}
-                          imageURL={item.image_url}
-                          price={item.price}
-                          onClick={() =>
-                            route.push(
-                              `/games/${category?.value}?item=${item.key}`
-                            )
-                          }
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center h-full w-full"></div>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 }
 
-export default Page;
+export default function Page() {
+  var name = headers().get("x-name") ?? "";
+  var url = headers().get("host") ?? "";
+
+  return (
+    <>
+      <Script
+        id=""
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                item: { "@id": url, name: "Home" },
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                item: {
+                  "@id": url + "/games",
+                  name: "Daftar Produk",
+                },
+              },
+            ],
+          }),
+        }}
+      />
+      <h1 className="hidden">Produk {name}</h1>
+      <ListCategory />
+    </>
+  );
+}

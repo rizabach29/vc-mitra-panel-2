@@ -30,16 +30,20 @@ function PaymentList({
 
   const paymentFee = useCallback(
     (payment: IPayment) => {
-      let fee = payment.fee_amount;
+      let total = 0;
 
       if (data.product) {
-        fee = payment.fee_amount + data.product.price;
-        if (data.product.discounted_price)
-          fee = payment.fee_amount + data.product.discounted_price;
-        if (fee > 0) return priceMask(fee);
+        total = data.product.discounted_price || data.product.price;
+        let fee = payment.fee_percent
+          ? (total * payment.fee_percent) / 100
+          : payment.fee_amount;
+
+        total += fee;
+
+        if (total > 0) return priceMask(total);
       }
 
-      if (fee > 0) return `+ ${priceMask(fee)}`;
+      if (total > 0) return `+ ${priceMask(total)}`;
     },
     [data.product, data.payment]
   );
@@ -53,7 +57,7 @@ function PaymentList({
           variant: "destructive",
         });
       }
-      if (payment.saldo) {
+      if (payment.payment_method == "SALDO") {
         let price = data.product.discounted_price || data.product.price;
         price += payment.fee_amount;
         if (price > payment.saldo)
@@ -79,8 +83,8 @@ function PaymentList({
       <Accordion type="multiple" defaultValue={paymentGroup.map((i) => i.name)}>
         {paymentGroup.map((group, idx) => (
           <AccordionItem key={idx.toString()} value={group.name}>
-            <AccordionTrigger>
-              <h3 className="text-muted-foreground text-xs">{group.name}</h3>
+            <AccordionTrigger className="text-muted-foreground text-xs">
+              {group.name}
             </AccordionTrigger>
             <AccordionContent>
               <div className="grid sm:grid-cols-3 grid-cols-2 gap-2">
@@ -110,6 +114,7 @@ function PaymentList({
                       {item.image_url ? (
                         <Image
                           alt={item.name}
+                          title={item.name}
                           src={item.image_url}
                           width={50}
                           height={50}

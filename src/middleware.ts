@@ -30,7 +30,10 @@ export default async function middleware(
     return NextResponse.redirect(new URL("/", req.url));
 
   var res = NextResponse.next();
-  res.headers.set("x-url", req.url);
+  var url = new URL(req.url);
+  url.hostname = req.headers.get("host") ?? "";
+  url.port = "";
+  res.headers.set("x-url", url.href);
 
   var credentialHeader = GetCredHeader();
   var header = {
