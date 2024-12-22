@@ -1,5 +1,6 @@
 import { debounce } from "@/Helpers";
 import { LooseObject, TProductForm } from "@/Type";
+import Spinner from "@/components/spinner";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -12,6 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import TransactionContext, {
   ITransactionContext,
 } from "@/infrastructures/context/transaction/transaction.context";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import React, { useContext, useState } from "react";
 
 interface Prop {
@@ -24,13 +26,18 @@ function FormAccount({ forms }: Prop) {
   ) as ITransactionContext;
   const [data, setData] = useState<LooseObject>();
   const { toast } = useToast();
+  const [nickName, setNickName] = useState<string | null>(null);
+  const [checkIdLoading, setCheckIdLoading] = useState(false);
+  const [isFormFull, setIsFormFull] = useState(false);
 
   const checkId = async () => {
     if (data) {
+      setCheckIdLoading(true);
       let isNull = false;
       Object.values(data).forEach((val) => {
         if (!val) isNull = true;
       });
+      setIsFormFull(forms.length == Object.keys(data).length && !isNull);
       if (forms.length == Object.keys(data).length && !isNull) {
         const payload = {
           category_key: selectedData.category?.key,
@@ -49,11 +56,15 @@ function FormAccount({ forms }: Prop) {
         if (res.ok) {
           const resData = await res.json();
           if (resData.data.is_valid) {
+            setNickName(resData.data.nickname);
+            setCheckIdLoading(false);
             return dispatch({
               action: "SET_FORM",
               payload: data,
             });
           }
+          setNickName(null);
+          setCheckIdLoading(false);
           return toast({
             title: "Failed",
             description: "Akun tidak ditemukan",
@@ -115,6 +126,23 @@ function FormAccount({ forms }: Prop) {
           )}
         </div>
       ))}
+      {isFormFull && (
+        <>
+          {checkIdLoading ? (
+            <div className="flex gap-2 items-center animate-pulse">
+              <Spinner size="sm" />
+              <p className="text-muted-foreground text-xs">Pengecekan Akun</p>
+            </div>
+          ) : nickName ? (
+            <p className="text-green-500 text-xs">Akun ditemukan: {nickName}</p>
+          ) : (
+            <div className="text-red-500 text-xs flex gap-2 items-end">
+              <ExclamationTriangleIcon />
+              <p className="text-xs">Akun tidak ditemukan</p>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

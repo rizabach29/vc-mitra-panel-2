@@ -101,6 +101,21 @@ export type TProductItem = {
   image_url: string;
 };
 
+export type TTag = {
+  value: string;
+  label: string;
+};
+
+export type TProductItemTag = {
+  name: string;
+  products: TProductItem[];
+};
+
+export type TProductItemWithTags = {
+  tags: TTag[];
+  products: TProductItemTag[];
+};
+
 export type TMarkup = "percentage" | "fix";
 
 export interface IFlashSaleProductDetail {
