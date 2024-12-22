@@ -93,6 +93,7 @@ function PaymentList({
                     key={item.name}
                     className={`flex hover:bg-zinc-50 rounded-lg justify-between items-center px-3 py-3 cursor-pointer ${
                       data.payment?.payment_channel == item.payment_channel &&
+                      data.payment?.payment_method == item.payment_method &&
                       `border-2 border-primary`
                     }`}
                     onClick={(e) => selectPayment(item)}
