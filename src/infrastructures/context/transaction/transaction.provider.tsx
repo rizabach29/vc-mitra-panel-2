@@ -13,7 +13,6 @@ function TransactionProvider({ children }: { children: React.ReactNode }) {
       email: session?.profile?.email ?? "",
       noWhatsapp: session?.profile?.phone ?? "",
     },
-    products: [],
   });
 
   const dispatch = (data: TransactionDispatch) => {

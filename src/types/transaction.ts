@@ -1,4 +1,9 @@
-import { IProductCategory, LooseObject, TProduct, TProductItem } from "@/Type";
+import {
+  IProductCategory,
+  LooseObject,
+  TProductItem,
+  TProductItemWithTags,
+} from "@/Type";
 
 export interface ICategoryForm {
   key: string;
@@ -123,7 +128,7 @@ export interface IAccount {
 
 export interface ITransaction {
   product?: TProductItem;
-  products: TProductItem[];
+  products?: TProductItemWithTags;
   category?: IProductCategory | null;
   promo?: IPromo;
   payment?: IPayment;

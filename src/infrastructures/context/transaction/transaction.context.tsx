@@ -1,6 +1,12 @@
 "use client";
 
-import { IProductCategory, IProfile, LooseObject, TProductItem } from "@/Type";
+import {
+  IProductCategory,
+  IProfile,
+  LooseObject,
+  TProductItem,
+  TProductItemWithTags,
+} from "@/Type";
 import { IAccount, IPayment, IPromo, ITransaction } from "@/types/transaction";
 import React from "react";
 
@@ -14,7 +20,7 @@ export type TransactionSetProduct = {
 };
 export type TransactionSetProducts = {
   action: "SET_PRODUCTS";
-  payload: TProductItem[];
+  payload: TProductItemWithTags;
 };
 export type TransactionSetPromo = {
   action: "SET_PROMO";
