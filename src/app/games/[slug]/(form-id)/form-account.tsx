@@ -1,4 +1,3 @@
-import { debounce } from "@/Helpers";
 import { LooseObject, TProductForm } from "@/Type";
 import Spinner from "@/components/spinner";
 import { Input } from "@/components/ui/input";
@@ -14,7 +13,8 @@ import TransactionContext, {
   ITransactionContext,
 } from "@/infrastructures/context/transaction/transaction.context";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import debounce from "lodash.debounce";
 
 interface Prop {
   forms: TProductForm[];
@@ -81,9 +81,11 @@ function FormAccount({ forms }: Prop) {
       ...prevState,
       [name]: e.target.type == "number" ? valueAsNumber : value,
     }));
-
-    checkId();
   }, 2500);
+
+  useEffect(() => {
+    checkId();
+  }, [data]);
 
   return (
     <div className="grid w-full items-center gap-4">
@@ -93,12 +95,13 @@ function FormAccount({ forms }: Prop) {
           {item.type === "option" ? (
             <Select
               disabled={!selectedData.product}
-              onValueChange={(e) =>
+              onValueChange={(e) => {
                 setData((prev) => ({
                   ...prev,
                   [item.key]: e,
-                }))
-              }
+                }));
+                checkId();
+              }}
               name={item.key}
             >
               <SelectTrigger className="col-span-2">
