@@ -48,7 +48,7 @@ function ProductList(prop: IProductList) {
               <div
                 id={"tag-" + item.name}
                 key={item.name}
-                className="mt-4 scroll-mt-12"
+                className="mt-4 scroll-mt-14"
               >
                 <p className="text-muted-foreground">{item.name}</p>
                 <div className="grid md:grid-cols-3 grid-cols-2 gap-2 mt-4">
