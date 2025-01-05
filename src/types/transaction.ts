@@ -49,7 +49,8 @@ export interface ILinkPayment extends IBasePaymentInformation {
 }
 export interface IQRPayment extends IBasePaymentInformation {
   payment_method: "QR_CODE";
-  qr_code: string;
+  qr_code?: string;
+  qr_image_url?: string;
 }
 
 export interface ITransactionHistoryDetail {

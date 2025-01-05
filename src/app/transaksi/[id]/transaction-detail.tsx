@@ -46,12 +46,11 @@ function TransactionHistoryDetail({
 
   const isPaymentNotExpired = useMemo(() => {
     if (!data) return false;
-    return (
-      data.payment_information &&
-      data.payment_information.expired_at &&
-      data.payment_information.payment_channel &&
-      isFuture(parseISO(data.payment_information.expired_at))
-    );
+    if (data.payment_information && data.payment_information.payment_channel)
+      if (data.payment_information.expired_at)
+        return isFuture(parseISO(data.payment_information.expired_at));
+      else return true;
+    else return false;
   }, [data]);
 
   const isHavePaymentDetail = () => {
@@ -111,7 +110,8 @@ function TransactionHistoryDetail({
                     <BadgeTransaksi status={data.status} />
                   </div>
                 </div>
-                {isPaymentNotExpired &&
+                {data.payment_information.expired_at &&
+                isFuture(parseISO(data.payment_information.expired_at)) &&
                 data.status === ETransactionStatus.Unpaid ? (
                   <div className="flex justify-between w-full">
                     <p className="text-muted-foreground text-sm">

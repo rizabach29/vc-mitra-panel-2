@@ -4,14 +4,54 @@ import React, { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/custom-input";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 function FormResetPassword({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { toast } = useToast();
+  const router = useRouter();
 
   const onSubmitReset = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!password || !confirmPassword) {
+      toast({
+        title: "Failed",
+        description: "Password atau Konfirmasi Password belum terisi",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password != confirmPassword) {
+      toast({
+        title: "Failed",
+        description: "Konfirmasi Password dan Password belum sesuai",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+    var res = await fetch("/api/forgot-password/reset", {
+      method: "POST",
+      body: JSON.stringify({
+        password,
+        token: params.id,
+      }),
+    });
+
+    setLoading(false);
+    if (res.ok) {
+      toast({
+        title: "Success",
+        description: "Password berhasil direset",
+        variant: "success",
+      });
+      return router.push("/auth/login/");
+    }
   };
 
   return (
