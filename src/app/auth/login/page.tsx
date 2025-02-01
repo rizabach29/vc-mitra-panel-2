@@ -2,17 +2,16 @@
 
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useToast } from "@/components/ui/use-toast";
-import { PasswordInput } from "@/components/ui/custom-input";
+import { PasswordInput, PhoneInputIndo } from "@/components/ui/custom-input";
 
 function Page() {
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -23,7 +22,7 @@ function Page() {
 
     setLoading(true);
     var res = await signIn("credentials", {
-      username,
+      phone: "0" + phone,
       password,
       redirect: false,
     });
@@ -53,16 +52,17 @@ function Page() {
         </p>
         <form onSubmit={onSubmit} className="w-full max-w-md grid gap-4 pt-4">
           <div className="grid w-full max-w-sm gap-1.5">
-            <Label htmlFor="username" className="text-left">
-              Email
+            <Label htmlFor="phone" className="text-left">
+              No. Whatsapp
             </Label>
-            <Input
-              className="bg-background"
-              id="username"
-              name="username"
-              type="email"
-              placeholder="✉️ Masukan Email..."
-              onChange={(e) => setUsername(e.target.value)}
+            <PhoneInputIndo
+              className="bg-background mt-2"
+              id="Whatsapp"
+              type="tel"
+              name="phone"
+              value={phone}
+              placeholder="Contoh: 81XXXXXXXXX"
+              onValueChange={(e) => setPhone(`${e}`)}
             />
           </div>
           <div className="grid w-full max-w-sm gap-1.5">

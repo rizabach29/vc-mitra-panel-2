@@ -6,11 +6,11 @@ export const options: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       credentials: {
-        username: { label: "Username", type: "text" },
+        phone: { label: "Phone", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(
-        credentials: Record<"username" | "password", string> | undefined,
+        credentials: Record<"phone" | "password", string> | undefined,
         req: Pick<RequestInternal, "body" | "query" | "headers" | "method">
       ) {
         var credentialHeader = GetCredHeader();
@@ -26,7 +26,7 @@ export const options: NextAuthOptions = {
               "X-Timestamp": credentialHeader.timestamp.toString(),
             },
             body: JSON.stringify({
-              email: credentials?.username,
+              phone: credentials?.phone,
               password: credentials?.password,
             }),
           }

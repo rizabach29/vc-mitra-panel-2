@@ -14,7 +14,6 @@ import TransactionContext, {
 } from "@/infrastructures/context/transaction/transaction.context";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import React, { useContext, useEffect, useState } from "react";
-import debounce from "lodash.debounce";
 
 interface Prop {
   forms: TProductForm[];
@@ -75,13 +74,13 @@ function FormAccount({ forms }: Prop) {
     }
   };
 
-  const handleChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, valueAsNumber } = e.target;
     setData((prevState) => ({
       ...prevState,
       [name]: e.target.type == "number" ? valueAsNumber : value,
     }));
-  }, 2500);
+  };
 
   useEffect(() => {
     checkId();
@@ -122,7 +121,7 @@ function FormAccount({ forms }: Prop) {
               id="id"
               type={item.type == "numeric" ? "number" : "text"}
               name={item.key}
-              onChange={handleChange}
+              onBlur={onChange}
               disabled={!selectedData.product}
               placeholder={`Masukan ${item.alias.replace(/_/g, " ")}`}
             />
