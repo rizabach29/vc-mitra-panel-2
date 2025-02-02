@@ -1,6 +1,6 @@
 "use client";
 import { RefObject, useContext, useEffect, useRef, useState } from "react";
-import { TProductItem } from "@/Type";
+import { TProductItem, TProductItemWithTags } from "@/Type";
 import { useSearchParams } from "next/navigation";
 import TransactionContext, {
   ITransactionContext,
@@ -10,7 +10,7 @@ import { ITransaction } from "@/types/transaction";
 
 export interface IUseCategoryData {
   data: ITransaction;
-  products: TProductItem[];
+  products?: TProductItemWithTags;
   loading: boolean;
   formRef: RefObject<HTMLDivElement>;
   productListRef: RefObject<HTMLDivElement>;
@@ -24,7 +24,7 @@ function useCategory(id: string): IUseCategoryData {
   const { data, dispatch } = useContext(
     TransactionContext
   ) as ITransactionContext;
-  const [products, setProducts] = useState<TProductItem[]>([]);
+  const [products, setProducts] = useState<TProductItemWithTags>();
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
 

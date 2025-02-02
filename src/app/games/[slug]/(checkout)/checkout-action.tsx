@@ -54,7 +54,7 @@ function CheckoutAction({
     )
       return toast({
         title: "Failed",
-        description: "Data akun tidak lengkap",
+        description: "Data akun tidak lengkap / tidak ditemukan",
         variant: "destructive",
         action: (
           <ToastAction

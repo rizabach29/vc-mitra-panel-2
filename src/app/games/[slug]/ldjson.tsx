@@ -13,17 +13,25 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
   const [date, _] = useState(new Date());
 
   const product = useMemo(() => {
-    if (data.products.length > 0) {
-      const min = Math.min(...data.products.map((i) => i.price));
-      const max = Math.max(...data.products.map((i) => i.price));
-      return {
-        min,
-        max,
-      };
+    if (data.products?.products) {
+      const productsMap = data.products?.products
+        ?.map((val) => val.products)
+        .flat();
+
+      if (productsMap.length > 0) {
+        const min = Math.min(...productsMap.map((i) => i.price));
+        const max = Math.max(...productsMap.map((i) => i.price));
+        return {
+          min,
+          max,
+          total: productsMap.length,
+        };
+      }
     }
     return {
       min: 0,
       max: 0,
+      total: 0,
     };
   }, [data.products]);
 
@@ -103,7 +111,7 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
                 priceCurrency: "IDR",
                 lowPrice: product.min,
                 highPrice: product.max,
-                offerCount: data.products.length,
+                offerCount: product.total,
               },
               aggregateRating: {
                 "@type": "AggregateRating",

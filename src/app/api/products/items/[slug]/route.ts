@@ -8,7 +8,7 @@ export async function GET(
   const { slug } = params;
   const url = new URL(req.url as string);
 
-  const strUrl = `${process.env.NEXT_API_URL}/v2/panel/product/${slug}?${url.searchParams}`;
+  const strUrl = `${process.env.NEXT_API_URL}/v2/panel/product-with-tags/${slug}?${url.searchParams}`;
 
   var re = await fetch(strUrl, {
     next: {
