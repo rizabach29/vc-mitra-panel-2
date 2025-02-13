@@ -39,6 +39,12 @@ function Promo({ categoryUuid }: { categoryUuid: string }) {
     });
   };
 
+  const onDetailClicked = (p?: IPromo) => {
+    setSelectedDetailPromo(p);
+    setOpen(false);
+    setDetailOpen(true);
+  };
+
   const getData = async (id?: string) => {
     if (!id || !categoryUuid) return;
     setLoading(true);
@@ -165,11 +171,7 @@ function Promo({ categoryUuid }: { categoryUuid: string }) {
                   selected={selectedPromo}
                   setSelected={(e) => selectPromo(e)}
                   isSecret
-                  onDetailClicked={(p) => {
-                    setSelectedDetailPromo(p);
-                    setOpen(false);
-                    setDetailOpen(true);
-                  }}
+                  onDetailClicked={onDetailClicked}
                 />
               ) : null}
               {promos.map((i) => (
@@ -178,11 +180,7 @@ function Promo({ categoryUuid }: { categoryUuid: string }) {
                   promo={i}
                   selected={selectedPromo}
                   setSelected={(e) => selectPromo(e)}
-                  onDetailClicked={(p) => {
-                    setSelectedDetailPromo(p);
-                    setOpen(false);
-                    setDetailOpen(true);
-                  }}
+                  onDetailClicked={onDetailClicked}
                 />
               ))}
             </div>
