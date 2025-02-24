@@ -17,9 +17,10 @@ import React, { useContext, useEffect, useState } from "react";
 
 interface Prop {
   forms: TProductForm[];
+  isCheckRequired?: boolean;
 }
 
-function FormAccount({ forms }: Prop) {
+function FormAccount({ forms, isCheckRequired }: Prop) {
   const { dispatch, data: selectedData } = useContext(
     TransactionContext
   ) as ITransactionContext;
@@ -31,7 +32,6 @@ function FormAccount({ forms }: Prop) {
 
   const checkId = async () => {
     if (data) {
-      setCheckIdLoading(true);
       let isNull = false;
       Object.values(data).forEach((val) => {
         if (!val) isNull = true;
@@ -46,7 +46,16 @@ function FormAccount({ forms }: Prop) {
             value: data[key],
           })),
         };
+
+        if (!isCheckRequired) {
+          return dispatch({
+            action: "SET_FORM",
+            payload: data,
+          });
+        }
+
         // check id
+        setCheckIdLoading(true);
         var res = await fetch(`/api/products/categories/check-id`, {
           method: "POST",
           body: JSON.stringify(payload),
