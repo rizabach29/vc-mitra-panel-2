@@ -137,7 +137,7 @@ function FormAccount({ forms, isCheckRequired }: Prop) {
           )}
         </div>
       ))}
-      {isFormFull && (
+      {isFormFull && isCheckRequired && (
         <>
           {checkIdLoading ? (
             <div className="flex gap-2 items-center animate-pulse">
