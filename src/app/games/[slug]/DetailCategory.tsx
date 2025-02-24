@@ -98,7 +98,10 @@ function DetailCategory(props: Props) {
             {props.data.category.forms ? (
               <div ref={props.formRef} className="w-full my-4">
                 <FormWrapper number={3} title="Masukkan Data Akun">
-                  <FormAccount forms={props.data.category.forms} />
+                  <FormAccount
+                    isCheckRequired={props.data.category.is_check_id}
+                    forms={props.data.category.forms}
+                  />
                 </FormWrapper>
               </div>
             ) : null}
