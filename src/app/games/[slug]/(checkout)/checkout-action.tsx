@@ -154,7 +154,7 @@ function CheckoutAction({
               onClick={checkout}
             >
               <ShoppingCartIcon className="text-white h-4 w-4" />
-              <div className="text-white">Pesan Sekarang</div>
+              <span className="text-white">Pesan Sekarang</span>
             </Button>
           </div>
         </div>
