@@ -42,6 +42,16 @@ function debounce<Params extends any[]>(
   };
 }
 
+const getDiscount = (product: TProductItem, promo: IPromo) => {
+  if (!promo.is_discount_percent) return promo.discount_amount;
+
+  let total = product.discounted_price || product.price;
+  let dicount = (promo.discount_percent * total) / 100;
+  if (dicount > promo.maximum_discount_amount)
+    return promo.maximum_discount_amount;
+  return dicount;
+};
+
 const getTotalPrice = (
   product: TProductItem,
   promo?: IPromo,
@@ -52,10 +62,7 @@ const getTotalPrice = (
   if (product) {
     total = product.discounted_price || product.price;
 
-    if (promo) {
-      if (!promo.is_discount_percent) total -= promo.discount_amount;
-      else total -= (promo.discount_percent * product.price) / 100;
-    }
+    if (promo) total -= getDiscount(product, promo);
 
     let fee = 0;
     if (payment)
@@ -168,4 +175,5 @@ export {
   nPlainFormatter,
   getTotalPrice,
   getFeePrice,
+  getDiscount,
 };

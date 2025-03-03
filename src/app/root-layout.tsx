@@ -47,7 +47,7 @@ export default function RootTemplateLayout({
         });
       };
       const iframeQontak = document.getElementById("qontak-webchat-widget");
-      if (iframeQontak) iframeQontak.style.height = "124px";
+      if (iframeQontak) iframeQontak.style.bottom = "24px";
     }
   }, []);
 

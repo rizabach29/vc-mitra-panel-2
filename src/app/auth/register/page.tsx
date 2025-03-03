@@ -83,19 +83,6 @@ function Page() {
               />
             </div>
             <div className="grid w-full max-w-sm gap-1.5">
-              <Label htmlFor="email" className="text-left">
-                Email
-              </Label>
-              <Input
-                className="bg-background"
-                id="email"
-                type="email"
-                placeholder="Masukan Email"
-                name="email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="grid w-full max-w-sm gap-1.5">
               <Label htmlFor="Whatsapp" className="text-left">
                 No. Whatsapp
               </Label>
@@ -107,6 +94,19 @@ function Page() {
                 value={phone}
                 placeholder="Contoh: 81XXXXXXXXX"
                 onValueChange={(e) => setPhone(`${e}`)}
+              />
+            </div>
+            <div className="grid w-full max-w-sm gap-1.5">
+              <Label htmlFor="email" className="text-left">
+                Email
+              </Label>
+              <Input
+                className="bg-background"
+                id="email"
+                type="email"
+                placeholder="Masukan Email"
+                name="email"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid w-full max-w-sm gap-1.5">

@@ -51,6 +51,7 @@ export interface IProductCategory {
   banner_url: string;
   description: string;
   forms?: TProductForm[];
+  is_check_id?: boolean;
 
   key: string;
   name: string;

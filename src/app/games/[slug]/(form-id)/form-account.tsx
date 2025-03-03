@@ -14,13 +14,13 @@ import TransactionContext, {
 } from "@/infrastructures/context/transaction/transaction.context";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import React, { useContext, useEffect, useState } from "react";
-import debounce from "lodash.debounce";
 
 interface Prop {
   forms: TProductForm[];
+  isCheckRequired?: boolean;
 }
 
-function FormAccount({ forms }: Prop) {
+function FormAccount({ forms, isCheckRequired }: Prop) {
   const { dispatch, data: selectedData } = useContext(
     TransactionContext
   ) as ITransactionContext;
@@ -32,7 +32,6 @@ function FormAccount({ forms }: Prop) {
 
   const checkId = async () => {
     if (data) {
-      setCheckIdLoading(true);
       let isNull = false;
       Object.values(data).forEach((val) => {
         if (!val) isNull = true;
@@ -47,7 +46,16 @@ function FormAccount({ forms }: Prop) {
             value: data[key],
           })),
         };
+
+        if (!isCheckRequired) {
+          return dispatch({
+            action: "SET_FORM",
+            payload: data,
+          });
+        }
+
         // check id
+        setCheckIdLoading(true);
         var res = await fetch(`/api/products/categories/check-id`, {
           method: "POST",
           body: JSON.stringify(payload),
@@ -75,13 +83,13 @@ function FormAccount({ forms }: Prop) {
     }
   };
 
-  const handleChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, valueAsNumber } = e.target;
     setData((prevState) => ({
       ...prevState,
       [name]: e.target.type == "number" ? valueAsNumber : value,
     }));
-  }, 2500);
+  };
 
   useEffect(() => {
     checkId();
@@ -122,14 +130,14 @@ function FormAccount({ forms }: Prop) {
               id="id"
               type={item.type == "numeric" ? "number" : "text"}
               name={item.key}
-              onChange={handleChange}
+              onBlur={onChange}
               disabled={!selectedData.product}
               placeholder={`Masukan ${item.alias.replace(/_/g, " ")}`}
             />
           )}
         </div>
       ))}
-      {isFormFull && (
+      {isFormFull && isCheckRequired && (
         <>
           {checkIdLoading ? (
             <div className="flex gap-2 items-center animate-pulse">

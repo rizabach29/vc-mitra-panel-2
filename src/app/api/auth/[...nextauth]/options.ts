@@ -1,16 +1,17 @@
 import type { NextAuthOptions, RequestInternal, Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { GetCredHeader } from "../../api-utils";
+import { signOut } from "next-auth/react";
 
 export const options: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       credentials: {
-        username: { label: "Username", type: "text" },
+        phone: { label: "Phone", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(
-        credentials: Record<"username" | "password", string> | undefined,
+        credentials: Record<"phone" | "password", string> | undefined,
         req: Pick<RequestInternal, "body" | "query" | "headers" | "method">
       ) {
         var credentialHeader = GetCredHeader();
@@ -26,7 +27,7 @@ export const options: NextAuthOptions = {
               "X-Timestamp": credentialHeader.timestamp.toString(),
             },
             body: JSON.stringify({
-              email: credentials?.username,
+              phone: credentials?.phone,
               password: credentials?.password,
             }),
           }
@@ -54,23 +55,35 @@ export const options: NextAuthOptions = {
     session: async ({ session, token }) => {
       var credentialHeader = GetCredHeader();
 
-      let response = await fetch(
-        `${process.env.NEXT_API_URL}/v2/panel/member/profile`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "X-Sign": credentialHeader.sign,
-            "X-User-Id": credentialHeader.mitraid,
-            "X-Timestamp": credentialHeader.timestamp.toString(),
-            Authorization: `Bearer ${token.token}`,
-          },
-        }
-      );
+      if (!process.env.NEXT_API_URL) {
+        throw new Error("NEXT_API_URL is not set in environment variables");
+      }
 
-      var res = await response.json();
-      if (response.ok) {
-        session.token = token.token;
-        session.profile = res.data;
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_API_URL}/v2/panel/member/profile`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "X-Sign": credentialHeader.sign,
+              "X-User-Id": credentialHeader.mitraid,
+              "X-Timestamp": String(credentialHeader.timestamp),
+              Authorization: `Bearer ${token.token}`,
+            },
+          }
+        );
+
+        const res = await response.json();
+
+        if (response.ok) {
+          session.token = token.token;
+          session.profile = res.data;
+        } else {
+          signOut();
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        signOut();
       }
 
       return session;
