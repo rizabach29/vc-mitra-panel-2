@@ -8,6 +8,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: ` #qontak-webchat-widget {
+                      bottom: 24px;
+                    } 
+                    `,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `

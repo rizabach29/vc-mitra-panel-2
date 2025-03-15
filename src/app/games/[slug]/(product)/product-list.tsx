@@ -27,7 +27,7 @@ function ProductList(prop: IProductList) {
     <>
       <div className="relative -mx-2 px-2" ref={ref}>
         {prop.products && prop.products.tags?.length > 0 ? (
-          <div className="flex -mt-2 sticky top-12 bg-background z-10 py-2">
+          <div className="flex -mt-2 sticky top-12 bg-background z-10 py-2 gap-2">
             {prop.products.tags?.map((item) => (
               <Badge
                 className="cursor-pointer"

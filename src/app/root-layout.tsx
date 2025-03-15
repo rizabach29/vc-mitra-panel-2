@@ -59,12 +59,7 @@ export default function RootTemplateLayout({
         dangerouslySetInnerHTML={{
           __html: ` :root {
                       --primary: ${HexToHSL(profile?.theme_color ?? "#000")};
-                    }
-
-                    #qontak-webchat-widget {
-                      bottom: 24px;
-                    } 
-                    `,
+                    }`,
         }}
       />
       <SessionProvider>

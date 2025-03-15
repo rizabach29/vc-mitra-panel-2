@@ -2,11 +2,12 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IProductCategory, TProductGroup } from "@/Type";
-import { CubeIcon } from "@radix-ui/react-icons";
+import { CubeIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
+import { Input } from "@/components/ui/input";
 
 export default function ListGame({ name }: { name: string }) {
   const [group, setGroup] = useState<TProductGroup>({
@@ -14,6 +15,7 @@ export default function ListGame({ name }: { name: string }) {
     name: "All",
   });
   const [data, setData] = useState<IProductCategory[]>([]);
+  const [searchData, setSearchData] = useState<IProductCategory[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [groups, setGroups] = useState<TProductGroup[]>([]);
@@ -29,13 +31,14 @@ export default function ListGame({ name }: { name: string }) {
 
     if (res.ok) {
       var result = await res.json();
+      setData(result.data);
 
-      if (result.data) {
-        if (more) setData((prev) => [...prev, result.data]);
-        else setData(result.data);
-      } else {
-        if (!more) setData([]);
-      }
+      // if (result.data) {
+      //   if (more) setData((prev) => [...prev, result.data]);
+      //   else setData(result.data);
+      // } else {
+      //   if (!more) setData([]);
+      // }
     }
     setLoading(false);
   };
@@ -66,16 +69,31 @@ export default function ListGame({ name }: { name: string }) {
   }, [group]);
 
   useEffect(() => {
+    setSearchData(data);
+  }, [data]);
+
+  useEffect(() => {
     if (pageIndex > 0) getData(true);
   }, [pageIndex]);
+
+  const handleSearchData = (e: string) => {
+    console.log(data);
+    if (e.length > 0) {
+      setSearchData(
+        data.filter((val) => val?.name.toLowerCase().includes(e.toLowerCase()))
+      );
+    } else {
+      setSearchData(data);
+    }
+  };
 
   return (
     <div className="bg-[#F0F8F6] pb-4 flex justify-center rounded-t-xl">
       <div className="w-full max-w-7xl px-2">
         <div className="md:flex md:items-end md:justify-between sticky z-10 top-12 py-2 rounded-t-lg bg-[#F0F8F6] backdrop-blur-md">
-          <div className="flex md:block items-center justify-between mt-4 ">
+          <div className="block md:flex items-center justify-between mt-4 gap-12 w-full">
             <div
-              className="no-scrollbar z-10 my-0.5"
+              className="no-scrollbar z-10 my-0.5 w-full"
               style={{
                 display: "flex",
                 flexDirection: "row",
@@ -97,6 +115,17 @@ export default function ListGame({ name }: { name: string }) {
                 </Badge>
               ))}
             </div>
+            {/* <div className="flex items-center justify-end w-100">
+              <div className="relative w-[300px] bg-white rounded-full mt-2">
+                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+                <Input
+                  type="text"
+                  placeholder="Cari brand..."
+                  className="pl-10"
+                  onChange={(e) => handleSearchData(e.target.value)}
+                />
+              </div>
+            </div> */}
           </div>
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 md:gap-4 gap-2 mt-2 place-items-center justify-center px-2">
@@ -104,8 +133,8 @@ export default function ListGame({ name }: { name: string }) {
             [...Array(3)].map((x, i) => (
               <Skeleton key={i} className="w-full aspect-square" />
             ))
-          ) : data && data.length > 0 ? (
-            data.map((val: IProductCategory, idx) =>
+          ) : searchData && searchData.length > 0 ? (
+            searchData.map((val: IProductCategory, idx) =>
               val.name ? (
                 <Link
                   href={`/games/${val.key}`}

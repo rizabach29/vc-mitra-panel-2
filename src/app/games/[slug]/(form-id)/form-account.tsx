@@ -93,7 +93,7 @@ function FormAccount({ forms, isCheckRequired }: Prop) {
 
   useEffect(() => {
     checkId();
-  }, [data]);
+  }, [data, isCheckRequired]);
 
   return (
     <div className="grid w-full items-center gap-4">
