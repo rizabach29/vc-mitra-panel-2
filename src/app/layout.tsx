@@ -10,10 +10,10 @@ export default function RootLayout({
       <head>
         <style
           dangerouslySetInnerHTML={{
-            __html: ` #qontak-webchat-widget {
-                      bottom: 24px;
-                    } 
-                    `,
+            __html: ` 
+            #qontak-webchat-widget {
+              bottom: 24px !important;
+            }`,
           }}
         />
         <script
