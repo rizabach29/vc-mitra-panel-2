@@ -51,7 +51,14 @@ function OTP(props: props) {
         variant: "success",
       });
       var body = await res.json();
+
       return router.push("/auth/reset-password/", body.data.token);
+    } else {
+      toast({
+        title: "Failed",
+        description: "Gagal mengirim OTP",
+        variant: "destructive",
+      });
     }
   };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/custom-input";
@@ -43,15 +43,21 @@ function FormResetPassword({ params }: { params: { id: string } }) {
       }),
     });
 
-    setLoading(false);
     if (res.ok) {
       toast({
         title: "Success",
         description: "Password berhasil direset",
         variant: "success",
       });
-      return router.push("/auth/login/");
+      router.push("/auth/login/");
+    } else {
+      toast({
+        title: "Failed",
+        description: "Gagal mereset password",
+        variant: "destructive",
+      });
     }
+    setLoading(false);
   };
 
   return (
