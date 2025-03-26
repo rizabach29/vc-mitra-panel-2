@@ -41,6 +41,12 @@ function ResetForm(props: props) {
         variant: "success",
       });
       props.onSuccess();
+    } else {
+      toast({
+        title: "Failed",
+        description: "Gagal mengirim request OTP",
+        variant: "destructive",
+      });
     }
     setLoading(false);
   };

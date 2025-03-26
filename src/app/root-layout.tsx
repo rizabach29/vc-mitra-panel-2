@@ -47,7 +47,7 @@ export default function RootTemplateLayout({
         });
       };
       const iframeQontak = document.getElementById("qontak-webchat-widget");
-      if (iframeQontak) iframeQontak.style.height = "124px";
+      if (iframeQontak) iframeQontak.style.bottom = "24px";
     }
   }, []);
 
@@ -58,10 +58,8 @@ export default function RootTemplateLayout({
       <style
         dangerouslySetInnerHTML={{
           __html: ` :root {
-                             --primary: ${HexToHSL(
-                               profile?.theme_color ?? "#000"
-                             )};
-                           }`,
+                      --primary: ${HexToHSL(profile?.theme_color ?? "#000")};
+                    }`,
         }}
       />
       <SessionProvider>

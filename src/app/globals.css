@@ -10,6 +10,10 @@ html {
   bottom: 60px;
 }
 
+#qontak-webchat-widget {
+  bottom: 24px;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
