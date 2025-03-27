@@ -57,7 +57,10 @@ deploy:
     - echo "$KUBECONFIG" > KUBECONFIG
   script:
     - export KUBECONFIG=KUBECONFIG
-    - kubectl create deployment $MITRA_NAME --image=$IMAGE_NAME_STG:latest --port=3002 --restart=Always
+    - kubectl create deployment $MITRA_NAME --image=$IMAGE_NAME_STG:latest --port=3002
+    - kubectl expose deployment $MITRA_NAME --port=80 --target-port=3002 --name=${MITRA_NAME}-svc
+    - kubectl create ingress $MITRA_NAME --rule="${NEXT_URL}/*=${MITRA_NAME}-svc:80" --annotation="nginx.ingress.kubernetes.io/rewrite-target=/" --annotation="cert-manager.io/cluster-issuer=letsencrypt-prod" --annotation="nginx.ingress.kubernetes.io/ssl-redirect=true"
+
     - |
       cat <<EOF > patch.json
       {
