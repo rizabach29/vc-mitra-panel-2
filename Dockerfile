@@ -3,6 +3,8 @@ FROM node:20-alpine AS base
 WORKDIR /app
 COPY . .
 
+RUN yarn add sharp
+
 RUN yarn install && yarn build
 
 
