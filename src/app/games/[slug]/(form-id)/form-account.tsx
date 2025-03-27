@@ -62,23 +62,23 @@ function FormAccount({ forms, isCheckRequired }: Prop) {
         });
 
         if (res.ok) {
+          setNickName(null);
           const resData = await res.json();
           if (resData.data.is_valid) {
             setNickName(resData.data.nickname);
-            setCheckIdLoading(false);
-            return dispatch({
-              action: "SET_FORM",
-              payload: data,
-            });
           }
-          setNickName(null);
-          setCheckIdLoading(false);
-          return toast({
+          toast({
             title: "Failed",
             description: "Akun tidak ditemukan",
             variant: "destructive",
           });
         }
+
+        setCheckIdLoading(false);
+        return dispatch({
+          action: "SET_FORM",
+          payload: data,
+        });
       }
     }
   };
