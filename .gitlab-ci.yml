@@ -3,7 +3,6 @@ stages:
   - deploy
 
 variables:
-  IMAGE_NAME_STG: "hub.omnicloud.io/vcgamers/staging/${CI_PROJECT_NAME}"
   NODE_ENV: "production"
   MITRA_NAME:
     description: "Bahasa pemrograman (go atau nodejs)"
@@ -26,7 +25,7 @@ variables:
   NEXT_URL:
     description: "Bahasa pemrograman (go atau nodejs)"
     value: "url website"  # Nilai default, bisa diubah saat manual run
-
+  IMAGE_NAME_STG: "hub.omnicloud.io/vcgamers/staging/$MITRA_NAME"
 
 build:
   stage: build
@@ -60,35 +59,34 @@ deploy:
     - export KUBECONFIG=KUBECONFIG
     - kubectl create deployment $MITRA_NAME --image=$IMAGE_NAME_STG:latest --port=3002 --restart=Always
     - |
-    cat <<EOF > patch.json
-    {
-      "spec": {
-        "template": {
-          "spec": {
-            "containers": [{
-              "name": "$MITRA_NAME",
-              "resources": {
-                "limits": {
-                  "cpu": "200m",
-                  "memory": "150Mi"
-                },
-                "requests": {
-                  "cpu": "100m",
-                  "memory": "150Mi"
+      cat <<EOF > patch.json
+      {
+        "spec": {
+          "template": {
+            "spec": {
+              "containers": [{
+                "name": "$MITRA_NAME",
+                "resources": {
+                  "limits": {
+                    "cpu": "200m",
+                    "memory": "150Mi"
+                  },
+                  "requests": {
+                    "cpu": "100m",
+                    "memory": "150Mi"
+                  }
                 }
-              }
-            }]
+              }]
+            }
           }
         }
       }
-    }
-    EOF
+      EOF
 
-  # ✅ Jalankan patch dari file
-  - kubectl patch deployment $MITRA_NAME --patch "$(cat patch.json)"
+    - kubectl patch deployment $MITRA_NAME --patch "$(cat patch.json)"
 
   # (Optional) hapus file patch
-  - rm -f patch.json
+    - rm -f patch.json
   only:
     - main 
   when: manual
