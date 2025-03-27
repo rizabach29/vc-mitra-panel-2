@@ -54,12 +54,29 @@ build:
 deploy:
   stage: deploy
   before_script:
+    # Inject kubeconfig dari GitLab CI/CD variable
     - echo "$KUBECONFIG" > KUBECONFIG
+
   script:
     - export KUBECONFIG=KUBECONFIG
-    - kubectl create deployment $MITRA_NAME --image=$IMAGE_NAME_STG:latest --port=3002
-    - kubectl expose deployment $MITRA_NAME --port=80 --target-port=3002 --name=${MITRA_NAME}-svc
-    - kubectl create ingress $MITRA_NAME --rule="${NEXT_URL}/*=${MITRA_NAME}-svc:80" --annotation="nginx.ingress.kubernetes.io/rewrite-target=/" --annotation="cert-manager.io/cluster-issuer=letsencrypt-prod" --annotation="nginx.ingress.kubernetes.io/ssl-redirect=true"
+    - echo "Creating deployment..."
+    - kubectl create deployment $MITRA_NAME --image=$IMAGE_NAME_STG:latest --port=3002 -n mitra-topup
+
+    - echo "Exposing deployment as service..."
+    - kubectl expose deployment $MITRA_NAME -n mitra-topup \
+        --port=80 \
+        --target-port=3002 \
+        --name=${MITRA_NAME}-svc
+
+    - echo "Creating ingress..."
+    - kubectl create ingress $MITRA_NAME -n mitra-topup \
+        --rule="${NEXT_URL}/*=${MITRA_NAME}-svc:80" \
+        --annotation="nginx.ingress.kubernetes.io/rewrite-target=/" \
+        --annotation="cert-manager.io/cluster-issuer=letsencrypt-prod" \
+        --annotation="nginx.ingress.kubernetes.io/ssl-redirect=true"
+
+    # Patch Deployment: set resource + imagePullSecrets
+    - echo "Patching deployment with resources and imagePullSecrets..."
     - |
       cat <<EOF > patch.json
       {
@@ -70,11 +87,11 @@ deploy:
                 "name": "$MITRA_NAME",
                 "resources": {
                   "limits": {
-                    "cpu": "200m",
-                    "memory": "150Mi"
+                    "cpu": "0.5",
+                    "memory": "200Mi"
                   },
                   "requests": {
-                    "cpu": "100m",
+                    "cpu": "0.3",
                     "memory": "150Mi"
                   }
                 }
@@ -87,11 +104,27 @@ deploy:
         }
       }
       EOF
-
     - kubectl patch deployment $MITRA_NAME --patch "$(cat patch.json)"
 
-  # (Optional) hapus file patch
-    - rm -f patch.json
+    # Patch Ingress: set ingressClassName & TLS
+    - echo "Patching ingress with ingressClassName and TLS..."
+    - |
+      cat <<EOF > patch-ingress.json
+      {
+        "spec": {
+          "ingressClassName": "nginx",
+          "tls": [{
+            "hosts": ["$NEXT_URL"],
+            "secretName": "${MITRA_NAME}-tls"
+          }]
+        }
+      }
+      EOF
+    - kubectl patch ingress $MITRA_NAME --patch "$(cat patch-ingress.json)" -n mitra-topup
+
+    # Cleanup
+    - rm -f patch.json patch-ingress.json KUBECONFIG
+
   only:
-    - main 
+    - main
   when: manual
