@@ -1,0 +1,88 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_NAME_STG: "hub.omnicloud.io/vcgamers/staging/${CI_PROJECT_NAME}"
+  NODE_ENV: "production"
+  MITRA_NAME:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "nama Mitra"  # Nilai default, bisa diubah saat manual run
+  NEXTAUTH_SECRET:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "random string"  # Nilai default, bisa diubah saat manual run
+  NEXTAUTH_URL:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "url website"  # Nilai default, bisa diubah saat manual run
+  NEXT_API_URL:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "mitra-api.vcgamers.com"  # Nilai default, bisa diubah saat manual run
+  MITRA_SECRET:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "mitra secret"  # Nilai default, bisa diubah saat manual run
+  MITRA_ID:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "mitra id"  # Nilai default, bisa diubah saat manual run
+  NEXT_URL:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "url webstie"  # Nilai default, bisa diubah saat manual run
+
+
+build:
+  stage: build
+  before_script:
+    - |
+      echo "MITRA_ID=$MITRA_ID" >> .env
+      echo "MITRA_SECRET=$MITRA_SECRET" >> .env
+      echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
+      echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> .env
+      echo "NEXT_API_URL=$NEXT_API_URL" >> .env
+      echo "NEXT_URL=$NEXT_URL" >> .env
+      echo "NODE_ENV=$NODE_ENV" >> .env
+  script:
+    - echo "Build Docker Image"
+    - docker login hub.omnicloud.io -u $USER_REGISTRY -p $PASS_REGISTRY
+    - docker build -t $IMAGE_NAME_STG:latest .
+    - docker push $IMAGE_NAME_STG:latest
+  after_script:
+    - rm -rf .env
+    - docker system prune --all --force
+  only:
+    - main 
+  when: manual
+
+
+deploy:
+  stage: deploy
+  before_script:
+    - echo "$KUBECONFIG" > KUBECONFIG
+  script:
+    - export KUBECONFIG=KUBECONFIG
+    - kubectl create deployment $MITRA_NAME --image=$IMAGE_NAME_STG:latest --port=3002 --restart=Always
+    - kubectl patch deployment $MITRA_NAME --patch "$(cat <<EOF
+        {
+          "spec": {
+            "template": {
+              "spec": {
+                "containers": [{
+                  "name": "$MITRA_NAME",
+                  "resources": {
+                    "limits": {
+                      "cpu": "200m",
+                      "memory": "150Mi"
+                    },
+                    "requests": {
+                      "cpu": "100m",
+                      "memory": "150Mi"
+                    }
+                  }
+                }]
+              }
+            }
+          }
+        }
+EOF
+      )"
+  only:
+    - main 
+  when: manual
