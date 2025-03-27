@@ -25,7 +25,7 @@ variables:
     value: "mitra id"  # Nilai default, bisa diubah saat manual run
   NEXT_URL:
     description: "Bahasa pemrograman (go atau nodejs)"
-    value: "url webstie"  # Nilai default, bisa diubah saat manual run
+    value: "url website"  # Nilai default, bisa diubah saat manual run
 
 
 build:
@@ -59,30 +59,36 @@ deploy:
   script:
     - export KUBECONFIG=KUBECONFIG
     - kubectl create deployment $MITRA_NAME --image=$IMAGE_NAME_STG:latest --port=3002 --restart=Always
-    - kubectl patch deployment $MITRA_NAME --patch "$(cat <<EOF
-        {
+    - |
+    cat <<EOF > patch.json
+    {
+      "spec": {
+        "template": {
           "spec": {
-            "template": {
-              "spec": {
-                "containers": [{
-                  "name": "$MITRA_NAME",
-                  "resources": {
-                    "limits": {
-                      "cpu": "200m",
-                      "memory": "150Mi"
-                    },
-                    "requests": {
-                      "cpu": "100m",
-                      "memory": "150Mi"
-                    }
-                  }
-                }]
+            "containers": [{
+              "name": "$MITRA_NAME",
+              "resources": {
+                "limits": {
+                  "cpu": "200m",
+                  "memory": "150Mi"
+                },
+                "requests": {
+                  "cpu": "100m",
+                  "memory": "150Mi"
+                }
               }
-            }
+            }]
           }
         }
-EOF
-      )"
+      }
+    }
+    EOF
+
+  # ✅ Jalankan patch dari file
+  - kubectl patch deployment $MITRA_NAME --patch "$(cat patch.json)"
+
+  # (Optional) hapus file patch
+  - rm -f patch.json
   only:
     - main 
   when: manual
