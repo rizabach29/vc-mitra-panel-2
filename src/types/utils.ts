@@ -27,6 +27,13 @@ export interface IBanner {
   hyperlink_url: string;
 }
 
+export interface IBannerDetail {
+  id: number;
+  name: string;
+  image_url: string;
+  description: string;
+}
+
 export interface ISosmed {
   key: string;
   name: string;

@@ -17,6 +17,18 @@ import { useRouter } from "next/navigation";
 function CarouselV2({ data, name }: { data: IBanner[]; name: string }) {
   const router = useRouter();
 
+  const onClickItem = (item: IBanner) => {
+    if (item.is_hyperlink) {
+      router.push(item.hyperlink_url);
+      return;
+    }
+
+    if (item.is_clickable) {
+      router.push(`/banner/${item.id}`);
+      return;
+    }
+  };
+
   return (
     <div>
       <div className="bg-background flex justify-center items-center md:py-4">
@@ -41,7 +53,7 @@ function CarouselV2({ data, name }: { data: IBanner[]; name: string }) {
                 key={index.toString()}
                 onClick={() =>
                   item.is_clickable || item.is_hyperlink
-                    ? router.push(item.hyperlink_url)
+                    ? onClickItem(item)
                     : null
                 }
                 className={`flex justify-center md:rounded-lg overflow-clip ${
