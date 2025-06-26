@@ -49,15 +49,15 @@ function DetailCategory(props: Props) {
         <div className="md:mt-4">
           <Breadcrumb className="hidden md:block mb-4">
             <BreadcrumbList>
-              <BreadcrumbItem>
+              <BreadcrumbItem position={1}>
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-              <BreadcrumbItem>
+              <BreadcrumbItem position={2}>
                 <BreadcrumbLink href="/games">Daftar Produk</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-              <BreadcrumbItem>
+              <BreadcrumbItem position={3}>
                 <BreadcrumbPage>{props.data.category.name}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>

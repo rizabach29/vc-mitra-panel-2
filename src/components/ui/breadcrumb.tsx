@@ -18,6 +18,7 @@ const BreadcrumbList = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ol
     ref={ref}
+    itemType="http://schema.org/BreadcrumbList"
     className={cn(
       "list-none flex flex-wrap items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5 ml-2",
       className
@@ -27,16 +28,25 @@ const BreadcrumbList = React.forwardRef<
 ));
 BreadcrumbList.displayName = "BreadcrumbList";
 
-const BreadcrumbItem = React.forwardRef<
-  HTMLLIElement,
-  React.ComponentPropsWithoutRef<"li">
->(({ className, ...props }, ref) => (
-  <li
-    ref={ref}
-    className={cn("inline-flex items-center gap-1.5", className)}
-    {...props}
-  />
-));
+interface BreadcrumbItemProps extends React.ComponentPropsWithoutRef<"li"> {
+  position: number;
+}
+
+const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
+  ({ className, children, position, ...props }, ref) => (
+    <li
+      ref={ref}
+      itemType="http://schema.org/ListItem"
+      itemProp="itemListElement"
+      itemScope
+      className={cn("inline-flex items-center gap-1.5", className)}
+      {...props}
+    >
+      {children}
+      <meta itemProp="position" content={position.toString()} />
+    </li>
+  )
+);
 BreadcrumbItem.displayName = "BreadcrumbItem";
 
 const BreadcrumbLink = React.forwardRef<
@@ -44,15 +54,18 @@ const BreadcrumbLink = React.forwardRef<
   React.ComponentPropsWithoutRef<"a"> & {
     asChild?: boolean;
   }
->(({ asChild, className, ...props }, ref) => {
+>(({ asChild, className, children, ...props }, ref) => {
   const Comp = asChild ? Slot : "a";
 
   return (
     <Comp
       ref={ref}
+      itemProp="item"
       className={cn("transition-colors hover:text-foreground", className)}
       {...props}
-    />
+    >
+      <span itemProp="name">{children}</span>
+    </Comp>
   );
 });
 BreadcrumbLink.displayName = "BreadcrumbLink";

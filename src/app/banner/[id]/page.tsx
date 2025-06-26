@@ -109,11 +109,11 @@ async function Page({ params }: { params: { id: string } }) {
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
           <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">
             <BreadcrumbList>
-              <BreadcrumbItem>
+              <BreadcrumbItem position={1}>
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-              <BreadcrumbItem>
+              <BreadcrumbItem position={2}>
                 <BreadcrumbPage>Banner</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -124,7 +124,7 @@ async function Page({ params }: { params: { id: string } }) {
                 <div className="bg-background rounded-lg w-full hidden md:flex justify-center items-center">
                   <Image
                     src={data.image_url}
-                    alt={`promo diskon/cashback ${data.name}`}
+                    alt={`${data.name}`}
                     title={`promo diskon/cashback ${data.name}`}
                     height={1000}
                     width={3000}

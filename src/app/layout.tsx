@@ -28,7 +28,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-repeat antialiased">
+      <body className="min-h-screen bg-repeat antialiased bg-zinc-50">
         <noscript
           dangerouslySetInnerHTML={{
             __html: `<iframe

@@ -22,7 +22,7 @@ function Header({
             <Image
               width={900}
               height={300}
-              alt={`${category.name} ${name}`}
+              alt={`${category.name}`}
               title={`${category.name} ${name}`}
               src={category?.banner_url}
               style={{ aspectRatio: 3 / 1 }}
