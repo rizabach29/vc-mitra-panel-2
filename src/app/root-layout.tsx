@@ -69,10 +69,12 @@ export default function RootTemplateLayout({
         <TransactionProvider>
           <PWAAlert profile={profile} />
           <Header profile={profile} />
-          <main
-            className={`min-h-[92vh] pb-12 md:pb-4 bg-[#F0F8F6] scroll-mt-28`}
-          >
-            {children}
+          <main>
+            <div
+              className={`min-h-[92vh] pb-12 md:pb-4 bg-[#F0F8F6] scroll-mt-16`}
+            >
+              {children}
+            </div>
             <BottomNav />
           </main>
           <Footer profile={profile} />

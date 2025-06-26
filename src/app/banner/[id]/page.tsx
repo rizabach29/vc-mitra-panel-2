@@ -124,7 +124,7 @@ async function Page({ params }: { params: { id: string } }) {
                 <div className="bg-background rounded-lg w-full hidden md:flex justify-center items-center">
                   <Image
                     src={data.image_url}
-                    alt={`promo diskon/cashback ${data.name}`}
+                    alt={`${data.name}`}
                     title={`promo diskon/cashback ${data.name}`}
                     height={1000}
                     width={3000}
