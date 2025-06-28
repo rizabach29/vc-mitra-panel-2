@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import Header from "./header";
 import { IUseCategoryData } from "./useCategory";
@@ -17,7 +16,6 @@ import InternalLink from "./internal-link";
 
 interface Props extends IUseCategoryData {
   appName: string;
-  session: Session | null;
 }
 
 const ProductList = dynamic(() => import("./(product)/product-list"), {
