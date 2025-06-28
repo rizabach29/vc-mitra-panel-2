@@ -17,7 +17,6 @@ function Content({
   url: string;
 }) {
   const data: IUseCategoryData = useCategory(id);
-  const { data: session } = useSession();
 
   if (data.loading) return <Loading />;
 
@@ -29,7 +28,7 @@ function Content({
         <BackHeader title="Pembelian" />
         <div className="flex justify-center w-full">
           <div className="max-w-7xl w-full mb-0 px-2">
-            <DetailCategory appName={appName} session={session} {...data} />
+            <DetailCategory appName={appName} {...data} />
           </div>
         </div>
       </>
