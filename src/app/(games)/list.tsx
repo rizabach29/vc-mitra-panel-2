@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { TProductItemWithTags } from "@/Type";
-import ProductCard from "./[slug]/(product)/product-card";
+import ProductCard from "./[slug]/(product)/(product-card)/product-card";
 import Loading from "../loading";
 import { useRouter } from "next/navigation";
 import Filter from "./filter";
@@ -112,19 +112,16 @@ function ListCategory() {
                             <p className="text-muted-foreground">{item.name}</p>
                             <div className="grid md:grid-cols-3 grid-cols-2 gap-2 mt-4">
                               {item.products.map((val) => (
-                                <div className="h-full w-full" key={val.key}>
-                                  <ProductCard
-                                    // category={item.category_alias}
-                                    discountedPrice={val.discounted_price}
-                                    name={val.name}
-                                    imageURL={val.image_url}
-                                    price={val.price}
-                                    onClick={() =>
-                                      route.push(
-                                        `/games/${category?.value}?item=${val.key}`
-                                      )
-                                    }
-                                  />
+                                <div
+                                  className="h-full w-full"
+                                  key={val.key}
+                                  onClick={() =>
+                                    route.push(
+                                      `/games/${category?.value}?item=${val.key}`
+                                    )
+                                  }
+                                >
+                                  <ProductCard data={val} />
                                 </div>
                               ))}
                             </div>

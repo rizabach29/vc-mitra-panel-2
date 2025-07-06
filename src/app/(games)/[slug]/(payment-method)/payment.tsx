@@ -3,7 +3,7 @@ import React, { RefObject, useContext, useEffect, useState } from "react";
 import PaymentList from "./payment-list";
 import { IPaymentGroup } from "@/types/transaction";
 
-function Payment({ nextRef }: { nextRef: RefObject<HTMLDivElement> }) {
+function Payment({ nextRef }: { nextRef: string | null }) {
   const [paymentGroups, setPaymentGroups] = useState<IPaymentGroup[]>([]);
 
   const getBank = async () => {

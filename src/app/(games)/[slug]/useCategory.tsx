@@ -12,11 +12,6 @@ export interface IUseCategoryData {
   data: ITransaction;
   products?: TProductItemWithTags;
   loading: boolean;
-  formRef: RefObject<HTMLDivElement>;
-  productListRef: RefObject<HTMLDivElement>;
-  methodRef: RefObject<HTMLDivElement>;
-  couponRef: RefObject<HTMLDivElement>;
-  confirmationRef: RefObject<HTMLDivElement>;
 }
 
 function useCategory(id: string): IUseCategoryData {
@@ -27,12 +22,6 @@ function useCategory(id: string): IUseCategoryData {
   const [products, setProducts] = useState<TProductItemWithTags>();
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
-
-  const formRef = useRef<HTMLDivElement>(null);
-  const productListRef = useRef<HTMLDivElement>(null);
-  const methodRef = useRef<HTMLDivElement>(null);
-  const couponRef = useRef<HTMLDivElement>(null);
-  const confirmationRef = useRef<HTMLDivElement>(null);
 
   const getData = async () => {
     setLoading(true);
@@ -100,11 +89,6 @@ function useCategory(id: string): IUseCategoryData {
     data,
     products,
     loading,
-    formRef,
-    productListRef,
-    methodRef,
-    couponRef,
-    confirmationRef,
   };
 }
 

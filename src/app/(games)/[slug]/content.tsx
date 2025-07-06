@@ -1,13 +1,10 @@
-"use client";
-import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
-import useCategory, { IUseCategoryData } from "./useCategory";
 import DetailCategory from "./DetailCategory";
-import { useSession } from "next-auth/react";
 import BackHeader from "@/components/header/back-header";
 import Ldjson from "./ldjson";
+import { getCategory, getProducts } from "./data";
 
-function Content({
+async function Content({
   id,
   appName,
   url,
@@ -16,25 +13,27 @@ function Content({
   appName: string;
   url: string;
 }) {
-  const data: IUseCategoryData = useCategory(id);
+  const category = await getCategory(id);
+  if (!category) return <NotFound />;
 
-  if (data.loading) return <Loading />;
+  const products = await getProducts(id);
 
-  if (data.data.category === null) return <NotFound />;
-  else if (data.data.category !== null && data.data.category !== undefined) {
-    return (
-      <>
-        <Ldjson appName={appName} url={url} />
-        <BackHeader title="Pembelian" />
-        <div className="flex justify-center w-full">
-          <div className="max-w-7xl w-full mb-0 px-2">
-            <DetailCategory appName={appName} {...data} />
-          </div>
+  return (
+    <>
+      <Ldjson appName={appName} url={url} />
+      <BackHeader title="Pembelian" />
+      <div className="flex justify-center w-full">
+        <div className="max-w-7xl w-full mb-0 px-2">
+          <DetailCategory
+            data={{ category, products }}
+            appName={appName}
+            products={products}
+            loading={false}
+          />
         </div>
-      </>
-    );
-  }
-  return <NotFound />;
+      </div>
+    </>
+  );
 }
 
 export default Content;

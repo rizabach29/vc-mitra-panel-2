@@ -1,3 +1,5 @@
+"use client";
+
 import { LooseObject, TProductForm } from "@/Type";
 import Spinner from "@/components/spinner";
 import { Input } from "@/components/ui/input";

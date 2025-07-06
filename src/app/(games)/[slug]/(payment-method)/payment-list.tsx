@@ -21,7 +21,7 @@ function PaymentList({
   nextRef,
 }: {
   paymentGroup: IPaymentGroup[];
-  nextRef: RefObject<HTMLDivElement>;
+  nextRef: string | null;
 }) {
   const { toast } = useToast();
   const { dispatch, data } = useContext(
@@ -71,9 +71,10 @@ function PaymentList({
         action: "SET_PAYMENT_METHOD",
         payload: payment,
       });
-      nextRef.current?.scrollIntoView({
-        behavior: "smooth",
-      });
+      if (nextRef)
+        document.getElementById(nextRef)?.scrollIntoView({
+          behavior: "smooth",
+        });
     },
     [data.product, data.payment]
   );
