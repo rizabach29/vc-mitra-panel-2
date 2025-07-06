@@ -56,8 +56,6 @@ export default function RootTemplateLayout({
     }
   }, []);
 
-  if (loading) return <Loading />;
-
   return (
     <>
       <style
@@ -72,7 +70,7 @@ export default function RootTemplateLayout({
           <PWAAlert profile={profile} />
           <Header profile={profile} />
           <main
-            className={`min-h-[92vh] pb-12 md:pb-4 bg-[#F0F8F6] scroll-mt-16`}
+            className={`min-h-[92vh] pb-12 md:pb-4 bg-[#F0F8F6] scroll-mt-28`}
           >
             {children}
             <BottomNav />

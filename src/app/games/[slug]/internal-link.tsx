@@ -1,31 +1,48 @@
+import { GetCredHeader } from "@/app/api/api-utils";
 import { Badge } from "@/components/ui/badge";
 import { IProductCategory } from "@/Type";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-function InternalLink() {
-  const [data, setData] = useState<IProductCategory[]>([]);
-
-  const getData = async () => {
-    const listChar = ["a", "i", "u", "e", "o"];
-    var num = Math.floor(Math.random() * (listChar.length - 1 + 1) + 0);
-    let searchParams = new URLSearchParams({
-      page: `${1}`,
-      limit: "10",
-      search: `${listChar[num]}`,
-    });
-
-    var res = await fetch(`/api/products/categories?` + searchParams);
-
-    if (res.ok) {
-      var result = await res.json();
-      setData(result.data);
-    }
+function getHeader() {
+  var credentialHeader = GetCredHeader();
+  var header = {
+    "Content-Type": "application/json",
+    "X-Sign": credentialHeader.sign,
+    "X-User-Id": credentialHeader.mitraid,
+    "X-Timestamp": credentialHeader.timestamp.toString(),
   };
+  return header;
+}
 
-  useEffect(() => {
-    getData();
-  }, []);
+const getData: () => Promise<IProductCategory[]> = async () => {
+  const listChar = ["a", "i", "u", "e", "o"];
+  var num = Math.floor(Math.random() * (listChar.length - 1 + 1) + 0);
+  let searchParams = new URLSearchParams({
+    page: `${1}`,
+    limit: "10",
+    search: `${listChar[num]}`,
+  });
+
+  var res = await fetch(
+    `${process.env.NEXT_API_URL}/v2/panel/category?` + searchParams,
+    {
+      next: {
+        revalidate: 30,
+      },
+      headers: getHeader(),
+    }
+  );
+  if (res.ok) {
+    var result = await res.json();
+    return result.data;
+  }
+
+  return [];
+};
+
+async function InternalLink() {
+  const data = await getData();
 
   return (
     <div>

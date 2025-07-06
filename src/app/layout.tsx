@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import RootTemplateLayout from "./root-layout";
+import Loading from "./loading";
 
 export default function RootLayout({
   children,
@@ -39,7 +41,9 @@ export default function RootLayout({
           ></iframe>`,
           }}
         />
-        <RootTemplateLayout>{children}</RootTemplateLayout>
+        <Suspense fallback={<Loading />}>
+          <RootTemplateLayout>{children}</RootTemplateLayout>
+        </Suspense>
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { getFeePrice, getTotalPrice, priceMask } from "@/Helpers";
 import { Button } from "@/components/ui/button";
 import { ToastAction } from "@/components/ui/toast";
@@ -16,9 +18,9 @@ function CheckoutAction({
   confirmationRef,
   paymentRef,
 }: {
-  formRef: RefObject<HTMLDivElement>;
-  confirmationRef: RefObject<HTMLDivElement>;
-  paymentRef: RefObject<HTMLDivElement>;
+  formRef: string | null;
+  confirmationRef: string | null;
+  paymentRef: string | null;
 }) {
   const { data } = useContext(TransactionContext) as ITransactionContext;
   const { data: session } = useSession();
@@ -32,10 +34,10 @@ function CheckoutAction({
         title: "Failed",
         description: "Metode pembayaran belum dipilih",
         variant: "destructive",
-        action: (
+        action: paymentRef ? (
           <ToastAction
             onClick={() =>
-              paymentRef.current?.scrollIntoView({
+              document.getElementById(paymentRef)?.scrollIntoView({
                 behavior: "smooth",
               })
             }
@@ -43,7 +45,7 @@ function CheckoutAction({
           >
             Lengkapi Data
           </ToastAction>
-        ),
+        ) : undefined,
       });
 
     if (
@@ -56,10 +58,10 @@ function CheckoutAction({
         title: "Failed",
         description: "Data akun tidak lengkap / tidak ditemukan",
         variant: "destructive",
-        action: (
+        action: formRef ? (
           <ToastAction
             onClick={() =>
-              formRef.current?.scrollIntoView({
+              document.getElementById(formRef)?.scrollIntoView({
                 behavior: "smooth",
               })
             }
@@ -67,7 +69,7 @@ function CheckoutAction({
           >
             Lengkapi Data
           </ToastAction>
-        ),
+        ) : undefined,
       });
 
     if (!session) {
@@ -83,10 +85,10 @@ function CheckoutAction({
         title: "Failed",
         description: "Data Konfirmasi Belum Lengkap",
         variant: "destructive",
-        action: (
+        action: confirmationRef ? (
           <ToastAction
             onClick={() =>
-              confirmationRef.current?.scrollIntoView({
+              document.getElementById(confirmationRef)?.scrollIntoView({
                 behavior: "smooth",
               })
             }
@@ -94,7 +96,7 @@ function CheckoutAction({
           >
             Lengkapi Data
           </ToastAction>
-        ),
+        ) : undefined,
       });
     }
 
