@@ -22,7 +22,7 @@ function Page() {
 
     setLoading(true);
     var res = await signIn("credentials", {
-      phone: "0" + phone,
+      phone: "62" + phone,
       password,
       redirect: false,
     });
