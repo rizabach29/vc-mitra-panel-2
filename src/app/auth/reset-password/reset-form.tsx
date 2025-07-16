@@ -30,7 +30,7 @@ function ResetForm(props: props) {
     var res = await fetch("/api/forgot-password/request", {
       method: "POST",
       body: JSON.stringify({
-        phone: "0" + props.phone,
+        phone: "62" + props.phone,
       }),
     });
 

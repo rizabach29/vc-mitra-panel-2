@@ -38,7 +38,7 @@ function OTP(props: props) {
     var res = await fetch("/api/forgot-password/otp", {
       method: "POST",
       body: JSON.stringify({
-        phone: "0" + props.phone,
+        phone: "62" + props.phone,
         otp,
       }),
     });
