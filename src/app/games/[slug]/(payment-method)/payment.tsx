@@ -2,8 +2,15 @@
 import React, { RefObject, useContext, useEffect, useState } from "react";
 import PaymentList from "./payment-list";
 import { IPaymentGroup } from "@/types/transaction";
+import { IProductCategory } from "@/Type";
 
-function Payment({ nextRef }: { nextRef: string | null }) {
+function Payment({
+  nextRef,
+  category,
+}: {
+  nextRef: string | null;
+  category: IProductCategory;
+}) {
   const [paymentGroups, setPaymentGroups] = useState<IPaymentGroup[]>([]);
 
   const getBank = async () => {
@@ -23,7 +30,13 @@ function Payment({ nextRef }: { nextRef: string | null }) {
   }, []);
 
   if (paymentGroups.length > 0)
-    return <PaymentList nextRef={nextRef} paymentGroup={paymentGroups} />;
+    return (
+      <PaymentList
+        nextRef={nextRef}
+        paymentGroup={paymentGroups}
+        category={category}
+      />
+    );
 }
 
 export default Payment;

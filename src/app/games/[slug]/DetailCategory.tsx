@@ -12,7 +12,7 @@ import {
 import FormWrapper from "./form-wrapper";
 import dynamic from "next/dynamic";
 import InternalLink from "./internal-link";
-import ProductList from "./(product)/product-list";
+import ProductWrapper from "./(product)/product-wrapper";
 
 interface Props extends IUseCategoryData {
   appName: string;
@@ -73,15 +73,17 @@ function DetailCategory(props: Props) {
           <div className="col-span-3 ">
             <div id="product-list" className="mt-4 md:mt-0">
               <FormWrapper number={1} title="Produk">
-                <ProductList
+                <ProductWrapper
                   nextRef={"payment-method"}
                   products={props.products}
+                  isPostpaid={props.data.category.is_postpaid}
                 />
               </FormWrapper>
             </div>
             <div id="payment-method" className="my-4">
               <FormWrapper number={2} title="Pilih Pembayaran">
                 <Payment
+                  category={props.data.category}
                   nextRef={
                     props.data.category.forms
                       ? "form-account"
@@ -96,6 +98,7 @@ function DetailCategory(props: Props) {
                   <FormAccount
                     isCheckRequired={props.data.category.is_check_id}
                     forms={props.data.category.forms}
+                    isPostpaid={props.data.category.is_postpaid}
                   />
                 </FormWrapper>
               </div>

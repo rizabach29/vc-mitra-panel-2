@@ -106,16 +106,54 @@ function CheckoutAction({
   const getTotal = useCallback(() => {
     let num = 0;
 
-    if (data.product)
-      num += getTotalPrice(data.product, data.promo, data.payment);
+    if (data.category?.is_postpaid) {
+      if (data.tagihan)
+        num += getTotalPrice({
+          product: data.tagihan,
+          promo: data.promo,
+          payment: data.payment,
+          type: "inquiry",
+        });
+    } else {
+      if (data.product)
+        num += getTotalPrice({
+          product: data.product,
+          promo: data.promo,
+          payment: data.payment,
+          type: "product",
+        });
+    }
 
     return priceMask(num);
-  }, [data.product, data.promo, data.payment]);
+  }, [data.product, data.promo, data.payment, data.category, data.tagihan]);
 
   const getFee = useCallback(() => {
-    let num = getFeePrice(data.product, data.payment);
-    return priceMask(num);
-  }, [data.product, data.payment]);
+    let total = 0;
+    if (data.category?.is_postpaid) {
+      if (data.tagihan)
+        total = getFeePrice({
+          product: data.tagihan,
+          payment: data.payment,
+          type: "inquiry",
+        });
+    } else
+      total = getFeePrice({
+        product: data.product,
+        payment: data.payment,
+        type: "product",
+      });
+
+    return priceMask(total);
+  }, [data.product, data.payment, data.category, data.tagihan]);
+
+  const getTotalBelanja = useCallback(() => {
+    if (data?.category?.is_postpaid)
+      return priceMask(
+        (data?.tagihan?.admin_total || 0) + (data?.tagihan?.bill_total || 0)
+      );
+
+    return priceMask(data.product?.discounted_price || data.product?.price);
+  }, [data.product, data.tagihan, data.category]);
 
   return (
     <>
@@ -125,9 +163,7 @@ function CheckoutAction({
             <div className="hidden md:block">
               <p className="text-muted-foreground text-xs">Total Belanja</p>
               <p className="text-foreground font-medium text-md">
-                {priceMask(
-                  data.product?.discounted_price || data.product?.price
-                )}
+                {getTotalBelanja()}
               </p>
             </div>
             <div className="hidden md:block">
@@ -170,7 +206,7 @@ function CheckoutAction({
           <div className="flex justify-between">
             <p className="text-muted-foreground text-xs">Total Belanja</p>
             <p className="text-foreground font-medium text-md">
-              {priceMask(data.product?.discounted_price || data.product?.price)}
+              {getTotalBelanja()}
             </p>
           </div>
           <div className="flex justify-between">
@@ -179,17 +215,7 @@ function CheckoutAction({
           </div>
         </div>
       </div>
-      <Purchase
-        products={data.products}
-        payment={data.payment}
-        onOpenChange={setIsCheckoutOpen}
-        isOpen={isCheckoutOpen}
-        category={data.category}
-        product={data.product}
-        promo={data.promo}
-        form={data.form}
-        account={data.account}
-      />
+      <Purchase onOpenChange={setIsCheckoutOpen} isOpen={isCheckoutOpen} />
     </>
   );
 }
