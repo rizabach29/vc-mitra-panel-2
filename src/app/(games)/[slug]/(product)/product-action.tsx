@@ -16,6 +16,7 @@ function ProductAction(props: IProps) {
   const { dispatch } = useContext(TransactionContext) as ITransactionContext;
 
   const onClick = () => {
+    console.log("Selected Product", props.val);
     dispatch({
       action: "SET_PRODUCT",
       payload: props.val,

@@ -52,6 +52,7 @@ export interface IProductCategory {
   description: string;
   forms?: TProductForm[];
   is_check_id?: boolean;
+  is_postpaid?: boolean;
 
   key: string;
   name: string;
@@ -142,4 +143,21 @@ export interface ITransactionHistoryList {
   payment_channel: string;
   payment_logo: string;
   expired_at?: string;
+}
+
+export interface IInquiryCheck {
+  category_key: string;
+  category_name: string;
+  product_key: string;
+  product_name: string;
+  bill_total: number;
+  admin_total: number;
+  grand_total: number;
+  customer_no: string;
+  customer_name: string;
+  form_data: { key: string; value: string | number; alias: string }[];
+  bill_detail: {
+    headers: { key: string; value: string | number }[];
+    details: { key: string; value: string | number }[][];
+  };
 }

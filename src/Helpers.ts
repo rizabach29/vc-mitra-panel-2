@@ -1,5 +1,6 @@
 import {
   IFlashSaleInProduct,
+  IInquiryCheck,
   IProductCategory,
   TProduct,
   TProductItem,
@@ -42,45 +43,90 @@ function debounce<Params extends any[]>(
   };
 }
 
-const getDiscount = (product: TProductItem, promo: IPromo) => {
+const getDiscount = (product: TProductItem | IInquiryCheck, promo: IPromo) => {
   if (!promo.is_discount_percent) return promo.discount_amount;
 
-  let total = product.discounted_price || product.price;
+  let total = 0;
+  // check product is TProductItem or IInquiryCheck
+  if ("discounted_price" in product) {
+    total = product.discounted_price || product.price;
+  } else {
+    total = product.admin_total + product.admin_total;
+  }
+
   let dicount = (promo.discount_percent * total) / 100;
   if (dicount > promo.maximum_discount_amount)
     return promo.maximum_discount_amount;
   return dicount;
 };
 
-const getTotalPrice = (
-  product: TProductItem,
-  promo?: IPromo,
-  payment?: IPayment
-) => {
+type TTotalPrice = {
+  promo?: IPromo;
+  payment?: IPayment;
+};
+interface TTotalProductParams extends TTotalPrice {
+  type: "product";
+  product: TProductItem;
+}
+
+interface TTotalInquiryParams extends TTotalPrice {
+  type: "inquiry";
+  product: IInquiryCheck;
+}
+
+const getTotalPrice = (data: TTotalProductParams | TTotalInquiryParams) => {
   let total = 0;
 
-  if (product) {
-    total = product.discounted_price || product.price;
-
-    if (promo) total -= getDiscount(product, promo);
-
-    let fee = 0;
-    if (payment)
-      fee = payment.fee_percent
-        ? (total * payment.fee_percent) / 100
-        : payment.fee_amount;
-
-    total += fee;
+  if (data.type === "inquiry") {
+    if (data.product) {
+      total = data.product.bill_total + data.product.admin_total;
+    }
   }
+
+  if (data.type === "product") {
+    if (data.product) {
+      total = data.product.discounted_price || data.product.price;
+    }
+  }
+
+  if (data.promo) {
+    total -= getDiscount(data.product, data.promo);
+  }
+
+  let fee = 0;
+  if (data.payment)
+    fee = data.payment.fee_percent
+      ? (total * data.payment.fee_percent) / 100
+      : data.payment.fee_amount;
+
+  total += fee;
 
   return total;
 };
 
-const getFeePrice = (product?: TProductItem, payment?: IPayment) => {
+interface TProductFeePrice {
+  type: "product";
+  product?: TProductItem;
+  payment?: IPayment;
+}
+
+interface TInquiryFeePrice {
+  type: "inquiry";
+  product?: IInquiryCheck;
+  payment?: IPayment;
+}
+
+const getFeePrice = (data: TProductFeePrice | TInquiryFeePrice) => {
+  const { payment } = data;
   if (payment) {
     if (payment?.fee_percent) {
-      if (product) {
-        let total = product.discounted_price || product.price;
+      if (data.product) {
+        let total = 0;
+
+        total =
+          data.type === "product"
+            ? data.product.discounted_price || data.product.price
+            : data.product.bill_total + data.product.admin_total;
 
         return (total * payment.fee_percent) / 100;
       }

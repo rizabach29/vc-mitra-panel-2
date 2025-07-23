@@ -14,6 +14,7 @@ async function Content({
   url: string;
 }) {
   const category = await getCategory(id);
+  console.log("Category data:", category);
   if (!category) return <NotFound />;
 
   const products = await getProducts(id);

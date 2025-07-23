@@ -1,4 +1,5 @@
 import {
+  IInquiryCheck,
   IProductCategory,
   LooseObject,
   TProductItem,
@@ -135,6 +136,7 @@ export interface ITransaction {
   payment?: IPayment;
   form?: LooseObject;
   account?: IAccount;
+  tagihan?: IInquiryCheck | null;
 }
 
 // ===============================================

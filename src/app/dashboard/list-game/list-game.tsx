@@ -31,6 +31,7 @@ export default function ListGame({ name }: { name: string }) {
 
     if (res.ok) {
       var result = await res.json();
+      console.log("Category result:", result);
       setData(result.data);
 
       // if (result.data) {
@@ -77,7 +78,6 @@ export default function ListGame({ name }: { name: string }) {
   }, [pageIndex]);
 
   const handleSearchData = (e: string) => {
-    console.log(data);
     if (e.length > 0) {
       setSearchData(
         data.filter((val) => val?.name.toLowerCase().includes(e.toLowerCase()))
