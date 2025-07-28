@@ -33,25 +33,28 @@ export default function RootTemplateLayout({
 
   useEffect(() => {
     get();
-    if (typeof window === "object") {
-      const qchatInit = document.createElement("script");
-      qchatInit.src = "https://webchat.qontak.com/qchatInitialize.js";
-      const qchatWidget = document.createElement("script");
-      qchatWidget.src = "https://webchat.qontak.com/js/app.js";
-      document.head.prepend(qchatInit);
-      document.head.prepend(qchatWidget);
-      qchatInit.onload = function () {
-        window.qchatInitialize({
-          id: process.env.NEXT_PUBLIC_QONTAK_ID,
-          code: process.env.NEXT_PUBLIC_QONTAK_CODE,
-        });
-      };
-      const iframeQontak = document.getElementById("qontak-webchat-widget");
-      if (iframeQontak) iframeQontak.style.bottom = "24px";
+    if (
+      process.env.NEXT_PUBLIC_QONTAK_ID &&
+      process.env.NEXT_PUBLIC_QONTAK_CODE
+    ) {
+      if (typeof window === "object") {
+        const qchatInit = document.createElement("script");
+        qchatInit.src = "https://webchat.qontak.com/qchatInitialize.js";
+        const qchatWidget = document.createElement("script");
+        qchatWidget.src = "https://webchat.qontak.com/js/app.js";
+        document.head.prepend(qchatInit);
+        document.head.prepend(qchatWidget);
+        qchatInit.onload = function () {
+          window.qchatInitialize({
+            id: process.env.NEXT_PUBLIC_QONTAK_ID,
+            code: process.env.NEXT_PUBLIC_QONTAK_CODE,
+          });
+        };
+        const iframeQontak = document.getElementById("qontak-webchat-widget");
+        if (iframeQontak) iframeQontak.style.bottom = "24px";
+      }
     }
   }, []);
-
-  if (loading) return <Loading />;
 
   return (
     <>
@@ -64,20 +67,16 @@ export default function RootTemplateLayout({
       />
       <SessionProvider>
         <TransactionProvider>
-          <div className="bg-zinc-50">
-            <PWAAlert profile={profile} />
-            <Header profile={profile} />
-            <div>
-              <div
-                className={`min-h-[92vh] pb-12 md:pb-4 bg-[#F0F8F6] scroll-mt-16`}
-              >
-                {children}
-              </div>
-              <BottomNav />
-            </div>
-            <Footer profile={profile} />
-            <Toaster />
-          </div>
+          <PWAAlert profile={profile} />
+          <Header profile={profile} />
+          <main
+            className={`min-h-[92vh] pb-12 md:pb-4 bg-[#F0F8F6] scroll-mt-28`}
+          >
+            {children}
+            <BottomNav />
+          </main>
+          <Footer profile={profile} />
+          <Toaster />
         </TransactionProvider>
       </SessionProvider>
     </>

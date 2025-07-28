@@ -39,7 +39,7 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
     let base = 4.7;
 
     return {
-      ratingValue: base + (date.getMonth() % 3),
+      ratingValue: base + (date.getMonth() % 3) * 0.1,
       reviewCount: format(date, "yyMMdd"),
     };
   }, [date.getMonth]);

@@ -1,42 +1,24 @@
 import { TProductItemWithTags } from "@/Type";
-import React, { RefObject, useContext, useRef } from "react";
-import ProductCard from "./product-card";
-import TransactionContext, {
-  ITransactionContext,
-} from "@/infrastructures/context/transaction/transaction.context";
-import { Badge } from "@/components/ui/badge";
+import React from "react";
+import ProductCard from "./(product-card)/product-card";
+import BadgeGroup from "./badge-group";
+import ProductAction from "./product-action";
 
 interface IProductList {
   products?: TProductItemWithTags;
-  nextRef: RefObject<HTMLDivElement>;
+  nextRef: string;
 }
 
 function ProductList(prop: IProductList) {
-  const { data, dispatch } = useContext(
-    TransactionContext
-  ) as ITransactionContext;
-
-  const ref = useRef<HTMLDivElement>(null);
-
-  function onTagSelected(tag: string) {
-    const section = document.getElementById("tag-" + tag);
-    section?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
   return (
     <>
-      <div className="relative -mx-2 px-2" ref={ref}>
+      <div className="relative -mx-2 px-2">
         {prop.products && prop.products.tags?.length > 0 ? (
           <div className="flex -mt-2 sticky top-12 bg-background z-10 py-2 gap-2">
             {prop.products.tags?.map((item) => (
-              <Badge
-                className="cursor-pointer"
-                variant="outline"
-                key={item.value}
-                onClick={() => onTagSelected(item.label)}
-              >
-                {item.label}
-              </Badge>
+              <BadgeGroup key={item.value} {...item}>
+                <h3 className="text-xs p-0">{item.label}</h3>
+              </BadgeGroup>
             ))}
           </div>
         ) : (
@@ -54,22 +36,9 @@ function ProductList(prop: IProductList) {
                 <div className="grid md:grid-cols-3 grid-cols-2 gap-2 mt-4">
                   {item.products.map((val) => (
                     <div className="h-full" key={val.key}>
-                      <ProductCard
-                        selected={val.key === data.product?.key}
-                        onClick={() => {
-                          dispatch({
-                            action: "SET_PRODUCT",
-                            payload: val,
-                          });
-                          prop.nextRef.current?.scrollIntoView({
-                            behavior: "smooth",
-                          });
-                        }}
-                        discountedPrice={val.discounted_price}
-                        name={val.name}
-                        imageURL={val.image_url}
-                        price={val.price}
-                      />
+                      <ProductAction nextRef={prop.nextRef} val={val}>
+                        <ProductCard data={val} />
+                      </ProductAction>
                     </div>
                   ))}
                 </div>

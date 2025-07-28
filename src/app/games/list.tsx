@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { TProductItem } from "@/Type";
-import ProductCard from "./[slug]/(product)/product-card";
+import { TProductItemWithTags } from "@/Type";
+import ProductCard from "./[slug]/(product)/(product-card)/product-card";
 import Loading from "../loading";
 import { useRouter } from "next/navigation";
 import Filter from "./filter";
@@ -14,9 +14,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Badge } from "@/components/ui/badge";
 
 function ListCategory() {
-  const [data, setData] = useState<TProductItem[]>([]);
+  const [data, setData] = useState<TProductItemWithTags | null>(null);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState<TValue | undefined>();
   const route = useRouter();
@@ -41,7 +42,7 @@ function ListCategory() {
           setLoading(false);
           return;
         }
-        setData([]);
+        setData(null);
       }
     }
     setLoading(false);
@@ -53,16 +54,21 @@ function ListCategory() {
     })();
   }, [category]);
 
+  function onTagSelected(tag: string) {
+    const section = document.getElementById("tag-" + tag);
+    section?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
     <div className="flex justify-center w-full px-2">
       <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
         <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">
           <BreadcrumbList>
-            <BreadcrumbItem>
+            <BreadcrumbItem position={1}>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem>
+            <BreadcrumbItem position={2}>
               <BreadcrumbPage>Daftar Produk</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -72,29 +78,56 @@ function ListCategory() {
             <p className="font-semibold text-primary text-2xl">Produk</p>
             <Filter onChange={setCategory} />
           </div>
-          <div className="min-h-[68vh] bg-background pb-8">
+          <div className="min-h-[68vh] bg-background pb-8 px-2">
             {loading ? (
               <Loading />
             ) : (
               <>
-                {data.length > 0 ? (
-                  <div className="grid sm:grid-cols-4 md:grid-cols-5 grid-cols-2 gap-2 mx-2">
-                    {data.map((item, idx) => (
-                      <div className="w-full h-full" key={`${idx}`}>
-                        <ProductCard
-                          // category={item.category_alias}
-                          discountedPrice={item.discounted_price}
-                          name={item.name}
-                          imageURL={item.image_url}
-                          price={item.price}
-                          onClick={() =>
-                            route.push(
-                              `/games/${category?.value}?item=${item.key}`
-                            )
-                          }
-                        />
+                {data ? (
+                  <div className="relative -mx-2 px-2">
+                    {data && data.tags?.length > 0 ? (
+                      <div className="flex -mt-2 sticky top-[150px] bg-background z-10 py-2 gap-2">
+                        {data.tags?.map((item) => (
+                          <Badge
+                            className="cursor-pointer"
+                            variant="outline"
+                            key={item.value}
+                            onClick={() => onTagSelected(item.label)}
+                          >
+                            {item.label}
+                          </Badge>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <></>
+                    )}
+                    <div>
+                      {data &&
+                        data.products?.map((item) => (
+                          <div
+                            id={"tag-" + item.name}
+                            key={item.name}
+                            className="mt-4 scroll-mt-44"
+                          >
+                            <p className="text-muted-foreground">{item.name}</p>
+                            <div className="grid md:grid-cols-3 grid-cols-2 gap-2 mt-4">
+                              {item.products.map((val) => (
+                                <div
+                                  className="h-full w-full"
+                                  key={val.key}
+                                  onClick={() =>
+                                    route.push(
+                                      `/games/${category?.value}?item=${val.key}`
+                                    )
+                                  }
+                                >
+                                  <ProductCard data={val} />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full w-full"></div>
