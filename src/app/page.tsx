@@ -40,8 +40,8 @@ export default function Home() {
 
   return (
     <>
+      <h1 className="hidden">Beli Voucher & Top Up Game Murah</h1>
       <div className="bg-background">
-        <h1 className="hidden">Beli Voucher & Top Up Game Murah</h1>
         <CarouselWrapper name={name} />
         <FlashSaleWrapper />
         <ListGame name={name} />

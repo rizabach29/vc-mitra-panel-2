@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  IInquiryCheck,
   IProductCategory,
   IProfile,
   LooseObject,
@@ -42,6 +43,10 @@ export type TransactionSetProfile = {
   action: "SET_PROFILE";
   payload: IProfile | null;
 };
+export type TransactionTagihan = {
+  action: "SET_TAGIHAN";
+  payload: IInquiryCheck | null;
+};
 
 export type TransactionDispatch =
   | TransactionSetCategory
@@ -51,6 +56,7 @@ export type TransactionDispatch =
   | TransactionSetPromo
   | TransactionSetAccount
   | TransactionSetProfile
+  | TransactionTagihan
   | TransactionSetPayment;
 
 export interface ITransactionContext {

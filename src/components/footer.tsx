@@ -27,11 +27,12 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
   }, []);
 
   return (
-    <div
+    <footer
+      id="footer"
       // style={{ backgroundImage: 'url("/assets/illustration/v1/footer.svg")' }}
       className="bg-no-repeat bg-right bg-background w-full"
     >
-      {!path.includes("/games/") && !path.includes("/auth/") ? (
+      {true ? (
         <>
           {!path.includes("/transaksi/") &&
           !path.includes("/syarat-ketentuan") &&
@@ -263,7 +264,7 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
           {`Designed by ${profile?.name}`}
         </p>
       </div>
-    </div>
+    </footer>
   );
 }
 

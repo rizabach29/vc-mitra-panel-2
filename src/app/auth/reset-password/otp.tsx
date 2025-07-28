@@ -46,13 +46,13 @@ function OTP(props: props) {
     setLoading(false);
     if (res.ok) {
       toast({
-        title: "OTP telah terkirim",
-        description: "Sistem telah mengirimkan OTP reset Sandi ke WA",
+        title: "Sukses",
+        description: "Sukses mengirim OTP",
         variant: "success",
       });
       var body = await res.json();
 
-      return router.push("/auth/reset-password/", body.data.token);
+      return router.push("/auth/reset-password/" + body?.data?.token);
     } else {
       toast({
         title: "Failed",

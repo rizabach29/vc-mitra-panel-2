@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import RootTemplateLayout from "./root-layout";
+import Loading from "./loading";
 
 export default function RootLayout({
   children,
@@ -28,7 +30,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-repeat antialiased">
+      <body className="min-h-screen bg-repeat antialiased bg-zinc-50">
         <noscript
           dangerouslySetInnerHTML={{
             __html: `<iframe
@@ -39,7 +41,9 @@ export default function RootLayout({
           ></iframe>`,
           }}
         />
-        <RootTemplateLayout>{children}</RootTemplateLayout>
+        <Suspense fallback={<Loading />}>
+          <RootTemplateLayout>{children}</RootTemplateLayout>
+        </Suspense>
       </body>
     </html>
   );
