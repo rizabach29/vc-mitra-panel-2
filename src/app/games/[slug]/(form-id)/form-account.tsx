@@ -59,6 +59,8 @@ function FormAccount({ forms, isCheckRequired, isPostpaid }: Prop) {
         const payload = {
           category_key: selectedData.category?.key,
           product_key: selectedData.product?.key,
+          phone: selectedData.account?.noWhatsapp,
+          email: selectedData.account?.email,
           form_data: Object.keys(data).map((key) => ({
             key,
             value: data[key],
