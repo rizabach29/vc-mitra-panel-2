@@ -100,11 +100,11 @@ function TransactionHistoryDetail({
         ) : null}
         <div className="flex flex-row justify-stretch items-center mt-2">
           <div className="grid md:grid-cols-2 w-full gap-3 h-full mt-1">
-            <div className="w-full bg-background h-full px-4 pt-3 pb-6 rounded-lg shadow flex-1">
-              <h2 className="font-medium text-lg text-primary">
+            <div className="w-full bg-background h-full pt-3 pb-6 rounded-lg shadow flex-1">
+              <h2 className="font-medium text-lg text-primary px-4">
                 Rincian Transaksi
               </h2>
-              <div className="mt-4 space-y-4 h-full">
+              <div className="mt-4 space-y-4 px-4">
                 <div className="flex justify-between w-full">
                   <p className="text-muted-foreground text-sm">Status</p>
                   <div>
@@ -181,6 +181,74 @@ function TransactionHistoryDetail({
                   </div>
                 </div>
               </div>
+              {data.bill_details && (
+                <>
+                  {data.bill_details.headers.length > 0 && (
+                    <>
+                      <Separator className="my-3 w-full" />
+                      <h2 className="font-medium text-lg text-primary px-4">
+                        Detail Pelanggan
+                      </h2>
+                      <div className="px-4 mt-4 space-y-4">
+                        {data?.bill_details?.headers?.map((header, index) => (
+                          <div
+                            className="flex justify-between w-full"
+                            key={index}
+                          >
+                            <p className="text-muted-foreground text-sm">
+                              {header.key}
+                            </p>
+                            <div>
+                              <p>{header.value}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {data.bill_details.details.length > 0 && (
+                    <>
+                      <Separator className="my-3 w-full" />
+                      <h2 className="font-medium text-lg text-primary px-4">
+                        Detail Tagihan
+                      </h2>
+                      <div className="px-4 mt-4 space-y-4">
+                        {data?.bill_details?.details?.map((header, index) => (
+                          <>
+                            {header.map((item, idx) => (
+                              <div
+                                className="flex justify-between w-full"
+                                key={idx}
+                              >
+                                <p className="text-muted-foreground text-sm">
+                                  {item.key}
+                                </p>
+                                <div>
+                                  <p>{item.value}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </>
+                        ))}
+                        <div className="flex justify-between w-full">
+                          <p className="text-muted-foreground text-sm">
+                            Tagihan
+                          </p>
+                          <div>
+                            <p>{priceMask(data.price)}</p>
+                          </div>
+                        </div>
+                        <div className="flex justify-between w-full">
+                          <p className="text-muted-foreground text-sm">Admin</p>
+                          <div>
+                            <p>{priceMask(data.admin_fee)}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
             </div>
             {data.payment_information ? (
               <>

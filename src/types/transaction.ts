@@ -74,6 +74,10 @@ export interface ITransactionHistoryDetail {
   status: number;
   history_status: ITransactionHistory[];
   payment_information: IVAPayment | ILinkPayment | IQRPayment;
+  bill_details?: {
+    details: { key: string; value: string }[][];
+    headers: { key: string; value: string }[];
+  };
 }
 
 // =========== TRANSACTION CONTEXT ================
