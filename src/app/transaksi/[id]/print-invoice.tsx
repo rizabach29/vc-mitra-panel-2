@@ -158,9 +158,10 @@ function PrintInvoice(data: Props) {
                     <div className=" mt-4 space-y-4">
                       {data?.bill_details?.details?.map((header, index) => (
                         <>
+                          <p>Data {index + 1}</p>
                           {header.map((item, idx) => (
                             <div
-                              className="flex justify-between w-full"
+                              className="flex justify-between w-full pl-4"
                               key={idx}
                             >
                               <p className="text-muted-foreground text-sm">
