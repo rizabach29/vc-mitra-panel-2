@@ -292,13 +292,24 @@ function FormAccount({ forms, isCheckRequired, isPostpaid }: Prop) {
                 Detail Tagihan
               </th>
             </tr>
-            {inquiryResponse?.bill_detail?.details[0].map((item) => (
-              <tr key={item.key} className="even:bg-black/5">
-                <th className="w-full text-left font-semibold px-2 py-1">
-                  {item.key}
-                </th>
-                <td className="w-full text-right px-2 py-1">{item.value}</td>
-              </tr>
+            {inquiryResponse?.bill_detail?.details.map((item, index) => (
+              <React.Fragment key={index}>
+                <tr key={index}>
+                  <th className="w-full text-left font-semibold text-black/50 px-2 pb-1 pt-4">
+                    Data {index + 1}
+                  </th>
+                </tr>
+                {item.map((detail) => (
+                  <tr key={detail.key} className="even:bg-black/5">
+                    <th className="w-full text-left font-semibold pr-2 pl-4 py-1">
+                      {detail.key}
+                    </th>
+                    <td className="w-full text-right px-2 py-1">
+                      {detail.value}
+                    </td>
+                  </tr>
+                ))}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
