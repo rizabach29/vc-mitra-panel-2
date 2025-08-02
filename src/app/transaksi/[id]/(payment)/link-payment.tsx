@@ -18,7 +18,12 @@ function LinkPayment({ payment }: { payment: ILinkPayment }) {
             className="w-full bg-green-500 text-white mt-2"
             size="sm"
             onClick={() =>
-              router.push(payment.deeplink_url || payment.mobile_url)
+              router.push(
+                payment.deeplink_url ||
+                  payment.mobile_url ||
+                  payment.web_url ||
+                  ""
+              )
             }
           >
             Bayar Sekarang
@@ -28,7 +33,14 @@ function LinkPayment({ payment }: { payment: ILinkPayment }) {
           <Button
             className="w-full bg-green-500 text-white mt-2"
             size="sm"
-            onClick={() => router.push(payment.deeplink_url || payment.web_url)}
+            onClick={() =>
+              router.push(
+                payment.deeplink_url ||
+                  payment.web_url ||
+                  payment.mobile_url ||
+                  ""
+              )
+            }
           >
             Bayar Sekarang
           </Button>

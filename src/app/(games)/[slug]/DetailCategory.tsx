@@ -48,11 +48,11 @@ function DetailCategory(props: Props) {
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-              <BreadcrumbItem position={2}>
-                <BreadcrumbPage>Daftar Produk</BreadcrumbPage>
+              {/* <BreadcrumbItem>
+                <BreadcrumbLink href="/games">Daftar Produk</BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem position={3}>
+              <BreadcrumbSeparator /> */}
+              <BreadcrumbItem position={2}>
                 <BreadcrumbPage>{props.data.category.name}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>

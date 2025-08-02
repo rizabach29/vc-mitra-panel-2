@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   var slug = split[split.length - 1];
 
   var host = headers().get("host") ?? "";
-  url = "https://" + host + "/games/" + slug;
+  url = "https://" + host + "/" + slug;
 
   var re = await fetch(
     `${process.env.NEXT_API_URL}/v2/panel/category/${slug}`,
