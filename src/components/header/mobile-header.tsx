@@ -19,7 +19,7 @@ export type path = {
 };
 
 const ignorePath = [
-  "/games/",
+  // "/games/",
   "/transaksi/",
   "/auth/register",
   "/profile/edit",

@@ -58,11 +58,11 @@ function Page() {
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
           <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">
             <BreadcrumbList>
-              <BreadcrumbItem>
+              <BreadcrumbItem position={1}>
                 <BreadcrumbLink href="/">Home</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-              <BreadcrumbItem>
+              <BreadcrumbItem position={2}>
                 <BreadcrumbPage>Edit Profil</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>

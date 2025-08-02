@@ -56,8 +56,6 @@ export default function RootTemplateLayout({
     }
   }, []);
 
-  if (loading) return <Loading />;
-
   return (
     <>
       <style
@@ -69,20 +67,16 @@ export default function RootTemplateLayout({
       />
       <SessionProvider>
         <TransactionProvider>
-          <div className="bg-zinc-50">
-            <PWAAlert profile={profile} />
-            <Header profile={profile} />
-            <div>
-              <div
-                className={`min-h-[92vh] pb-12 md:pb-4 bg-[#F0F8F6] scroll-mt-16`}
-              >
-                {children}
-              </div>
-              <BottomNav />
-            </div>
-            <Footer profile={profile} />
-            <Toaster />
-          </div>
+          <PWAAlert profile={profile} />
+          <Header profile={profile} />
+          <main
+            className={`min-h-[92vh] pb-12 md:pb-4 bg-[#F0F8F6] scroll-mt-28`}
+          >
+            {children}
+            <BottomNav />
+          </main>
+          <Footer profile={profile} />
+          <Toaster />
         </TransactionProvider>
       </SessionProvider>
     </>

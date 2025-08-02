@@ -58,11 +58,11 @@ function ListCategory() {
       <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
         <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">
           <BreadcrumbList>
-            <BreadcrumbItem>
+            <BreadcrumbItem position={1}>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            <BreadcrumbItem>
+            <BreadcrumbItem position={2}>
               <BreadcrumbPage>Daftar Produk</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
@@ -88,9 +88,7 @@ function ListCategory() {
                           imageURL={item.image_url}
                           price={item.price}
                           onClick={() =>
-                            route.push(
-                              `/games/${category?.value}?item=${item.key}`
-                            )
+                            route.push(`/${category?.value}?item=${item.key}`)
                           }
                         />
                       </div>

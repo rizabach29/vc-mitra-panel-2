@@ -16,7 +16,7 @@ function FlashSaleCard({
   );
   return (
     <Link
-      href={`/games/${data.category_key}?item=${data.key}`}
+      href={`/${data.category_key}?item=${data.key}`}
       className="w-full h-full"
     >
       <div
