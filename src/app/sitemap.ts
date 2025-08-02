@@ -31,7 +31,7 @@ export default async function sitemap() {
     games = result.data;
 
     detailProducts = games.map((i) => ({
-      url: url + "/games/" + i.key,
+      url: url + "/" + i.key,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
@@ -39,12 +39,12 @@ export default async function sitemap() {
   }
 
   var base = [
-    {
-      url: url + "/games",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
+    // {
+    //   url: url + "/games",
+    //   lastModified: new Date(),
+    //   changeFrequency: "weekly",
+    //   priority: 1,
+    // },
     {
       url: url + "/auth/login",
       lastModified: new Date(),

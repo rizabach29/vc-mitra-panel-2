@@ -34,7 +34,7 @@ function InternalLink() {
       </h2>
       <div className="flex-wrap flex gap-2">
         {data.map((item, i) => (
-          <Link key={i} href={`/games/${item.key}`}>
+          <Link key={i} href={`/${item.key}`}>
             <Badge variant="ghost" className="mr-1">
               {item.name}
             </Badge>
