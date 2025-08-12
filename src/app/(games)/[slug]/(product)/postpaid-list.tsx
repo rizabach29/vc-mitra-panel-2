@@ -44,8 +44,6 @@ function PostpaidList(prop: IProductList) {
     onClick(selectedProduct);
   }, [productKey, products]);
 
-  console.log(products);
-
   useEffect(() => {
     let formedProducts: TProductItem[] = [];
     if (prop.products) {

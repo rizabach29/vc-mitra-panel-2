@@ -34,6 +34,14 @@ export interface IBannerDetail {
   description: string;
 }
 
+export interface IBlogDetail {
+  slug: string;
+  title: string;
+  banner_url: string;
+  content: string;
+  created_at: string;
+}
+
 export interface ISosmed {
   key: string;
   name: string;

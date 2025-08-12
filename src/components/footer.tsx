@@ -85,6 +85,12 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
                           <ArrowRightIcon />{" "}
                           <p className="text-xs">Syarat Ketentuan</p>
                         </Link>
+                        <Link
+                          href="/blog"
+                          className="flex items-center space-x-2"
+                        >
+                          <ArrowRightIcon /> <p className="text-xs">Blog</p>
+                        </Link>
                       </div>
                     </div>
                     <div className={`bg-background flex flex-col mt-8`}>
@@ -194,6 +200,12 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
                       >
                         <ArrowRightIcon />{" "}
                         <p className="text-xs">Syarat Ketentuan</p>
+                      </Link>
+                      <Link
+                        href="/blog"
+                        className="flex items-center space-x-2"
+                      >
+                        <ArrowRightIcon /> <p className="text-xs">Blog</p>
                       </Link>
                     </div>
                   </div>
