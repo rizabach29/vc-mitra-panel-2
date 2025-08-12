@@ -25,6 +25,7 @@ const ignorePath = [
   "/profile/edit",
   "/kebijakan",
   "/syarat-ketentuan",
+  "/blog",
 ];
 
 function MobileHeader({ profile }: { profile?: ISiteProfile }) {
