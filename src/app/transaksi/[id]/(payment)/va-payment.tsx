@@ -14,7 +14,7 @@ function VAPayment({
     return (
       <>
         <div className="flex justify-between w-full">
-          <p className="text-muted-foreground">Pembayaran</p>
+          <p className="text-muted-foreground">No Virtual Account</p>
           <div className="flex items-center justify-end">
             <p className="font-semibold">{payment.virtual_account_number}</p>
             {!printable ? (
