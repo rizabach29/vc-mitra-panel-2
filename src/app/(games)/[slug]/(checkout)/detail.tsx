@@ -22,6 +22,7 @@ import { useSession } from "next-auth/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 interface IDetailProp extends ITransaction {
   isOpen: boolean;
@@ -82,8 +83,21 @@ export function Purchase({
       body: JSON.stringify(payload),
     });
 
-    onOpenChange(false);
+    sendGTMEvent({
+      event: "transaction",
+      transaction: {
+        product_key: product.key,
+        category_key: category.key,
+        payment_method: payment.payment_method,
+        payment_channel: payment.payment_channel,
+        email: account?.email,
+      },
+    });
     var data = await res.json();
+
+    onOpenChange(false);
+    setLoading(false);
+
     if (res.ok) {
       toast({
         title: "Success",
@@ -91,13 +105,11 @@ export function Purchase({
         variant: "success",
       });
 
-      setLoading(false);
       router.push(`/transaksi/${data.data.transaction_code}`);
       return;
     }
 
     setSuccess(false);
-    setLoading(false);
     return toast({
       title: "Failed",
       description: data.data,
