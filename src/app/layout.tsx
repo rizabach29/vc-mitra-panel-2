@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import RootTemplateLayout from "./root-layout";
 import Loading from "./loading";
-import { GoogleTagManager } from "@next/third-parties/google";
+import GTM from "./gtm";
 
 export default function RootLayout({
   children,
@@ -24,8 +24,8 @@ export default function RootLayout({
         <Suspense fallback={<Loading />}>
           <RootTemplateLayout>{children}</RootTemplateLayout>
         </Suspense>
+        <GTM />
       </body>
-      <GoogleTagManager gtmId="GTM-P25S2QGV" />
     </html>
   );
 }
