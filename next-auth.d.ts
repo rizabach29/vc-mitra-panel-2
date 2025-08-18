@@ -14,6 +14,7 @@ declare module "next-auth" {
       qty_successe: number;
       amount_successe: number;
     };
+    expired_at: string;
   }
 
   interface User {
@@ -28,6 +29,7 @@ declare module "next-auth" {
       qty_successe: number;
       amount_successe: number;
     };
+    expired_at: string;
   }
 }
 
@@ -44,5 +46,6 @@ declare module "next-auth/jwt" {
       amount_successe: number;
     };
     token: string;
+    expired_at: string;
   }
 }
