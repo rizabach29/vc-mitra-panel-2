@@ -66,12 +66,15 @@ function FormAccount({ forms, isCheckRequired }: Prop) {
           const resData = await res.json();
           if (resData.data.is_valid) {
             setNickName(resData.data.nickname);
+          } else {
+            toast({
+              title: "Failed",
+              description: "Akun tidak ditemukan",
+              variant: "destructive",
+            });
+            setCheckIdLoading(false);
+            return;
           }
-          toast({
-            title: "Failed",
-            description: "Akun tidak ditemukan",
-            variant: "destructive",
-          });
         }
 
         setCheckIdLoading(false);

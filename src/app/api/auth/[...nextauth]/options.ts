@@ -39,6 +39,14 @@ export const options: NextAuthOptions = {
       },
     }),
   ],
+  jwt: {
+    maxAge: 29 * 24 * 60 * 60, // 29 days
+    // maxAge: 10 * 60, // 6 minutes
+  },
+  session: {
+    maxAge: 29 * 24 * 60 * 60, // 29 days
+    // maxAge: 10 * 60, // 10 minutes
+  },
   callbacks: {
     jwt: async ({ token, user, session, trigger }) => {
       if (trigger === "update" && session) {
@@ -79,11 +87,11 @@ export const options: NextAuthOptions = {
           session.token = token.token;
           session.profile = res.data;
         } else {
-          signOut();
+          return session;
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
-        signOut();
+        return session;
       }
 
       return session;
