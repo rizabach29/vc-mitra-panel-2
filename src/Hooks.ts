@@ -13,19 +13,15 @@ interface ICountdownResponse {
 export const useCountdown = (
   targetDate: string | number | Date
 ): ICountdownResponse => {
-  const [countDownDate, _] = useState(new Date(targetDate).getTime());
-
-  const [countDown, setCountDown] = useState(
-    countDownDate - new Date().getTime()
-  );
+  const [countDown, setCountDown] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCountDown(countDownDate - new Date().getTime());
+      setCountDown(new Date(targetDate).getTime() - new Date().getTime());
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [countDownDate, targetDate]);
+  }, [targetDate]);
 
   return getReturnValues(countDown);
 };

@@ -48,9 +48,10 @@ function CheckoutAction({
 
     if (
       data.category?.forms &&
-      data.form &&
-      Object.keys(data.form).length == data.category.forms.length &&
-      Object.values(data.form).every((x) => x === null || x === "")
+      (!data.form ||
+        (data.form &&
+          Object.keys(data.form).length == data.category.forms.length &&
+          Object.values(data.form).every((x) => x === null || x === "")))
     )
       return toast({
         title: "Failed",
