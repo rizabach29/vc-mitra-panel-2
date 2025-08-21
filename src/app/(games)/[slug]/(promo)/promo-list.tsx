@@ -128,8 +128,12 @@ function Promo({ categoryUuid }: { categoryUuid: string }) {
         />
       ) : (
         <div
-          onClick={() => setOpen(true)}
-          className="rounded-full cursor-pointer hover:bg-zinc-50 py-1.5 px-4 border-2 flex justify-between items-center"
+          onClick={() => data.product?.key && categoryUuid && setOpen(true)}
+          className={`rounded-full ${
+            !data.product?.key || !categoryUuid
+              ? "cursor-not-allowed"
+              : "cursor-pointer"
+          } hover:bg-zinc-50 py-1.5 px-4 border-2 flex justify-between items-center`}
         >
           <p className="p-0 m-0 text-sm">Pilih Promo</p>
           <ChevronRightIcon />

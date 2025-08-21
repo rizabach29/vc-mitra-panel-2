@@ -73,6 +73,10 @@ function FormAccount({ forms, isCheckRequired }: Prop) {
               variant: "destructive",
             });
             setCheckIdLoading(false);
+            dispatch({
+              action: "SET_FORM",
+              payload: undefined,
+            });
             return;
           }
         }
