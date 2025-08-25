@@ -57,6 +57,8 @@ export interface IProductCategory {
   key: string;
   name: string;
   image_url: string;
+  meta_title?: string;
+  meta_description?: string;
 }
 
 export type TTiersPrice = {

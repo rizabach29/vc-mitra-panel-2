@@ -25,6 +25,7 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import TransactionContext, {
   ITransactionContext,
 } from "@/infrastructures/context/transaction/transaction.context";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 interface IDetailProp {
   isOpen: boolean;
@@ -83,8 +84,21 @@ export function Purchase({ isOpen, onOpenChange }: IDetailProp) {
       body: JSON.stringify(payload),
     });
 
-    onOpenChange(false);
+    sendGTMEvent({
+      event: "transaction",
+      transaction: {
+        product_key: transaction.product.key,
+        category_key: transaction.category.key,
+        payment_method: transaction.payment.payment_method,
+        payment_channel: transaction.payment.payment_channel,
+        email: transaction.account?.email,
+      },
+    });
     var data = await res.json();
+
+    onOpenChange(false);
+    setLoading(false);
+
     if (res.ok) {
       toast({
         title: "Success",
@@ -92,13 +106,11 @@ export function Purchase({ isOpen, onOpenChange }: IDetailProp) {
         variant: "success",
       });
 
-      setLoading(false);
       router.push(`/transaksi/${data.data.transaction_code}`);
       return;
     }
 
     setSuccess(false);
-    setLoading(false);
     return toast({
       title: "Failed",
       description: data.data,

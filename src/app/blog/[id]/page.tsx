@@ -15,7 +15,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import NotFound from "@/app/not-found";
+import { notFound } from "next/navigation";
 
 const getData = async (id: string) => {
   const credentialHeader = GetCredHeader();
@@ -100,7 +100,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function Page({ params }: { params: { id: string } }) {
   var data: IBlogDetail = await getData(params.id);
-  if (!data) return <NotFound />;
+  if (!data) return notFound();
 
   return (
     <>

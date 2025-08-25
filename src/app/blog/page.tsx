@@ -64,7 +64,6 @@ async function Page({
   const searchQuery = searchParams.search || "";
 
   const blogPosts = await fetchBlogPosts(pageNumber, searchQuery);
-  console.log(blogPosts);
 
   return (
     <>

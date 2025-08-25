@@ -31,7 +31,7 @@ export default async function sitemap() {
     games = result.data;
 
     detailProducts = games.map((i) => ({
-      url: url + "/games/" + i.key,
+      url: url + "/" + i.key,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1,
@@ -40,9 +40,9 @@ export default async function sitemap() {
 
   var base = [
     {
-      url: url + "/games",
+      url,
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "daily",
       priority: 1,
     },
     {
@@ -60,19 +60,19 @@ export default async function sitemap() {
     {
       url: url + "/flash-sale",
       lastModified: new Date(),
-      changeFrequency: "monthly",
+      changeFrequency: "daily",
       priority: 0.8,
     },
     {
       url: url + "/kebijakan",
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "monthly",
       priority: 0.5,
     },
     {
       url: url + "/syarat-ketentuan",
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: "monthly",
       priority: 0.5,
     },
   ];

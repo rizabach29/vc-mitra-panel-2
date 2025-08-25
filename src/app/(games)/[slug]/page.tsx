@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   var slug = split[split.length - 1];
 
   var host = headers().get("host") ?? "";
-  url = "https://" + host + "/games/" + slug;
+  url = "https://" + host + "/" + slug;
 
   var re = await fetch(
     `${process.env.NEXT_API_URL}/v2/panel/category/${slug}`,
@@ -45,12 +45,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const month = format(new Date(date), "MMMM", {
     locale: id,
   });
-  const description = `Daftar harga voucher/top up ${
-    games?.name
-  } murah ${month} ${date.getFullYear()} di ${name}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`;
-  const title = `Beli/Top Up ${
-    games?.name
-  } Termurah ${month} ${date.getFullYear()} | ${name}`;
+  const description =
+    games?.meta_description ??
+    `Daftar harga voucher/top up ${
+      games?.name
+    } murah ${month} ${date.getFullYear()} di ${name}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`;
+  const title =
+    games?.meta_title ??
+    `Beli/Top Up ${
+      games?.name
+    } Termurah ${month} ${date.getFullYear()} | ${name}`;
 
   return {
     manifest: "/api/manifest.json",
