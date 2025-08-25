@@ -41,14 +41,21 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Home() {
   var name = headers().get("x-name") ?? "";
+  var meta_title = headers().get("x-meta-title") ?? "";
+  var meta_description = headers().get("x-meta-description") ?? "";
 
   return (
     <>
-      <h1 className="hidden">Beli Voucher & Top Up Game Murah</h1>
       <div className="bg-background">
+        {meta_title ? <h1 className="pt-4 px-4">{meta_title}</h1> : null}
         <CarouselWrapper name={name} />
         <FlashSaleWrapper />
         <ListGame name={name} />
+        {meta_description ? (
+          <div className="container -mb-12">
+            <p className="pt-4 px-4 md:px-6">{meta_description}</p>
+          </div>
+        ) : null}
       </div>
     </>
   );
