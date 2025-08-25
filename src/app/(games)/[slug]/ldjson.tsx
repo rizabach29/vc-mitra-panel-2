@@ -36,13 +36,30 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
   }, [data.products]);
 
   const rating = useMemo(() => {
-    let base = 4.7;
+    // random number between 4.5 to 5 based on current date month
+    const base = 4.5;
+    if (date.getMonth() < 3) {
+      return {
+        ratingValue: base + 0.5,
+        reviewCount: format(date, "yyMMdd"),
+      };
+    } else if (date.getMonth() < 6) {
+      return {
+        ratingValue: base + 0.3,
+        reviewCount: format(date, "yyMMdd"),
+      };
+    } else if (date.getMonth() < 9) {
+      return {
+        ratingValue: base + 0.1,
+        reviewCount: format(date, "yyMMdd"),
+      };
+    }
 
     return {
       ratingValue: base + (date.getMonth() % 3) * 0.1,
       reviewCount: format(date, "yyMMdd"),
     };
-  }, [date.getMonth]);
+  }, [date]);
 
   const month = useMemo(() => {
     return format(new Date(date), "MMMM", {
@@ -66,19 +83,19 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
                   position: 1,
                   item: { "@id": url, name: "Home" },
                 },
+                // {
+                //   "@type": "ListItem",
+                //   position: 2,
+                //   item: {
+                //     "@id": url + "/games",
+                //     name: "Daftar Produk",
+                //   },
+                // },
                 {
                   "@type": "ListItem",
                   position: 2,
                   item: {
-                    "@id": url + "/games",
-                    name: "Daftar Produk",
-                  },
-                },
-                {
-                  "@type": "ListItem",
-                  position: 3,
-                  item: {
-                    "@id": url + "/games/" + data.category?.key,
+                    "@id": url + "/" + data.category?.key,
                     name: data.category?.name,
                   },
                 },
@@ -100,7 +117,7 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
                 data.category?.name
               } murah ${month} ${date.getFullYear()} di ${appName}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`,
               image: data.category?.image_url,
-              url: url + "/games/" + data.category?.key,
+              url: url + "/" + data.category?.key,
               brand: {
                 "@type": "Brand",
                 name: data.category?.name,

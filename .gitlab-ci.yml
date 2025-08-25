@@ -1,0 +1,130 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  NODE_ENV: "production"
+  MITRA_NAME:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "nama Mitra"  # Nilai default, bisa diubah saat manual run
+  NEXTAUTH_SECRET:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "random string"  # Nilai default, bisa diubah saat manual run
+  NEXTAUTH_URL:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "url website"  # Nilai default, bisa diubah saat manual run
+  NEXT_API_URL:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "mitra-api.vcgamers.com"  # Nilai default, bisa diubah saat manual run
+  MITRA_SECRET:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "mitra secret"  # Nilai default, bisa diubah saat manual run
+  MITRA_ID:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "mitra id"  # Nilai default, bisa diubah saat manual run
+  NEXT_URL:
+    description: "Bahasa pemrograman (go atau nodejs)"
+    value: "url website"  # Nilai default, bisa diubah saat manual run
+  IMAGE_NAME_STG: "hub.omnicloud.io/vcgamers/staging/$MITRA_NAME"
+
+build:
+  stage: build
+  before_script:
+    - |
+      echo "MITRA_ID=$MITRA_ID" >> .env
+      echo "MITRA_SECRET=$MITRA_SECRET" >> .env
+      echo "NEXTAUTH_SECRET=$NEXTAUTH_SECRET" >> .env
+      echo "NEXTAUTH_URL=$NEXTAUTH_URL" >> .env
+      echo "NEXT_API_URL=$NEXT_API_URL" >> .env
+      echo "NEXT_URL=$NEXT_URL" >> .env
+      echo "NODE_ENV=$NODE_ENV" >> .env
+  script:
+    - echo "Build Docker Image"
+    - docker login hub.omnicloud.io -u $USER_REGISTRY -p $PASS_REGISTRY
+    - docker build -t $IMAGE_NAME_STG:latest .
+    - docker push $IMAGE_NAME_STG:latest
+  after_script:
+    - rm -rf .env
+    - docker system prune --all --force
+  only:
+    - main 
+  when: manual
+
+
+deploy:
+  stage: deploy
+  before_script:
+    # Inject kubeconfig dari GitLab CI/CD variable
+    - echo "$KUBECONFIG" > KUBECONFIG
+
+  script:
+    - export KUBECONFIG=KUBECONFIG
+    - echo "Creating deployment..."
+    - kubectl create deployment $MITRA_NAME --image=$IMAGE_NAME_STG:latest --port=3002 -n mitra-topup
+
+    - echo "Exposing deployment as service..."
+    - kubectl expose deployment $MITRA_NAME -n mitra-topup \
+        --port=80 \
+        --target-port=3002 \
+        --name=${MITRA_NAME}-svc
+
+    - echo "Creating ingress..."
+    - kubectl create ingress $MITRA_NAME -n mitra-topup \
+        --rule="${NEXT_URL}/*=${MITRA_NAME}-svc:80" \
+        --annotation="nginx.ingress.kubernetes.io/rewrite-target=/" \
+        --annotation="cert-manager.io/cluster-issuer=letsencrypt-prod" \
+        --annotation="nginx.ingress.kubernetes.io/ssl-redirect=true"
+
+    # Patch Deployment: set resource + imagePullSecrets
+    - echo "Patching deployment with resources and imagePullSecrets..."
+    - |
+      cat <<EOF > patch.json
+      {
+        "spec": {
+          "template": {
+            "spec": {
+              "containers": [{
+                "name": "$MITRA_NAME",
+                "resources": {
+                  "limits": {
+                    "cpu": "0.5",
+                    "memory": "200Mi"
+                  },
+                  "requests": {
+                    "cpu": "0.3",
+                    "memory": "150Mi"
+                  }
+                }
+              }],
+              "imagePullSecrets": [{
+                "name": "regcredv2"
+              }]
+            }
+          }
+        }
+      }
+      EOF
+    - kubectl patch deployment $MITRA_NAME --patch "$(cat patch.json)"
+
+    # Patch Ingress: set ingressClassName & TLS
+    - echo "Patching ingress with ingressClassName and TLS..."
+    - |
+      cat <<EOF > patch-ingress.json
+      {
+        "spec": {
+          "ingressClassName": "nginx",
+          "tls": [{
+            "hosts": ["$NEXT_URL"],
+            "secretName": "${MITRA_NAME}-tls"
+          }]
+        }
+      }
+      EOF
+    - kubectl patch ingress $MITRA_NAME --patch "$(cat patch-ingress.json)" -n mitra-topup
+
+    # Cleanup
+    - rm -f patch.json patch-ingress.json KUBECONFIG
+
+  only:
+    - main
+  when: manual

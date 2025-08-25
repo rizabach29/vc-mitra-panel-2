@@ -96,7 +96,7 @@ function Searchbar() {
                 key={idx}
                 className="px-5 py-2 hover:bg-zinc-50 cursor-pointer flex items-center gap-4"
                 onClick={() => {
-                  router.push(`/games/${i.key}`);
+                  router.push(`/${i.key}`);
                   setIsOpen(false);
                 }}
               >

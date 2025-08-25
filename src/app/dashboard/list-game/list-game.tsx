@@ -31,7 +31,6 @@ export default function ListGame({ name }: { name: string }) {
 
     if (res.ok) {
       var result = await res.json();
-      console.log("Category result:", result);
       setData(result.data);
 
       // if (result.data) {
@@ -136,11 +135,7 @@ export default function ListGame({ name }: { name: string }) {
           ) : searchData && searchData.length > 0 ? (
             searchData.map((val: IProductCategory, idx) =>
               val.name ? (
-                <Link
-                  href={`/games/${val.key}`}
-                  key={idx}
-                  className="w-full h-full"
-                >
+                <Link href={`/${val.key}`} key={idx} className="w-full h-full">
                   <Card className="w-full h-full min-w-fit rounded-xl hover:shadow-md hover:text-primary transition duration-300">
                     <div className="p-4 md:p-5 flex flex-col items-center">
                       <div className="overflow-clip h-20 md:h-28 w-auto rounded-xl bg-background aspect-square flex justify-center items-center">
