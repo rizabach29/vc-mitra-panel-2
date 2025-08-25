@@ -10,11 +10,15 @@ export async function generateMetadata(): Promise<Metadata> {
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";
+  var meta_title = headers().get("x-meta-title") ?? "";
+  var meta_description = headers().get("x-meta-description") ?? "";
 
   return {
     manifest: "/api/manifest.json",
-    title: `Beli Voucher & Top Up Game Murah di ${name}`,
-    description: `${name} tempat top up game termurah & beli voucher game terlengkap. Cuma di ${name} top up ML, HoK, FF, PUBG & lainnya jadi makin mudah dan cepat`,
+    title: meta_title ?? `Beli Voucher & Top Up Game Murah di ${name}`,
+    description:
+      meta_description ??
+      `${name} tempat top up game termurah & beli voucher game terlengkap. Cuma di ${name} top up ML, HoK, FF, PUBG & lainnya jadi makin mudah dan cepat`,
     keywords: keywords,
     openGraph: {
       images: [logo_url],

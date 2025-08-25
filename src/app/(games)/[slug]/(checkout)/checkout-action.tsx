@@ -50,10 +50,10 @@ function CheckoutAction({
 
     if (
       data.category?.forms &&
-      (!data.form ||
-        (data.form &&
-          Object.keys(data.form).length == data.category.forms.length &&
-          Object.values(data.form).every((x) => x === null || x === "")))
+      data.form &&
+      !data.category?.is_postpaid &&
+      Object.keys(data.form).length == data.category.forms.length &&
+      Object.values(data.form).every((x) => x === null || x === "")
     )
       return toast({
         title: "Failed",
