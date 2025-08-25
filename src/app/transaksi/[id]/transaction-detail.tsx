@@ -39,7 +39,6 @@ function TransactionHistoryDetail({
       var re = await fetch(`/api/transaction/${id}`);
 
       var res = await re.json();
-      console.log("Transaction History Detail:", res);
       setLoading(false);
       setData(res.data);
     })();

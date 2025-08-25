@@ -31,7 +31,6 @@ export default function ListGame({ name }: { name: string }) {
 
     if (res.ok) {
       var result = await res.json();
-      console.log("Category result:", result);
       setData(result.data);
 
       // if (result.data) {
