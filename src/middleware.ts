@@ -60,8 +60,8 @@ export default async function middleware(
     res.headers.set("x-name", setting.name);
     res.headers.set("x-keywords", setting.keywords);
     res.headers.set("x-logo", setting.logo_url);
-    res.headers.set("x-meta-title", setting.meta_title);
-    res.headers.set("x-meta-description", setting.meta_description);
+    res.headers.set("x-meta-title", setting?.meta_title ?? "");
+    res.headers.set("x-meta-description", setting?.meta_description ?? "");
   }
 
   if (

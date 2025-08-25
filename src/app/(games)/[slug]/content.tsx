@@ -1,8 +1,8 @@
-import NotFound from "@/app/not-found";
 import DetailCategory from "./DetailCategory";
 import BackHeader from "@/components/header/back-header";
 import Ldjson from "./ldjson";
 import { getCategory, getProducts } from "./data";
+import { notFound } from "next/navigation";
 
 async function Content({
   id,
@@ -14,8 +14,7 @@ async function Content({
   url: string;
 }) {
   const category = await getCategory(id);
-  console.log("Category data:", category);
-  if (!category) return <NotFound />;
+  if (!category) return notFound();
 
   const products = await getProducts(id);
 
