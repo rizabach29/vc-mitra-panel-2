@@ -13,7 +13,7 @@ interface ICountdownResponse {
 export const useCountdown = (
   targetDate: string | number | Date
 ): ICountdownResponse => {
-  const [countDownDate, _] = useState(new Date(targetDate).getTime());
+  const countDownDate = new Date(targetDate).getTime();
 
   const [countDown, setCountDown] = useState(
     countDownDate - new Date().getTime()
@@ -25,7 +25,7 @@ export const useCountdown = (
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [countDownDate, targetDate]);
+  }, [countDownDate]);
 
   return getReturnValues(countDown);
 };

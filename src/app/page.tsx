@@ -47,7 +47,13 @@ export default function Home() {
   return (
     <>
       <div className="bg-background">
-        {meta_title ? <h1 className="pt-4 px-4">{meta_title}</h1> : null}
+        {meta_title ? (
+          <div className="flex justify-center rounded-t-xl">
+            <div className="w-full max-w-7xl px-2">
+              <h1 className="pt-4">{meta_title}</h1>
+            </div>
+          </div>
+        ) : null}
         <CarouselWrapper name={name} />
         <FlashSaleWrapper />
         <ListGame name={name} />
