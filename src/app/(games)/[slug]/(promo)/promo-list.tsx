@@ -112,6 +112,28 @@ function Promo({ categoryUuid }: { categoryUuid: string }) {
   }, [data.product, categoryUuid]);
 
   const selectPromo = (promo?: IPromo) => {
+    if (promo) {
+      let price = data?.product?.discounted_price || data?.product?.price || 0;
+      let discount = promo.discount_amount ?? promo.discount_percent * price;
+      let totalPrice = price - discount;
+
+      if (totalPrice < promo.minimal_amount) {
+        toast({
+          title: "Promo Tidak Valid",
+          description: "Promo tidak memenuhi syarat minimal.",
+          variant: "destructive",
+        });
+        return;
+      } else if (discount > promo.maximum_discount_amount) {
+        toast({
+          title: "Promo Tidak Valid",
+          description: "Promo melebihi syarat maksimal.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     setSelectedPromo(promo);
     onPromoSelected(promo);
     setOpen(false);
