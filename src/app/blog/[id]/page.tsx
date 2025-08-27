@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { GetCredHeader } from "../../api/api-utils";
-import { IBannerDetail, IBlogDetail } from "@/types/utils";
+import { IBlogDetail } from "@/types/utils";
 import BackHeader from "@/components/header/back-header";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -56,23 +56,27 @@ export async function generateMetadata(): Promise<Metadata> {
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";
 
-  var banner: IBannerDetail | undefined = undefined;
+  var blog: IBlogDetail | undefined = undefined;
   var url = headers().get("x-url") ?? "";
   var split = url.split("/");
   var slug = split[split.length - 1];
 
   var host = headers().get("host") ?? "";
-  url = "https://" + host + "/banner/" + slug;
+  url = "https://" + host + "/blog/" + slug;
 
-  banner = await getData(slug);
+  blog = await getData(slug);
 
   const date = new Date();
   const month = format(new Date(date), "MMMM", {
     locale: id,
   });
 
-  const description = `Daftar harga voucher/top up termurah ${month} ${date.getFullYear()} di ${name}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`;
-  const title = `Beli/Top Up Termurah ${month} ${date.getFullYear()} | ${name}`;
+  const description =
+    blog?.title ??
+    `Daftar harga voucher/top up termurah ${month} ${date.getFullYear()} di ${name}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`;
+  const title =
+    blog?.title ??
+    `Beli/Top Up Termurah ${month} ${date.getFullYear()} | ${name}`;
 
   return {
     manifest: "/api/manifest.json",
@@ -80,7 +84,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords: keywords,
     openGraph: {
-      images: [banner?.image_url || logo_url],
+      images: [blog?.banner_url || logo_url],
       title,
       url,
       type: "website",
