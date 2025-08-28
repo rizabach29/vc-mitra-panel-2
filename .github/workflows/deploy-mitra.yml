@@ -1,0 +1,175 @@
+name: Build and Deploy Mitra Application
+
+on:
+  workflow_dispatch:
+    inputs:
+      MITRA_NAME:
+        description: "Nama Mitra"
+        required: true
+        default: "nama Mitra"
+        type: string
+      NEXTAUTH_SECRET:
+        description: "NextAuth Secret"
+        required: true
+        default: "random string"
+        type: string
+      NEXTAUTH_URL:
+        description: "NextAuth URL"
+        required: true
+        default: "url website"
+        type: string
+      NEXT_API_URL:
+        description: "Next API URL"
+        required: true
+        default: "mitra-api.vcgamers.com"
+        type: string
+      MITRA_SECRET:
+        description: "Mitra Secret"
+        required: true
+        default: "mitra secret"
+        type: string
+      MITRA_ID:
+        description: "Mitra ID"
+        required: true
+        default: "mitra id"
+        type: string
+      NEXT_URL:
+        description: "Next URL"
+        required: true
+        default: "url website"
+        type: string
+
+env:
+  NODE_ENV: "production"
+  IMAGE_NAME_STG: "astrology-hub-vcg.my.id/vcgamers/staging/${{ github.event.inputs.MITRA_NAME }}"
+
+jobs:
+  build:
+    runs-on: self-hosted
+    outputs:
+      image-name: ${{ env.IMAGE_NAME_STG }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create environment file
+        run: |
+          echo "MITRA_ID=${{ github.event.inputs.MITRA_ID }}" >> .env
+          echo "MITRA_SECRET=${{ github.event.inputs.MITRA_SECRET }}" >> .env
+          echo "NEXTAUTH_SECRET=${{ github.event.inputs.NEXTAUTH_SECRET }}" >> .env
+          echo "NEXTAUTH_URL=${{ github.event.inputs.NEXTAUTH_URL }}" >> .env
+          echo "NEXT_API_URL=${{ github.event.inputs.NEXT_API_URL }}" >> .env
+          echo "NEXT_URL=${{ github.event.inputs.NEXT_URL }}" >> .env
+          echo "NODE_ENV=${{ env.NODE_ENV }}" >> .env
+
+      - name: Build Docker Image
+        run: |
+          echo "Build Docker Image"
+          docker login astrology-hub-vcg.my.id -u ${{ secrets.USER_REGISTRY }} -p ${{ secrets.PASS_REGISTRY }}
+          docker build -t ${{ env.IMAGE_NAME_STG }}:latest .
+          docker push ${{ env.IMAGE_NAME_STG }}:latest
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf .env
+          docker system prune --all --force
+
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    
+    steps:
+      - name: Setup Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > KUBECONFIG
+          export KUBECONFIG=KUBECONFIG
+
+      - name: Create Kubernetes Deployment
+        run: |
+          export KUBECONFIG=KUBECONFIG
+          echo "Creating deployment..."
+          kubectl create deployment ${{ github.event.inputs.MITRA_NAME }} \
+            --image=${{ env.IMAGE_NAME_STG }}:latest \
+            --port=3002 \
+            -n mitra-panel
+
+      - name: Expose Deployment as Service
+        run: |
+          export KUBECONFIG=KUBECONFIG
+          echo "Exposing deployment as service..."
+          kubectl expose deployment ${{ github.event.inputs.MITRA_NAME }} \
+            -n mitra-panel \
+            --port=80 \
+            --target-port=3002 \
+            --name=${{ github.event.inputs.MITRA_NAME }}-svc
+
+      - name: Create Ingress
+        run: |
+          export KUBECONFIG=KUBECONFIG
+          echo "Creating ingress..."
+          kubectl create ingress ${{ github.event.inputs.MITRA_NAME }} \
+            -n mitra-panel \
+            --rule="${{ github.event.inputs.NEXT_URL }}/*=${{ github.event.inputs.MITRA_NAME }}-svc:80" \
+            --annotation="nginx.ingress.kubernetes.io/rewrite-target=/" \
+            --annotation="cert-manager.io/cluster-issuer=letsencrypt-prod" \
+            --annotation="nginx.ingress.kubernetes.io/ssl-redirect=true"
+
+      - name: Patch Deployment with Resources and ImagePullSecrets
+        run: |
+          export KUBECONFIG=KUBECONFIG
+          echo "Patching deployment with resources and imagePullSecrets..."
+          cat <<EOF > patch.json
+          {
+            "spec": {
+              "template": {
+                "spec": {
+                  "containers": [{
+                    "name": "${{ github.event.inputs.MITRA_NAME }}",
+                    "resources": {
+                      "limits": {
+                        "cpu": "0.5",
+                        "memory": "200Mi"
+                      },
+                      "requests": {
+                        "cpu": "0.3",
+                        "memory": "150Mi"
+                      }
+                    }
+                  }],
+                  "imagePullSecrets": [{
+                    "name": "regcredv2"
+                  }]
+                }
+              }
+            }
+          }
+          EOF
+          kubectl patch deployment ${{ github.event.inputs.MITRA_NAME }} \
+            --patch "$(cat patch.json)" \
+            -n mitra-panel
+
+      - name: Patch Ingress with IngressClassName and TLS
+        run: |
+          export KUBECONFIG=KUBECONFIG
+          echo "Patching ingress with ingressClassName and TLS..."
+          cat <<EOF > patch-ingress.json
+          {
+            "spec": {
+              "ingressClassName": "nginx",
+              "tls": [{
+                "hosts": ["${{ github.event.inputs.NEXT_URL }}"],
+                "secretName": "${{ github.event.inputs.MITRA_NAME }}-tls"
+              }]
+            }
+          }
+          EOF
+          kubectl patch ingress ${{ github.event.inputs.MITRA_NAME }} \
+            --patch "$(cat patch-ingress.json)" \
+            -n mitra-panel
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f patch.json patch-ingress.json KUBECONFIG
