@@ -58,9 +58,9 @@ jobs:
           echo "MITRA_ID=${{ github.event.inputs.MITRA_ID }}" >> .env
           echo "MITRA_SECRET=${{ github.event.inputs.MITRA_SECRET }}" >> .env
           echo "NEXTAUTH_SECRET=${{ github.event.inputs.NEXTAUTH_SECRET }}" >> .env
-          echo "NEXTAUTH_URL=${{ github.event.inputs.NEXTAUTH_URL }}" >> .env
-          echo "NEXT_API_URL=${{ github.event.inputs.NEXT_API_URL }}" >> .env
-          echo "NEXT_URL=${{ github.event.inputs.NEXT_URL }}" >> .env
+          echo "NEXTAUTH_URL=https://${{ github.event.inputs.NEXTAUTH_URL }}" >> .env
+          echo "NEXT_API_URL=https://${{ github.event.inputs.NEXT_API_URL }}" >> .env
+          echo "NEXT_URL=https://${{ github.event.inputs.NEXT_URL }}" >> .env
           echo "NODE_ENV=${{ env.NODE_ENV }}" >> .env
 
       - name: Build Docker Image
