@@ -66,7 +66,7 @@ jobs:
       - name: Build Docker Image
         run: |
           echo "Build Docker Image"
-          docker login astrology-hub-vcg.my.id -u ${{ secrets.USER_REGISTRY }} -p ${{ secrets.PASS_REGISTRY }}
+          docker login astrology-hub.vcg.my.id -u ${{ secrets.USER_REGISTRY }} -p ${{ secrets.PASS_REGISTRY }}
           docker build -t ${{ env.IMAGE_NAME_STG }}:latest .
           docker push ${{ env.IMAGE_NAME_STG }}:latest
 
