@@ -139,7 +139,7 @@ jobs:
                     }
                   }],
                   "imagePullSecrets": [{
-                    "name": "regcredv2"
+                    "name": "astrology-hub-secret"
                   }]
                 }
               }
