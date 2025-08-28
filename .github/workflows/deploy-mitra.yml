@@ -41,7 +41,7 @@ on:
 
 env:
   NODE_ENV: "production"
-  IMAGE_NAME_STG: "astrology-hub-vcg.my.id/vcgamers/staging/${{ github.event.inputs.MITRA_NAME }}"
+  IMAGE_NAME_STG: "astrology-hub.vcg.my.id/vcgamers/staging/${{ github.event.inputs.MITRA_NAME }}"
 
 jobs:
   build:
