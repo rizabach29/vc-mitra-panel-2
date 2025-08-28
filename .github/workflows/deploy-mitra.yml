@@ -157,7 +157,7 @@ jobs:
           cat <<EOF > patch-ingress.json
           {
             "spec": {
-              "ingressClassName": "nginx",
+              "ingressClassName": "nginx-mitra",
               "tls": [{
                 "hosts": ["${{ github.event.inputs.NEXT_URL }}"],
                 "secretName": "${{ github.event.inputs.MITRA_NAME }}-tls"
