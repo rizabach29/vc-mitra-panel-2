@@ -1,6 +1,6 @@
 "use client";
 
-import React, { RefObject, useCallback, useContext } from "react";
+import React, { RefObject, useCallback, useContext, useEffect } from "react";
 import Image from "next/image";
 import { priceMask } from "@/Helpers";
 import TransactionContext, {
@@ -15,13 +15,16 @@ import {
 import { IPayment, IPaymentGroup } from "@/types/transaction";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
+import { IProductCategory } from "@/Type";
 
 function PaymentList({
   paymentGroup,
   nextRef,
+  category,
 }: {
   paymentGroup: IPaymentGroup[];
-  nextRef: RefObject<HTMLDivElement>;
+  nextRef: string | null;
+  category: IProductCategory;
 }) {
   const { toast } = useToast();
   const { dispatch, data } = useContext(
@@ -31,12 +34,16 @@ function PaymentList({
   const paymentFee = useCallback(
     (payment: IPayment) => {
       let total = 0;
+      let fee = payment.fee_percent
+        ? (total * payment.fee_percent) / 100
+        : payment.fee_amount;
 
+      if (data.category?.is_postpaid) {
+        if (payment.fee_amount > 0) return `+ ${priceMask(fee)}`;
+        else return `${payment.fee_percent}%`;
+      }
       if (data.product) {
         total = data.product.discounted_price || data.product.price;
-        let fee = payment.fee_percent
-          ? (total * payment.fee_percent) / 100
-          : payment.fee_amount;
 
         total += fee;
 
@@ -45,8 +52,15 @@ function PaymentList({
 
       if (total > 0) return `+ ${priceMask(total)}`;
     },
-    [data.product, data.payment]
+    [data.product, data.category]
   );
+
+  useEffect(() => {
+    dispatch({
+      action: "SET_CATEGORY",
+      payload: category,
+    });
+  }, [category]);
 
   const selectPayment = useCallback(
     (payment: IPayment) => {
@@ -71,9 +85,10 @@ function PaymentList({
         action: "SET_PAYMENT_METHOD",
         payload: payment,
       });
-      nextRef.current?.scrollIntoView({
-        behavior: "smooth",
-      });
+      if (nextRef)
+        document.getElementById(nextRef)?.scrollIntoView({
+          behavior: "smooth",
+        });
     },
     [data.product, data.payment]
   );

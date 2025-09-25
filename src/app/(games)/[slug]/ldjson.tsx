@@ -56,7 +56,7 @@ function Ldjson({ appName, url }: { appName: string; url: string }) {
     }
 
     return {
-      ratingValue: base,
+      ratingValue: base + (date.getMonth() % 3) * 0.1,
       reviewCount: format(date, "yyMMdd"),
     };
   }, [date]);

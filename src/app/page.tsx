@@ -10,11 +10,15 @@ export async function generateMetadata(): Promise<Metadata> {
   var logo_url = headers().get("x-logo") ?? "";
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";
+  var meta_title = headers().get("x-meta-title") ?? "";
+  var meta_description = headers().get("x-meta-description") ?? "";
 
   return {
     manifest: "/api/manifest.json",
-    title: `Beli Voucher & Top Up Game Murah di ${name}`,
-    description: `${name} tempat top up game termurah & beli voucher game terlengkap. Cuma di ${name} top up ML, HoK, FF, PUBG & lainnya jadi makin mudah dan cepat`,
+    title: meta_title ?? `Beli Voucher & Top Up Game Murah di ${name}`,
+    description:
+      meta_description ??
+      `${name} tempat top up game termurah & beli voucher game terlengkap. Cuma di ${name} top up ML, HoK, FF, PUBG & lainnya jadi makin mudah dan cepat`,
     keywords: keywords,
     openGraph: {
       images: [logo_url],
@@ -37,14 +41,27 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function Home() {
   var name = headers().get("x-name") ?? "";
+  var meta_title = headers().get("x-meta-title") ?? "";
+  var meta_description = headers().get("x-meta-description") ?? "";
 
   return (
     <>
       <div className="bg-background">
-        <h1 className="hidden">Beli Voucher & Top Up Game Murah</h1>
+        {meta_title ? (
+          <div className="flex justify-center rounded-t-xl">
+            <div className="w-full max-w-7xl px-2">
+              <h1 className="pt-4">{meta_title}</h1>
+            </div>
+          </div>
+        ) : null}
         <CarouselWrapper name={name} />
         <FlashSaleWrapper />
         <ListGame name={name} />
+        {meta_description ? (
+          <div className="container -mb-12">
+            <p className="pt-4 px-4 md:px-6">{meta_description}</p>
+          </div>
+        ) : null}
       </div>
     </>
   );

@@ -1,5 +1,9 @@
-import { LooseObject, TProductForm } from "@/Type";
+"use client";
+
+import { priceMask } from "@/Helpers";
+import { IInquiryCheck, LooseObject, TProductForm } from "@/Type";
 import Spinner from "@/components/spinner";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -18,9 +22,10 @@ import React, { useContext, useEffect, useState } from "react";
 interface Prop {
   forms: TProductForm[];
   isCheckRequired?: boolean;
+  isPostpaid?: boolean;
 }
 
-function FormAccount({ forms, isCheckRequired }: Prop) {
+function FormAccount({ forms, isCheckRequired, isPostpaid }: Prop) {
   const { dispatch, data: selectedData } = useContext(
     TransactionContext
   ) as ITransactionContext;
@@ -29,6 +34,84 @@ function FormAccount({ forms, isCheckRequired }: Prop) {
   const [nickName, setNickName] = useState<string | null>(null);
   const [checkIdLoading, setCheckIdLoading] = useState(false);
   const [isFormFull, setIsFormFull] = useState(false);
+  const [inquiryResponse, setInquiryResponse] = useState<IInquiryCheck | null>(
+    null
+  );
+
+  const checkInquiry = async () => {
+    if (data) {
+      let isNull = false;
+      Object.values(data).forEach((val) => {
+        if (!val) isNull = true;
+      });
+      const isFull = forms.length == Object.keys(data).length && !isNull;
+      setIsFormFull(isFull);
+
+      if (!isFull) {
+        toast({
+          title: "Failed",
+          description: "Lengkapi semua form terlebih dahulu",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (forms.length == Object.keys(data).length && !isNull) {
+        const payload = {
+          category_key: selectedData.category?.key,
+          product_key: selectedData.product?.key,
+          phone: selectedData.account?.noWhatsapp,
+          email: selectedData.account?.email,
+          form_data: Object.keys(data).map((key) => ({
+            key,
+            value: data[key],
+          })),
+        };
+
+        // check id
+        setCheckIdLoading(true);
+        const res = await fetch(`/api/products/categories/inquiry`, {
+          method: "POST",
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          const resData = await res.json();
+
+          if (resData?.code == 200) {
+            setInquiryResponse(resData.data);
+            dispatch({
+              action: "SET_TAGIHAN",
+              payload: resData.data,
+            });
+          } else {
+            setInquiryResponse(null);
+            dispatch({
+              action: "SET_TAGIHAN",
+              payload: null,
+            });
+            toast({
+              title: "Failed",
+              description: "Tagihan tidak ditemukan atau telah dibayar",
+              variant: "destructive",
+            });
+          }
+        } else {
+          setInquiryResponse(null);
+          toast({
+            title: "Failed",
+            description: "Tagihan tidak ditemukan atau telah dibayar",
+            variant: "destructive",
+          });
+        }
+
+        setCheckIdLoading(false);
+        return dispatch({
+          action: "SET_FORM",
+          payload: data,
+        });
+      }
+    }
+  };
 
   const checkId = async () => {
     if (data) {
@@ -56,7 +139,7 @@ function FormAccount({ forms, isCheckRequired }: Prop) {
 
         // check id
         setCheckIdLoading(true);
-        var res = await fetch(`/api/products/categories/check-id`, {
+        const res = await fetch(`/api/products/categories/check-id`, {
           method: "POST",
           body: JSON.stringify(payload),
         });
@@ -144,6 +227,100 @@ function FormAccount({ forms, isCheckRequired }: Prop) {
           )}
         </div>
       ))}
+      {isPostpaid && (
+        <Button onClick={checkInquiry} disabled={checkIdLoading}>
+          Cek Tagihan
+        </Button>
+      )}
+      {isPostpaid && inquiryResponse && (
+        <table className="text-xs mx-3">
+          <tbody>
+            <tr>
+              <th
+                colSpan={2}
+                className="text-center w-full mb-3 text-base pb-2 font-semibold"
+              >
+                Informasi Pembayaran
+              </th>
+            </tr>
+            <tr className="even:bg-black/5">
+              <th className="w-full text-left mb-3 px-2 py-1 font-semibold">
+                Id
+              </th>
+              <td className="w-full text-right px-2 py-1">
+                {inquiryResponse?.customer_no}
+              </td>
+            </tr>
+            <tr className="even:bg-black/5">
+              <th className="w-full text-left mb-3 px-2 py-1 font-semibold">
+                Nama
+              </th>
+              <td className="w-full text-right px-2 py-1 nowrap">
+                {inquiryResponse?.customer_name}
+              </td>
+            </tr>
+            <tr className="even:bg-black/5">
+              <th className="w-full text-left mb-3 px-2 py-1 font-semibold">
+                Tagihan
+              </th>
+              <td className="w-full text-right px-2 py-1">
+                {priceMask(inquiryResponse?.bill_total ?? 0)}
+              </td>
+            </tr>
+            <tr className="even:bg-black/5">
+              <th className="w-full text-left mb-3 px-2 py-1 font-semibold">
+                Admin
+              </th>
+              <td className="w-full text-right px-2 py-1">
+                {priceMask(inquiryResponse?.admin_total ?? 0)}
+              </td>
+            </tr>
+            <tr>
+              <th
+                className="text-center w-full mb-3 text-base pb-2 font-semibold pt-4"
+                colSpan={2}
+              >
+                Detail Pelanggan
+              </th>
+            </tr>
+            {inquiryResponse?.bill_detail?.headers.map((item) => (
+              <tr key={item.key} className="even:bg-black/5">
+                <th className="w-full text-left font-semibold px-2 py-1">
+                  {item.key}
+                </th>
+                <td className="w-full text-right px-2 py-1">{item.value}</td>
+              </tr>
+            ))}
+            <tr>
+              <th
+                className="text-center w-full mb-3 text-base pb-2 font-semibold pt-4"
+                colSpan={2}
+              >
+                Detail Tagihan
+              </th>
+            </tr>
+            {inquiryResponse?.bill_detail?.details.map((item, index) => (
+              <React.Fragment key={index}>
+                <tr key={index}>
+                  <th className="w-full text-left font-semibold text-black/50 px-2 pb-1 pt-4">
+                    Data {index + 1}
+                  </th>
+                </tr>
+                {item.map((detail) => (
+                  <tr key={detail.key} className="even:bg-black/5">
+                    <th className="w-full text-left font-semibold pr-2 pl-4 py-1">
+                      {detail.key}
+                    </th>
+                    <td className="w-full text-right px-2 py-1">
+                      {detail.value}
+                    </td>
+                  </tr>
+                ))}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      )}
       {isFormFull && isCheckRequired && (
         <>
           {checkIdLoading ? (

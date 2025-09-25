@@ -15,7 +15,7 @@ import Image from "next/image";
 import { Metadata } from "next";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import NotFound from "@/app/not-found";
+import { notFound } from "next/navigation";
 
 const getData = async (id: string) => {
   const credentialHeader = GetCredHeader();
@@ -100,7 +100,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function Page({ params }: { params: { id: string } }) {
   var data: IBannerDetail = await getData(params.id);
-  if (!data) return <NotFound />;
+  if (!data) return notFound();
 
   return (
     <>
@@ -124,7 +124,7 @@ async function Page({ params }: { params: { id: string } }) {
                 <div className="bg-background rounded-lg w-full hidden md:flex justify-center items-center">
                   <Image
                     src={data.image_url}
-                    alt={`promo diskon/cashback ${data.name}`}
+                    alt={`${data.name}`}
                     title={`promo diskon/cashback ${data.name}`}
                     height={1000}
                     width={3000}
