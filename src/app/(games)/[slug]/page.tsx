@@ -80,9 +80,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function Layout({ params }: { params: { slug: string } }) {
+export default function Layout({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   var name = headers().get("x-name") ?? "";
   var url = headers().get("host") ?? "";
+  var selected = searchParams?.item;
 
-  return <Content url={url} appName={name} id={params.slug} />;
+  return (
+    <Content url={url} appName={name} id={params.slug} selected={selected} />
+  );
 }

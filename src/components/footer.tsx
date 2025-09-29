@@ -32,6 +32,11 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
       // style={{ backgroundImage: 'url("/assets/illustration/v1/footer.svg")' }}
       className="bg-no-repeat bg-right bg-background w-full"
     >
+      {profile?.meta_description ? (
+        <p className="pt-4 px-4 md:px-14 md:container">
+          {profile?.meta_description}
+        </p>
+      ) : null}
       {true ? (
         <>
           {!path.includes("/transaksi/") &&

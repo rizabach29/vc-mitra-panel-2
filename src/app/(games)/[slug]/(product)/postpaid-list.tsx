@@ -17,6 +17,7 @@ import TransactionContext, {
 interface IProductList {
   products?: TProductItemWithTags;
   nextRef: string;
+  selected?: string | string[] | undefined;
 }
 
 function PostpaidList(prop: IProductList) {
@@ -52,7 +53,10 @@ function PostpaidList(prop: IProductList) {
       );
     }
     setProducts(formedProducts);
-  }, [prop.products]);
+    if (prop.selected && typeof prop.selected === "string") {
+      setProductKey(prop.selected as string);
+    }
+  }, [prop.products, prop.selected]);
 
   return (
     <div className="relative -mx-2 px-2">

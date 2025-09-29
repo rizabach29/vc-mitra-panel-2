@@ -23,6 +23,14 @@ export default async function middleware(
     res.headers.set("X-Timestamp", credentials.timestamp.toString());
     res.headers.set("Authorization", `Bearer ${token?.token}`);
 
+    if (!token) {
+      // Clear next-auth session cookie
+      res.cookies.set("next-auth.session-token", "", { maxAge: 0 });
+      res.cookies.set("__Secure-next-auth.session-token", "", {
+        maxAge: 0,
+      });
+    }
+
     return res;
   }
 

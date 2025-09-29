@@ -8,10 +8,12 @@ async function Content({
   id,
   appName,
   url,
+  selected,
 }: {
   id: string;
   appName: string;
   url: string;
+  selected: string | string[] | undefined;
 }) {
   const category = await getCategory(id);
   if (!category) return notFound();
@@ -29,6 +31,7 @@ async function Content({
             appName={appName}
             products={products}
             loading={false}
+            selected={selected}
           />
         </div>
       </div>

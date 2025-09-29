@@ -78,6 +78,7 @@ export interface ITransactionHistoryDetail {
     details: { key: string; value: string }[][];
     headers: { key: string; value: string }[];
   };
+  is_reviewed: boolean;
 }
 
 // =========== TRANSACTION CONTEXT ================

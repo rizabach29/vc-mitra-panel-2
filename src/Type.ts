@@ -53,6 +53,7 @@ export interface IProductCategory {
   forms?: TProductForm[];
   is_check_id?: boolean;
   is_postpaid?: boolean;
+  rating?: number;
 
   key: string;
   name: string;
@@ -162,4 +163,17 @@ export interface IInquiryCheck {
     headers: { key: string; value: string | number }[];
     details: { key: string; value: string | number }[][];
   };
+}
+
+export interface ICreateReview {
+  rating: number;
+  review_text: string;
+}
+
+export interface IReviewTransaction {
+  id: number;
+  member_name: string;
+  rating: number;
+  review_text: string;
+  created_at: string;
 }
