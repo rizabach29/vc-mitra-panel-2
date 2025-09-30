@@ -39,7 +39,6 @@ const FormAccount = dynamic(() => import("./(form-id)/form-account"), {
 });
 
 function DetailCategory(props: Props) {
-  console.log(props);
   if (props.data.category !== null && props.data.category !== undefined)
     return (
       <>
