@@ -42,15 +42,17 @@ function TransactionHistoryDetail({
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      var re = await fetch(`/api/transaction/${id}`);
+  async function getData(inputId: string) {
+    setLoading(true);
+    var re = await fetch(`/api/transaction/${inputId}`);
 
-      var res = await re.json();
-      setLoading(false);
-      setData(res.data);
-    })();
+    var res = await re.json();
+    setLoading(false);
+    setData(res.data);
+  }
+
+  useEffect(() => {
+    getData(id);
   }, [id]);
 
   const isPaymentNotExpired = useMemo(() => {
@@ -90,15 +92,23 @@ function TransactionHistoryDetail({
       },
       body: JSON.stringify(review),
     });
-    const data = await res.json();
-    if (data.success) {
+
+    if (res.ok) {
       toast({
         title: "Review berhasil dikirim",
         description: "Terima kasih telah memberikan review",
       });
-      setData({ ...data, is_reviewed: true });
-      // Handle successful review submission
+      // refresh data
+      await getData(id);
+      return;
     }
+
+    const data = await res.json();
+    toast({
+      title: "Gagal mengirim review",
+      description: data.data ?? "Terjadi kesalahan",
+      variant: "destructive",
+    });
   };
 
   if (loading) return <Loading />;
@@ -142,12 +152,14 @@ function TransactionHistoryDetail({
                 <>
                   <div className="px-4">
                     <h2 className="font-medium text-lg text-primary">Ulasan</h2>
-                    <StarRating
-                      defaultValue={5}
-                      onChange={(value) =>
-                        setReview({ ...review, rating: value })
-                      }
-                    />
+                    <div className="w-full items-center flex justify-center mb-6">
+                      <StarRating
+                        defaultValue={5}
+                        onChange={(value) =>
+                          setReview({ ...review, rating: value })
+                        }
+                      />
+                    </div>
                     <Textarea
                       placeholder="Tulis review kamu disini..."
                       className="mt-2"
@@ -172,17 +184,22 @@ function TransactionHistoryDetail({
                     <h2 className="font-medium text-lg text-primary">
                       Ulasan Anda
                     </h2>
-                    <StarRating
-                      defaultValue={data?.review_information?.rating ?? 5}
-                      onChange={(value) =>
-                        setReview({ ...review, rating: value })
-                      }
-                      readOnly
-                    />
-                    <p className="mt-2">
+                    <div className="w-full items-center flex justify-center mb-6">
+                      <StarRating
+                        defaultValue={data?.review_information?.rating ?? 5}
+                        onChange={(value) =>
+                          setReview({ ...review, rating: value })
+                        }
+                        readOnly
+                      />
+                    </div>
+                    <p className="mt-2 w-full text-center text-muted-foreground">
+                      {'"'}
                       {data?.review_information?.review_text}
+                      {'"'}
                     </p>
                   </div>
+
                   <Separator className="my-3 w-full" />
                 </>
               ) : null}

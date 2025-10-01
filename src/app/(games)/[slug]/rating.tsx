@@ -42,39 +42,49 @@ function Rating({ id }: { id: string }) {
 
   return (
     <div className="text-xs space-y-2 max-h-72 overflow-y-auto py-2">
-      {displayReview.map((item, index) => (
-        <Card
-          key={index}
-          className="border-b last:border-0 border-b-muted/50 py-2 px-3.5"
-        >
-          <div className="flex items-center justify-between mb-2">
-            <div className="font-semibold">{item.member_name}</div>
-            <div className="ml-2 text-xs text-muted-foreground">
-              {" "}
-              {new Date(item.created_at).toLocaleDateString()}
-            </div>
-          </div>
-          <div className="items-center gap-1 mb-2 flex">
-            <StarFilledIcon
-              style={{ width: 10, height: 10 }}
-              className="text-yellow-500"
-            />
-            <p className="text-xs text-muted-foreground">{item?.rating ?? 5}</p>
-          </div>
-          <div className="text-xs text-muted-foreground">
-            {item.review_text}
-          </div>
-        </Card>
-      ))}
-      {totalPages > page && (
-        <div className="flex justify-center">
-          <button
-            className="text-sm text-primary hover:underline"
-            onClick={() => setPage(page + 1)}
-          >
-            Lihat lebih banyak
-          </button>
+      {displayReview.length === 0 ? (
+        <div className="text-center text-muted-foreground py-4">
+          Belum ada ulasan
         </div>
+      ) : (
+        <>
+          {displayReview.map((item, index) => (
+            <Card
+              key={index}
+              className="border-b last:border-0 border-b-muted/50 py-2 px-3.5"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <div className="font-semibold">{item.member_name}</div>
+                <div className="ml-2 text-xs text-muted-foreground">
+                  {" "}
+                  {new Date(item.created_at).toLocaleDateString()}
+                </div>
+              </div>
+              <div className="items-center gap-1 mb-2 flex">
+                <StarFilledIcon
+                  style={{ width: 10, height: 10 }}
+                  className="text-yellow-500"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {item?.rating ?? 5}
+                </p>
+              </div>
+              <div className="text-xs text-muted-foreground">
+                {item.review_text}
+              </div>
+            </Card>
+          ))}
+          {totalPages > page && (
+            <div className="flex justify-center">
+              <button
+                className="text-sm text-primary hover:underline"
+                onClick={() => setPage(page + 1)}
+              >
+                Lihat lebih banyak
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

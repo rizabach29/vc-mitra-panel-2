@@ -1,29 +1,6 @@
 "use client";
 
 import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
-// SVG for half star
-const StarHalfIcon = ({ size = 20 }: { size?: number }) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <defs>
-      <linearGradient id="half">
-        <stop offset="50%" stopColor="currentColor" />
-        <stop offset="50%" stopColor="transparent" />
-      </linearGradient>
-    </defs>
-    <path
-      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-      fill="url(#half)"
-      stroke="currentColor"
-      strokeWidth="1"
-    />
-  </svg>
-);
 import React, { useState, useCallback, KeyboardEvent } from "react";
 
 // StarRating component for shadcn-style apps
@@ -34,7 +11,7 @@ import React, { useState, useCallback, KeyboardEvent } from "react";
 
 type StarRatingProps = {
   count?: number;
-  value?: number; // controlled value (0..count, supports half e.g. 3.5)
+  value?: number; // controlled value (0..count, integer only)
   defaultValue?: number; // uncontrolled initial value
   onChange?: (value: number) => void;
   readOnly?: boolean;
@@ -58,8 +35,8 @@ export default function StarRating({
   const setValue = useCallback(
     (v: number) => {
       if (readOnly) return;
-      // Clamp to nearest 0.5
-      const rounded = Math.max(0, Math.min(count, Math.round(v * 2) / 2));
+      // Clamp to integer
+      const rounded = Math.max(0, Math.min(count, Math.round(v)));
       if (typeof value !== "number") setInternal(rounded);
       onChange?.(rounded);
     },
@@ -75,12 +52,12 @@ export default function StarRating({
     }
     if (e.key === "ArrowRight") {
       e.preventDefault();
-      setValue(Math.min(count, current + 0.5));
+      setValue(Math.min(count, current + 1));
       return;
     }
     if (e.key === "ArrowLeft") {
       e.preventDefault();
-      setValue(Math.max(0, current - 0.5));
+      setValue(Math.max(0, current - 1));
       return;
     }
   };
@@ -93,46 +70,29 @@ export default function StarRating({
     >
       {Array.from({ length: count }).map((_, idx) => {
         const starValue = idx + 1;
-        let icon;
-        if (current >= starValue) {
-          icon = <StarFilledIcon style={{ width: size, height: size }} />;
-        } else if (current >= starValue - 0.5) {
-          icon = <StarHalfIcon size={size} />;
-        } else {
-          icon = <StarIcon style={{ width: size, height: size }} />;
-        }
+        const isActive = current >= starValue;
         return (
-          <span key={idx} className="relative flex">
-            <button
-              type="button"
-              role="radio"
-              aria-checked={current >= starValue}
-              aria-label={`${starValue} star${starValue === 1 ? "" : "s"}`}
-              onClick={() => setValue(starValue)}
-              onKeyDown={(e) => handleKey(e, idx)}
-              disabled={readOnly}
-              className={`p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-transform transform hover:scale-110 ${
-                current >= starValue - 0.5
-                  ? "text-yellow-500"
-                  : "text-muted-foreground"
-              }`}
-              title={`${starValue} / ${count}`}
-              style={{ zIndex: 2 }}
-            >
-              {icon}
-            </button>
-            {/* Half star click area */}
-            {!readOnly && (
-              <button
-                type="button"
-                aria-label={`Half ${starValue} star`}
-                onClick={() => setValue(starValue - 0.5)}
-                className="absolute left-0 top-0 w-1/2 h-full opacity-0 cursor-pointer"
-                style={{ zIndex: 3 }}
-                tabIndex={-1}
-              />
+          <button
+            key={idx}
+            type="button"
+            role="radio"
+            aria-checked={isActive}
+            aria-label={`${starValue} star${starValue === 1 ? "" : "s"}`}
+            onClick={() => setValue(starValue)}
+            onKeyDown={(e) => handleKey(e, idx)}
+            disabled={readOnly}
+            className={`p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-transform transform hover:scale-110 ${
+              isActive ? "text-yellow-500" : "text-muted-foreground"
+            }`}
+            title={`${starValue} / ${count}`}
+            style={{ width: size, height: size }}
+          >
+            {isActive ? (
+              <StarFilledIcon style={{ width: size, height: size }} />
+            ) : (
+              <StarIcon style={{ width: size, height: size }} />
             )}
-          </span>
+          </button>
         );
       })}
     </div>
