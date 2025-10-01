@@ -16,6 +16,7 @@ import ProductWrapper from "./(product)/product-wrapper";
 
 interface Props extends IUseCategoryData {
   appName: string;
+  selected?: string | string[] | undefined;
 }
 
 const Payment = dynamic(() => import("./(payment-method)/payment"), {
@@ -77,6 +78,7 @@ function DetailCategory(props: Props) {
                   nextRef={"payment-method"}
                   products={props.products}
                   isPostpaid={props.data.category.is_postpaid}
+                  selected={props.selected}
                 />
               </FormWrapper>
             </div>

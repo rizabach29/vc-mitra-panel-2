@@ -8,10 +8,12 @@ async function Content({
   id,
   appName,
   url,
+  selected,
 }: {
   id: string;
   appName: string;
   url: string;
+  selected: string | string[] | undefined;
 }) {
   const category = await getCategory(id);
   if (!category) return notFound();
@@ -20,7 +22,12 @@ async function Content({
 
   return (
     <>
-      <Ldjson appName={appName} url={url} />
+      <Ldjson
+        appName={appName}
+        url={url}
+        category={category}
+        products={products}
+      />
       <BackHeader title="Pembelian" />
       <div className="flex justify-center w-full">
         <div className="max-w-7xl w-full mb-0 px-2">
@@ -29,6 +36,7 @@ async function Content({
             appName={appName}
             products={products}
             loading={false}
+            selected={selected}
           />
         </div>
       </div>

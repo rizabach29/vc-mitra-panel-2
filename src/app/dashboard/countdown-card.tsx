@@ -15,11 +15,18 @@ function CountdownCard({
   theme?: theme;
 }) {
   const { days, hours, minutes, seconds, isExpired } = useCountdown(date);
+  const [mounted, setMounted] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  React.useEffect(() => {
     if (isExpired && onExpired) onExpired();
-  }, [seconds]);
+  }, [seconds, isExpired, onExpired]);
 
+  // Prevent hydration mismatch: render nothing until mounted
+  if (!mounted) return null;
   if (isExpired) return null;
 
   if (days > 0)

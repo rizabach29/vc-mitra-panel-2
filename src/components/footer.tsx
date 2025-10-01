@@ -32,6 +32,10 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
       // style={{ backgroundImage: 'url("/assets/illustration/v1/footer.svg")' }}
       className="bg-no-repeat bg-right bg-background w-full"
     >
+      <p className="pt-4 px-4 md:px-14 md:container">
+        {profile?.meta_description ??
+          `${profile?.name} tempat top up game termurah & beli voucher game terlengkap. Cuma di ${profile?.name} top up ML, HoK, FF, PUBG & lainnya jadi makin mudah dan cepat`}
+      </p>
       {true ? (
         <>
           {!path.includes("/transaksi/") &&

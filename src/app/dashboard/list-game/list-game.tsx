@@ -1,90 +1,68 @@
-"use client";
-import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { IProductCategory, TProductGroup } from "@/Type";
-import { CubeIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { CubeIcon } from "@radix-ui/react-icons";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
+import { GetCredHeader } from "@/app/api/api-utils";
 
-export default function ListGame({ name }: { name: string }) {
-  const [group, setGroup] = useState<TProductGroup>({
-    id: "",
-    name: "All",
+async function getGroups(): Promise<TProductGroup[]> {
+  var credentialHeader = GetCredHeader();
+  var header = {
+    "Content-Type": "application/json",
+    "X-Sign": credentialHeader.sign,
+    "X-User-Id": credentialHeader.mitraid,
+    "X-Timestamp": credentialHeader.timestamp.toString(),
+  };
+  const res = await fetch(`${process.env.NEXT_API_URL}/v2/panel/label`, {
+    cache: "no-store",
+    headers: header,
   });
-  const [data, setData] = useState<IProductCategory[]>([]);
-  const [searchData, setSearchData] = useState<IProductCategory[]>([]);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [groups, setGroups] = useState<TProductGroup[]>([]);
+  let data: TProductGroup[] = [
+    {
+      id: "",
+      name: "All",
+    },
+  ];
+  if (res.ok) {
+    const result = await res.json();
+    data = data.concat(result.data);
+  }
+  return data;
+}
 
-  const getData = async (more: boolean) => {
-    setLoading(true);
-    var res = await fetch(
-      `/api/products/categories/?` +
-        new URLSearchParams({
-          label_id: `${group?.id ?? ""}`,
-        })
-    );
-
-    if (res.ok) {
-      var result = await res.json();
-      setData(result.data);
-
-      // if (result.data) {
-      //   if (more) setData((prev) => [...prev, result.data]);
-      //   else setData(result.data);
-      // } else {
-      //   if (!more) setData([]);
-      // }
-    }
-    setLoading(false);
+async function getCategories(labelId?: string): Promise<IProductCategory[]> {
+  var credentialHeader = GetCredHeader();
+  var header = {
+    "Content-Type": "application/json",
+    "X-Sign": credentialHeader.sign,
+    "X-User-Id": credentialHeader.mitraid,
+    "X-Timestamp": credentialHeader.timestamp.toString(),
   };
-
-  const getGroup = async () => {
-    var res = await fetch(`/api/products/groups/?`);
-
-    if (res.ok) {
-      let data: TProductGroup[] = [
-        {
-          id: "",
-          name: "All",
-        },
-      ];
-      var result = await res.json();
-      data = data.concat(result.data);
-      setGroups(data);
+  const res = await fetch(
+    `${process.env.NEXT_API_URL}/v2/panel/category?label_id=${labelId}`,
+    {
+      cache: "no-store",
+      headers: header,
     }
-  };
+  );
+  if (res.ok) {
+    const result = await res.json();
+    return result.data;
+  }
+  return [];
+}
 
-  useEffect(() => {
-    getGroup();
-  }, []);
-
-  useEffect(() => {
-    setPageIndex(1);
-    getData(false);
-  }, [group]);
-
-  useEffect(() => {
-    setSearchData(data);
-  }, [data]);
-
-  useEffect(() => {
-    if (pageIndex > 0) getData(true);
-  }, [pageIndex]);
-
-  const handleSearchData = (e: string) => {
-    if (e.length > 0) {
-      setSearchData(
-        data.filter((val) => val?.name.toLowerCase().includes(e.toLowerCase()))
-      );
-    } else {
-      setSearchData(data);
-    }
-  };
+export default async function ListGame({
+  name,
+  label,
+}: {
+  name: string;
+  label?: string;
+}) {
+  // Default to "All" group
+  const groups = await getGroups();
+  const data = await getCategories(label);
 
   return (
     <div className="bg-[#F0F8F6] pb-4 flex justify-center rounded-t-xl">
@@ -101,39 +79,22 @@ export default function ListGame({ name }: { name: string }) {
               }}
             >
               {groups.map((val, idx) => (
-                <Badge
-                  className={`mx-1 cursor-pointer inline-block whitespace-nowrap`}
-                  variant={val.id == group.id ? "default" : "outline"}
-                  key={`${idx}`}
-                  onClick={() => {
-                    setData([]);
-                    setGroup(val);
-                  }}
-                >
-                  {val.name}
-                </Badge>
+                <Link href={`/?label=${val.id}`} key={idx} scroll={false}>
+                  <Badge
+                    className={`mx-1 inline-block whitespace-nowrap cursor-pointer`}
+                    variant={val.id == label ? "default" : "outline"}
+                    key={`${idx}`}
+                  >
+                    {val.name}
+                  </Badge>
+                </Link>
               ))}
             </div>
-            {/* <div className="flex items-center justify-end w-100">
-              <div className="relative w-[300px] bg-white rounded-full mt-2">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
-                <Input
-                  type="text"
-                  placeholder="Cari brand..."
-                  className="pl-10"
-                  onChange={(e) => handleSearchData(e.target.value)}
-                />
-              </div>
-            </div> */}
           </div>
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 md:gap-4 gap-2 mt-2 place-items-center justify-center px-2">
-          {loading ? (
-            [...Array(3)].map((x, i) => (
-              <Skeleton key={i} className="w-full aspect-square" />
-            ))
-          ) : searchData && searchData.length > 0 ? (
-            searchData.map((val: IProductCategory, idx) =>
+          {data && data.length > 0 ? (
+            data.map((val: IProductCategory, idx) =>
               val.name ? (
                 <Link href={`/${val.key}`} key={idx} className="w-full h-full">
                   <Card className="w-full h-full min-w-fit rounded-xl hover:shadow-md hover:text-primary transition duration-300">

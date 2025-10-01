@@ -5,11 +5,12 @@ import ProductCardDetail from "./product-card-detail";
 
 interface IProps {
   data: TProductItem;
+  selected?: string | string[] | undefined;
 }
 
 function ProductCard(props: IProps) {
   return (
-    <ProductCardWrapper data={props.data}>
+    <ProductCardWrapper data={props.data} selected={props.selected}>
       <ProductCardDetail
         discountedPrice={props.data.discounted_price}
         imageURL={props.data.image_url}
