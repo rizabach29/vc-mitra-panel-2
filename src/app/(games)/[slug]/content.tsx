@@ -22,7 +22,12 @@ async function Content({
 
   return (
     <>
-      <Ldjson appName={appName} url={url} />
+      <Ldjson
+        appName={appName}
+        url={url}
+        category={category}
+        products={products}
+      />
       <BackHeader title="Pembelian" />
       <div className="flex justify-center w-full">
         <div className="max-w-7xl w-full mb-0 px-2">

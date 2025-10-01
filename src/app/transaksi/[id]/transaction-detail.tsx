@@ -137,38 +137,55 @@ function TransactionHistoryDetail({
         <div className="flex flex-row justify-stretch items-center mt-2">
           <div className="grid md:grid-cols-2 w-full gap-3 h-full mt-1">
             <div className="w-full bg-background h-full pt-3 pb-6 rounded-lg shadow flex-1">
-              {!data.is_reviewed &&
-                data.status === ETransactionStatus.Delivered && (
-                  <>
-                    <div className="px-4">
-                      <h2 className="font-medium text-lg text-primary">
-                        Review
-                      </h2>
-                      <StarRating
-                        defaultValue={5}
-                        onChange={(value) =>
-                          setReview({ ...review, rating: value })
-                        }
-                      />
-                      <Textarea
-                        placeholder="Tulis review kamu disini..."
-                        className="mt-2"
-                        rows={3}
-                        onChange={(e) =>
-                          setReview({ ...review, review_text: e.target.value })
-                        }
-                      />
-                      <Button
-                        className="mt-4 w-full"
-                        size="sm"
-                        onClick={handleSubmitReview}
-                      >
-                        Kirim Review
-                      </Button>
-                    </div>
-                    <Separator className="my-3 w-full" />
-                  </>
-                )}
+              {data.status === ETransactionStatus.Delivered &&
+              !data.is_reviewed ? (
+                <>
+                  <div className="px-4">
+                    <h2 className="font-medium text-lg text-primary">Ulasan</h2>
+                    <StarRating
+                      defaultValue={5}
+                      onChange={(value) =>
+                        setReview({ ...review, rating: value })
+                      }
+                    />
+                    <Textarea
+                      placeholder="Tulis review kamu disini..."
+                      className="mt-2"
+                      rows={3}
+                      onChange={(e) =>
+                        setReview({ ...review, review_text: e.target.value })
+                      }
+                    />
+                    <Button
+                      className="mt-4 w-full"
+                      size="sm"
+                      onClick={handleSubmitReview}
+                    >
+                      Kirim Review
+                    </Button>
+                  </div>
+                  <Separator className="my-3 w-full" />
+                </>
+              ) : data.review_information ? (
+                <>
+                  <div className="px-4">
+                    <h2 className="font-medium text-lg text-primary">
+                      Ulasan Anda
+                    </h2>
+                    <StarRating
+                      defaultValue={data?.review_information?.rating ?? 5}
+                      onChange={(value) =>
+                        setReview({ ...review, rating: value })
+                      }
+                      readOnly
+                    />
+                    <p className="mt-2">
+                      {data?.review_information?.review_text}
+                    </p>
+                  </div>
+                  <Separator className="my-3 w-full" />
+                </>
+              ) : null}
               <h2 className="font-medium text-lg text-primary px-4">
                 Rincian Transaksi
               </h2>
@@ -179,7 +196,7 @@ function TransactionHistoryDetail({
                     <BadgeTransaksi status={data.status} />
                   </div>
                 </div>
-                {data.payment_information.expired_at &&
+                {data.payment_information?.expired_at &&
                 isFuture(parseISO(data.payment_information.expired_at)) &&
                 data.status === ETransactionStatus.Unpaid ? (
                   <div className="flex justify-between w-full">

@@ -27,8 +27,7 @@ function Header({
                 <Image
                   width={900}
                   height={300}
-                  alt={`${category.name}`}
-                  title={`${category.name} ${name}`}
+                  alt={`${category.meta_title}`}
                   src={category?.banner_url}
                   style={{ aspectRatio: 3 / 1 }}
                   className={`object-cover w-full md:rounded-xl rounded-t-xl border`}
@@ -46,8 +45,7 @@ function Header({
                     <Image
                       width={300}
                       height={300}
-                      alt={`${category.name} ${name}`}
-                      title={`${category.name} ${name}`}
+                      alt={`${category.meta_title}`}
                       className="h-auto w-12 md:w-16 absolute"
                       src={
                         category.image_url ??
@@ -104,8 +102,7 @@ function Header({
               <Image
                 width={300}
                 height={300}
-                alt={`${category.name} ${name}`}
-                title={`${category.name} ${name}`}
+                alt={`${category.meta_title}`}
                 className="h-auto w-12 md:w-16 absolute"
                 src={
                   category.image_url ??

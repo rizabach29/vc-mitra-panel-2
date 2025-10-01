@@ -60,7 +60,7 @@ function PostpaidList(prop: IProductList) {
 
   return (
     <div className="relative -mx-2 px-2">
-      <Select onValueChange={(e) => setProductKey(e)} value={productKey}>
+      <Select>
         <SelectTrigger className="col-span-2">
           <SelectValue placeholder={`Pilih Variasi`} />
         </SelectTrigger>
@@ -68,9 +68,11 @@ function PostpaidList(prop: IProductList) {
           {products && products.length > 0 && (
             <>
               {products.map((item, index) => (
-                <SelectItem key={index} value={item.key}>
-                  {item.name}
-                </SelectItem>
+                <ProductAction key={item.key} nextRef={prop.nextRef} val={item}>
+                  <SelectItem key={index} value={item.key}>
+                    {item.name}
+                  </SelectItem>
+                </ProductAction>
               ))}
             </>
           )}
