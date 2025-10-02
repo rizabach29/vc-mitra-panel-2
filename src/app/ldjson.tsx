@@ -48,9 +48,7 @@ async function Ldjson({ appName, url }: { appName: string; url: string }) {
               "@type": "ContactPoint",
               contactType: "customer support",
               email: data.filter((x) => x.key === "email")[0]?.value,
-              telephone: data.filter(
-                (x) => x.key === "telephone" || x.key === "telegram"
-              )[0]?.value,
+              telephone: data.filter((x) => x.key === "telephone")[0]?.value,
               areaServed: "ID",
               availableLanguage: ["Indonesian"],
             },

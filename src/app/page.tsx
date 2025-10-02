@@ -51,17 +51,25 @@ export default function Home({
     `${name} Top Up Game Termurah & 100% Aman!`;
   var url = headers().get("host") ?? "";
   var label = (searchParams.label as string) ?? "";
+  var seo_title =
+    headers().get("x-seo-title") ??
+    `<h1>Beli Voucher & Top Up Game Murah di ${name}</h1>`;
 
   return (
     <>
       <Ldjson appName={name} url={url} />
       <div className="bg-background">
-        <div className="flex justify-center rounded-t-xl">
-          <div className="w-full max-w-7xl px-2">
-            <h1 className="pt-4">{meta_title}</h1>
+        <CarouselWrapper name={name} title={meta_title} />
+        <div className="flex justify-center rounded-t-xl bg-[#F0F8F6]">
+          <div className="w-full max-w-7xl px-2 pt-4">
+            <div
+              className="mb-4 text-center text-2xl font-bold text-primary"
+              dangerouslySetInnerHTML={{
+                __html: seo_title,
+              }}
+            ></div>
           </div>
         </div>
-        <CarouselWrapper name={name} title={meta_title} />
         <FlashSaleWrapper />
         <ListGame name={name} label={label} />
       </div>

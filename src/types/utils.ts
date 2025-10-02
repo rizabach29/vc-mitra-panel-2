@@ -59,6 +59,8 @@ export interface ISiteProfile {
   privacy_policy: string;
   theme_color: string;
   manifest: any;
+  seo_title: string;
+  seo_description: string;
   meta_title?: string;
   meta_description?: string;
 }
