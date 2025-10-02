@@ -70,6 +70,8 @@ export default async function middleware(
     res.headers.set("x-logo", setting.logo_url);
     res.headers.set("x-meta-title", setting?.meta_title ?? "");
     res.headers.set("x-meta-description", setting?.meta_description ?? "");
+    res.headers.set("x-seo-title", setting?.seo_title ?? "");
+    res.headers.set("x-seo-description", setting?.seo_description ?? "");
   }
 
   if (
