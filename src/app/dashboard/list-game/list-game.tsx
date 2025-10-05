@@ -44,6 +44,9 @@ async function getCategories(labelId?: string): Promise<IProductCategory[]> {
     {
       cache: "no-store",
       headers: header,
+      next: {
+        revalidate: 30,
+      },
     }
   );
   if (res.ok) {
