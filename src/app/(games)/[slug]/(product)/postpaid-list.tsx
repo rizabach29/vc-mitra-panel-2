@@ -30,7 +30,7 @@ export default function PostpaidList(prop: IProductList) {
 
   return (
     <div className="relative -mx-2 px-2">
-      <div className="w-full max-w-sm">
+      <div className="w-full ">
         <PostpaidSelectWrapper
           nextRef={prop.nextRef}
           selected={selectedKey}
@@ -44,7 +44,7 @@ export default function PostpaidList(prop: IProductList) {
               <SelectLabel>Produk</SelectLabel>
               {formedProducts.map((item) => (
                 <SelectItem key={item.key} value={item.key}>
-                  {item.name}
+                  <h3 className="text-sm p-0 m-0">{item.name}</h3>
                 </SelectItem>
               ))}
             </SelectGroup>

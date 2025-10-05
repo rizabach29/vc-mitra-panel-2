@@ -46,6 +46,7 @@ async function Ldjson({
         <Script
           id=""
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -79,6 +80,7 @@ async function Ldjson({
         <Script
           id=""
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "http://schema.org/",

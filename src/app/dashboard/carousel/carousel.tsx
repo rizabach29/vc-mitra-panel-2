@@ -71,7 +71,7 @@ function CarouselV2({
                 <Image
                   key={index}
                   src={item.image_url}
-                  alt={title ?? item.name}
+                  alt={item.name ?? title}
                   height={2000}
                   width={6000}
                   style={{ aspectRatio: 3 / 1 }}
