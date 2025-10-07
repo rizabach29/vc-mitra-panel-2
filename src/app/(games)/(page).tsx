@@ -45,6 +45,7 @@ export default function Page() {
       <Script
         id=""
         type="application/ld+json"
+        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
