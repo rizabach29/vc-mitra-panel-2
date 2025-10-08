@@ -72,9 +72,10 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 
   const description =
-    blog?.title ??
+    blog?.meta_description ??
     `Daftar harga voucher/top up termurah ${month} ${date.getFullYear()} di ${name}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`;
   const title =
+    blog?.meta_title ??
     blog?.title ??
     `Beli/Top Up Termurah ${month} ${date.getFullYear()} | ${name}`;
 
@@ -103,7 +104,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function Page({ params }: { params: { id: string } }) {
-  var data: IBlogDetail = await getData(params.id);
+  var res = await getData(params.id);
+  console.log(res);
+  var data: IBlogDetail | undefined = res;
   if (!data) return notFound();
 
   return (
