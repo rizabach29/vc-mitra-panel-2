@@ -105,7 +105,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 async function Page({ params }: { params: { id: string } }) {
   var res = await getData(params.id);
-  console.log(res);
   var data: IBlogDetail | undefined = res;
   if (!data) return notFound();
 
