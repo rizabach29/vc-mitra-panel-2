@@ -13,6 +13,7 @@ import React from "react";
 import { GetCredHeader } from "../api/api-utils";
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 
 async function fetchBlogPosts(
   pageNumber = 1,
@@ -67,32 +68,32 @@ async function Page({
 
   return (
     <>
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  item: { "@id": url, name: "Home" },
+      <Script
+        id="blog-schema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                item: { "@id": url, name: "Home" },
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                item: {
+                  "@id": url + "/blog",
+                  name: "Blog",
                 },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  item: {
-                    "@id": url + "/blog",
-                    name: "Blog",
-                  },
-                },
-              ],
-            }),
-          }}
-        />
-      </Head>
+              },
+            ],
+          }),
+        }}
+      />
       <BackHeader title="Blog" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">

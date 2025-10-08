@@ -36,6 +36,7 @@ async function Ldjson({ appName, url }: { appName: string; url: string }) {
     <>
       <Script
         id=""
+        strategy="beforeInteractive"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({

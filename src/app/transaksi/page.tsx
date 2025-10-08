@@ -15,6 +15,7 @@ import { GetCredHeader } from "../api/api-utils";
 import { headers } from "next/headers";
 import { ISiteProfile } from "@/types/utils";
 import Head from "next/head";
+import Script from "next/script";
 
 export async function generateMetadata(): Promise<Metadata> {
   var credentialHeader = GetCredHeader();
@@ -76,32 +77,32 @@ async function Page() {
 
   return (
     <>
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  item: { "@id": url, name: "Home" },
+      <Script
+        id="transaksi-schema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                item: { "@id": url, name: "Home" },
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                item: {
+                  "@id": url + "/transaksi",
+                  name: "List Transaksi",
                 },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  item: {
-                    "@id": url + "/transaksi",
-                    name: "List Transaksi",
-                  },
-                },
-              ],
-            }),
-          }}
-        />
-      </Head>
+              },
+            ],
+          }),
+        }}
+      />
       <div className="md:pt-4 px-2 flex w-full justify-center">
         <div className="max-w-7xl w-full flex flex-col justify-center items-center">
           <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">

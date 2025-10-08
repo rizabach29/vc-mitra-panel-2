@@ -40,6 +40,8 @@ export interface IBlogDetail {
   banner_url: string;
   content: string;
   created_at: string;
+  meta_title: string;
+  meta_description: string;
 }
 
 export interface ISosmed {
