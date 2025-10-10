@@ -63,7 +63,7 @@ export default function Home({
         <div className="flex justify-center rounded-t-xl bg-[#F0F8F6]">
           <div className="w-full max-w-7xl px-2 pt-4">
             <div
-              className="mb-4"
+              className="mb-4 article-content"
               dangerouslySetInnerHTML={{
                 __html: seo_title,
               }}

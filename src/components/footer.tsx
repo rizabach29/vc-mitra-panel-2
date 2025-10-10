@@ -34,7 +34,7 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
     >
       {profile?.seo_description ? (
         <div
-          className="pt-4 px-4 md:px-14 md:container"
+          className="pt-4 px-4 md:px-14 md:container article-content"
           dangerouslySetInnerHTML={{ __html: profile?.seo_description }}
         ></div>
       ) : (
@@ -70,7 +70,7 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
                             {profile.name} - {profile.title}
                           </p>
                           <p
-                            className="text-muted-foreground text-xs leading-5"
+                            className="text-muted-foreground text-xs leading-5 article-content"
                             dangerouslySetInnerHTML={{
                               __html: profile?.description,
                             }}
@@ -186,7 +186,7 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
                           {profile.name} - {profile.title}
                         </p>
                         <p
-                          className="text-muted-foreground text-xs leading-5"
+                          className="text-muted-foreground text-xs leading-5 article-content"
                           dangerouslySetInnerHTML={{
                             __html: profile?.description,
                           }}

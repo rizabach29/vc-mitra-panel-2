@@ -273,6 +273,7 @@ function PrintInvoice(data: Props) {
                       Cara Pembayaran
                     </p>
                     <div
+                      className="article-content"
                       dangerouslySetInnerHTML={{
                         __html: data.payment_information.guide,
                       }}

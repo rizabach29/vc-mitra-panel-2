@@ -133,7 +133,7 @@ async function Page({ params }: { params: { id: string } }) {
                 </div>
                 {data ? (
                   <div
-                    className="pt-6"
+                    className="pt-6 article-content"
                     dangerouslySetInnerHTML={{
                       __html: data?.description,
                     }}

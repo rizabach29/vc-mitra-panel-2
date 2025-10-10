@@ -92,6 +92,7 @@ async function Page() {
                 </div>
                 {data ? (
                   <div
+                    className="article-content"
                     dangerouslySetInnerHTML={{
                       __html: data?.terms_condition,
                     }}
