@@ -405,7 +405,7 @@ function TransactionHistoryDetail({
                           Catatan
                         </h2>
                         <div
-                          className="mt-4 text-sm text-muted-foreground"
+                          className="mt-4 text-sm text-muted-foreground article-content"
                           dangerouslySetInnerHTML={{
                             __html: data.order_description,
                           }}
@@ -458,7 +458,7 @@ function TransactionHistoryDetail({
                         </h2>
                       </div>
                       <div
-                        className="mt-4"
+                        className="mt-4 article-content"
                         dangerouslySetInnerHTML={{
                           __html: data.payment_information.guide,
                         }}

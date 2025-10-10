@@ -16,6 +16,7 @@ import { Metadata } from "next";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 const getData = async (id: string) => {
   const credentialHeader = GetCredHeader();
@@ -71,13 +72,10 @@ export async function generateMetadata(): Promise<Metadata> {
     locale: id,
   });
 
+  const title = blog?.meta_title ?? `Terbaru Hari Ini - ${name}.`;
   const description =
     blog?.meta_description ??
-    `Daftar harga voucher/top up termurah ${month} ${date.getFullYear()} di ${name}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`;
-  const title =
-    blog?.meta_title ??
-    blog?.title ??
-    `Beli/Top Up Termurah ${month} ${date.getFullYear()} | ${name}`;
+    `Update berita game terbaru  dan terlengkap di Blog ${name}. Temukan artikel informasi, event, tips & trik seputar game ML, FF, PUBG, Roblox dan masih banyak lagi.`;
 
   return {
     manifest: "/api/manifest.json",
@@ -104,12 +102,51 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function Page({ params }: { params: { id: string } }) {
+  var name = headers().get("x-name") ?? "";
+  var host = headers().get("host") ?? "";
+  var logo = headers().get("x-logo") ?? "";
+
+  // fetch data
   var res = await getData(params.id);
   var data: IBlogDetail | undefined = res;
   if (!data) return notFound();
 
   return (
     <>
+      <Script
+        id="blog-posts-schema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": "diisi dengan url artikel terkait",
+            },
+            headline: data.title,
+            description: data.meta_description,
+            image: data.banner_url,
+            author: {
+              "@type": "Person",
+              name,
+              url: `https://${host}`,
+            },
+            publisher: {
+              "@type": "Organization",
+              name,
+              logo: {
+                "@type": "ImageObject",
+                url: logo,
+              },
+            },
+            datePublished: new Date(data.created_at).toISOString(),
+            articleSection: "Berita Game",
+            url: `https://${host}/blog/${data.slug}`,
+          }),
+        }}
+      />
       <BackHeader title="Blog" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
@@ -154,7 +191,7 @@ async function Page({ params }: { params: { id: string } }) {
                 </div>
                 {data ? (
                   <div
-                    className="mt-8"
+                    className="mt-8 article-content"
                     dangerouslySetInnerHTML={{
                       __html: data?.content,
                     }}

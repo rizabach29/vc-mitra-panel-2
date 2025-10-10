@@ -46,6 +46,12 @@ export default async function sitemap() {
       priority: 1,
     },
     {
+      url: url + "/blog",
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1,
+    },
+    {
       url: url + "/auth/login",
       lastModified: new Date(),
       changeFrequency: "yearly",
