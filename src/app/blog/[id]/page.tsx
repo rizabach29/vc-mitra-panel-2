@@ -72,9 +72,9 @@ export async function generateMetadata(): Promise<Metadata> {
     locale: id,
   });
 
-  const description = blog?.meta_description ?? `Terbaru Hari Ini - ${name}.`;
-  const title =
-    blog?.meta_title ??
+  const title = blog?.meta_title ?? `Terbaru Hari Ini - ${name}.`;
+  const description =
+    blog?.meta_description ??
     `Update berita game terbaru  dan terlengkap di Blog ${name}. Temukan artikel informasi, event, tips & trik seputar game ML, FF, PUBG, Roblox dan masih banyak lagi.`;
 
   return {
