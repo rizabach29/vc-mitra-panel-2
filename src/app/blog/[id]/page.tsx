@@ -16,7 +16,7 @@ import { Metadata } from "next";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { notFound } from "next/navigation";
-import Script from "next/script";
+import Head from "next/head";
 
 const getData = async (id: string) => {
   const credentialHeader = GetCredHeader();
@@ -113,39 +113,74 @@ async function Page({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Script
-        id="blog-posts-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": "diisi dengan url artikel terkait",
-            },
-            headline: data.title,
-            description: data.meta_description,
-            image: data.banner_url,
-            author: {
-              "@type": "Person",
-              name,
-              url: `https://${host}`,
-            },
-            publisher: {
-              "@type": "Organization",
-              name,
-              logo: {
-                "@type": "ImageObject",
-                url: logo,
+      <head>
+        <script
+          id="breadcrumb-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": `https://${host}`, name: "Home" },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": `https://${host}/blog`,
+                    name: "Blog",
+                  },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  item: {
+                    "@id": `https://${host}/blog/${data.slug}`,
+                    name: data.title,
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+        <script
+          id="blog-posts-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": "diisi dengan url artikel terkait",
               },
-            },
-            datePublished: new Date(data.created_at).toISOString(),
-            articleSection: "Berita Game",
-            url: `https://${host}/blog/${data.slug}`,
-          }),
-        }}
-      />
+              headline: data.title,
+              description: data.meta_description,
+              image: data.banner_url,
+              author: {
+                "@type": "Person",
+                name,
+                url: `https://${host}`,
+              },
+              publisher: {
+                "@type": "Organization",
+                name,
+                logo: {
+                  "@type": "ImageObject",
+                  url: logo,
+                },
+              },
+              datePublished: new Date(data.created_at).toISOString(),
+              articleSection: "Berita Game",
+              url: `https://${host}/blog/${data.slug}`,
+            }),
+          }}
+        />
+      </head>
       <BackHeader title="Blog" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">

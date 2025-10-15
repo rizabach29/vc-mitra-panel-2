@@ -13,6 +13,7 @@ import BackHeader from "@/components/header/back-header";
 import { headers } from "next/headers";
 import Script from "next/script";
 import { Metadata } from "next";
+import Head from "next/head";
 
 const getData = async () => {
   const credentialHeader = GetCredHeader();
@@ -78,32 +79,34 @@ async function Page() {
 
   return (
     <>
-      <Script
-        type="application/ld+json"
-        id="syarat-ketentuan-schema"
-        // strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                item: { "@id": url, name: "Home" },
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                item: {
-                  "@id": url + "/syarat-ketentuan",
-                  name: "Syarat Ketentuan",
+      <head>
+        <script
+          type="application/ld+json"
+          id="syarat-ketentuan-schema"
+          // strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": url, name: "Home" },
                 },
-              },
-            ],
-          }),
-        }}
-      />
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": url + "/syarat-ketentuan",
+                    name: "Syarat Ketentuan",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </head>
       <BackHeader title="Syarat Ketentuan" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">

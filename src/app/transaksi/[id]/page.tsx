@@ -14,7 +14,6 @@ import BackHeader from "@/components/header/back-header";
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import Head from "next/head";
-import Script from "next/script";
 
 export async function generateMetadata(): Promise<Metadata> {
   var logo_url = headers().get("x-logo") ?? "";
@@ -83,39 +82,41 @@ async function DetailPage({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Script
-        id="detail-transaksi-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                item: { "@id": url, name: "Home" },
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                item: {
-                  "@id": url + "/transaksi",
-                  name: "List Transaksi",
+      <head>
+        <script
+          id="detail-transaksi-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": url, name: "Home" },
                 },
-              },
-              {
-                "@type": "ListItem",
-                position: 3,
-                item: {
-                  "@id": url + "/transaksi/",
-                  name: "Detail Transaksi",
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": url + "/transaksi",
+                    name: "List Transaksi",
+                  },
                 },
-              },
-            ],
-          }),
-        }}
-      />
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  item: {
+                    "@id": url + "/transaksi/",
+                    name: "Detail Transaksi",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </head>
       <BackHeader title="Detail Transaksi" />
       <div className="pt-4 px-2 flex w-full justify-center">
         <div className="max-w-7xl w-full flex flex-col justify-center items-center">

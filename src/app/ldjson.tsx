@@ -1,5 +1,4 @@
 import { ISosmed } from "@/types/utils";
-import Script from "next/script";
 import React from "react";
 import { GetCredHeader } from "./api/api-utils";
 
@@ -33,8 +32,8 @@ async function Ldjson({ appName, url }: { appName: string; url: string }) {
   const data = await getSocialMedia();
 
   return (
-    <>
-      <Script
+    <head>
+      <script
         id="ldjson-organization"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -61,7 +60,7 @@ async function Ldjson({ appName, url }: { appName: string; url: string }) {
           }),
         }}
       />
-    </>
+    </head>
   );
 }
 

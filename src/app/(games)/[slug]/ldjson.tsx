@@ -1,7 +1,7 @@
 import { IProductCategory, TProductItemWithTags } from "@/Type";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
-import Script from "next/script";
+import Head from "next/head";
 import React from "react";
 
 async function Ldjson({
@@ -41,8 +41,8 @@ async function Ldjson({
   });
 
   return (
-    <>
-      <Script
+    <head>
+      <script
         id="breadcrumb-ld-json"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -75,7 +75,7 @@ async function Ldjson({
           }),
         }}
       />
-      <Script
+      <script
         id="product-ld-json"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -112,7 +112,7 @@ async function Ldjson({
           }),
         }}
       />
-    </>
+    </head>
   );
 }
 

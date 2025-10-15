@@ -12,7 +12,6 @@ import { ISiteProfile } from "@/types/utils";
 import BackHeader from "@/components/header/back-header";
 import Head from "next/head";
 import { headers } from "next/headers";
-import Script from "next/script";
 import { Metadata } from "next";
 
 const getData = async () => {
@@ -79,31 +78,33 @@ async function Page() {
 
   return (
     <>
-      <Script
-        id="kebijakan-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                item: { "@id": url, name: "Home" },
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                item: {
-                  "@id": url + "/kebijakan",
-                  name: "Kebijakan",
+      <head>
+        <script
+          id="kebijakan-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": url, name: "Home" },
                 },
-              },
-            ],
-          }),
-        }}
-      />
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": url + "/kebijakan",
+                    name: "Kebijakan",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </head>
       <BackHeader title="Kebijakan Privasi" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
