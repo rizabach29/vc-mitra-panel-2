@@ -38,6 +38,27 @@ export default async function sitemap() {
     }));
   }
 
+  re = await fetch(`${process.env.NEXT_API_URL}/v2/panel/blog/list`, {
+    next: {
+      revalidate: 30,
+    },
+    headers: header,
+  });
+
+  let detailBlogs: any[] = [];
+
+  if (re.ok) {
+    var result = await re.json();
+    let blogs = result.data;
+
+    detailBlogs = blogs.map((i: any) => ({
+      url: url + "/blog/" + i.slug,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.8,
+    }));
+  }
+
   var base = [
     {
       url,
@@ -83,5 +104,5 @@ export default async function sitemap() {
     },
   ];
 
-  return [...base, ...detailProducts];
+  return [...base, ...detailProducts, ...detailBlogs];
 }

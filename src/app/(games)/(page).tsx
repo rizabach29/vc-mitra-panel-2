@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
-import Script from "next/script";
 import ListCategory from "./list";
+import Head from "next/head";
 
 export const revalidate = 3600;
 
@@ -42,32 +42,33 @@ export default function Page() {
 
   return (
     <>
-      <Script
-        id=""
-        type="application/ld+json"
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                item: { "@id": url, name: "Home" },
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                item: {
-                  "@id": url + "/games",
-                  name: "Daftar Produk",
+      <head>
+        <script
+          id=""
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": url, name: "Home" },
                 },
-              },
-            ],
-          }),
-        }}
-      />
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": url + "/games",
+                    name: "Daftar Produk",
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      </head>
       <h1 className="hidden">Produk {name}</h1>
       <ListCategory />
     </>
