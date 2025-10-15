@@ -11,7 +11,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Script
         id="flash-sale-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",

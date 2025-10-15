@@ -22,7 +22,6 @@ function Page() {
       <Script
         id="edit-profile-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",

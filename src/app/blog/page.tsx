@@ -63,10 +63,10 @@ export async function generateMetadata(): Promise<Metadata> {
   var slug = split[split.length - 1];
 
   var host = headers().get("host") ?? "";
-  url = "https://" + host + "/blog/" + slug;
+  url = "https://" + host + "/blog/";
 
-  const description = `Berita Game Terbaru Hari Ini - ${name}.`;
-  const title = `Update berita game terbaru  dan terlengkap di Blog ${name}. Temukan artikel informasi, event, tips & trik seputar game ML, FF, PUBG, Roblox dan masih banyak lagi.`;
+  const title = `Berita Game Terbaru Hari Ini - ${name}.`;
+  const description = `Update berita game terbaru  dan terlengkap di Blog ${name}. Temukan artikel informasi, event, tips & trik seputar game ML, FF, PUBG, Roblox dan masih banyak lagi.`;
 
   return {
     manifest: "/api/manifest.json",
@@ -110,7 +110,6 @@ async function Page({
       <Script
         id="blog-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",

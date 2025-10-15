@@ -35,24 +35,29 @@ async function Ldjson({ appName, url }: { appName: string; url: string }) {
   return (
     <>
       <Script
-        id=""
-        strategy="beforeInteractive"
+        id="ldjson-organization"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            "@context": "http://schema.org/",
+            "@context": "https://schema.org",
             "@type": "Organization",
-            name: ` ${appName}`,
-            url: url + "/",
+            name: appName,
+            url: url,
             logo: url + "/assets/logo.png",
             contactPoint: {
               "@type": "ContactPoint",
               contactType: "customer support",
-              email: data.filter((x) => x.key === "email")[0]?.value,
-              telephone: data.filter((x) => x.key === "telephone")[0]?.value,
+              email: data.find((x) => x.key === "email")?.value || "",
+              telephone: data.find((x) => x.key === "telephone")?.value || "",
               areaServed: "ID",
               availableLanguage: ["Indonesian"],
             },
+            sameAs: data
+              .filter(
+                (item) =>
+                  item.key !== "email" && item.key !== "telephone" && item.value
+              )
+              .map((item) => item.value),
           }),
         }}
       />

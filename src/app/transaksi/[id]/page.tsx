@@ -86,7 +86,6 @@ async function DetailPage({ params }: { params: { id: string } }) {
       <Script
         id="detail-transaksi-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",

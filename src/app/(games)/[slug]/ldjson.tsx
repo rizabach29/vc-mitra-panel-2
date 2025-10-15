@@ -40,83 +40,80 @@ async function Ldjson({
     locale: id,
   });
 
-  if (product.min && product.max)
-    return (
-      <>
-        <Script
-          id=""
-          type="application/ld+json"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  item: { "@id": url, name: "Home" },
+  return (
+    <>
+      <Script
+        id="breadcrumb-ld-json"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                item: { "@id": url, name: "Home" },
+              },
+              // {
+              //   "@type": "ListItem",
+              //   position: 2,
+              //   item: {
+              //     "@id": url + "/games",
+              //     name: "Daftar Produk",
+              //   },
+              // },
+              {
+                "@type": "ListItem",
+                position: 2,
+                item: {
+                  "@id": url + "/" + category?.key,
+                  name: category?.name,
                 },
-                // {
-                //   "@type": "ListItem",
-                //   position: 2,
-                //   item: {
-                //     "@id": url + "/games",
-                //     name: "Daftar Produk",
-                //   },
-                // },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  item: {
-                    "@id": url + "/" + category?.key,
-                    name: category?.name,
-                  },
-                },
-              ],
-            }),
-          }}
-        />
-        <Script
-          id=""
-          type="application/ld+json"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "http://schema.org/",
-              "@type": "Product",
-              name: `Beli/Top Up ${
-                category?.name
-              } Termurah ${month} ${new Date().getFullYear()} | ${appName}`,
-              description: `Daftar harga voucher/top up ${
-                category?.name
-              } murah ${month} ${new Date().getFullYear()} di ${appName}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`,
-              image: category?.image_url,
-              url: url + "/" + category?.key,
-              brand: {
-                "@type": "Brand",
-                name: category?.name,
               },
-              offers: {
-                "@type": "AggregateOffer",
-                availability: "https://schema.org/InStock",
-                priceCurrency: "IDR",
-                lowPrice: product.min,
-                highPrice: product.max,
-                offerCount: product.total,
-              },
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: category?.rating ?? 5,
-                reviewCount: 6,
-                bestRating: "5",
-                worstRating: "1",
-              },
-            }),
-          }}
-        />
-      </>
-    );
+            ],
+          }),
+        }}
+      />
+      <Script
+        id="product-ld-json"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "http://schema.org/",
+            "@type": "Product",
+            name: `Beli/Top Up ${
+              category?.name
+            } Termurah ${month} ${new Date().getFullYear()} | ${appName}`,
+            description: `Daftar harga voucher/top up ${
+              category?.name
+            } murah ${month} ${new Date().getFullYear()} di ${appName}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`,
+            image: category?.image_url,
+            url: url + "/" + category?.key,
+            brand: {
+              "@type": "Brand",
+              name: category?.name,
+            },
+            offers: {
+              "@type": "AggregateOffer",
+              availability: "https://schema.org/InStock",
+              priceCurrency: "IDR",
+              lowPrice: product.min || 1000,
+              highPrice: product.max || 100000,
+              offerCount: product.total || 1,
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: category?.rating ?? 5,
+              reviewCount: 6,
+              bestRating: "5",
+              worstRating: "1",
+            },
+          }),
+        }}
+      />
+    </>
+  );
 }
 
 export default Ldjson;

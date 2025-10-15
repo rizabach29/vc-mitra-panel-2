@@ -80,7 +80,6 @@ async function Page() {
       <Script
         id="transaksi-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
