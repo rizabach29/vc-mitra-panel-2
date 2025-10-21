@@ -63,7 +63,7 @@ export async function generateMetadata(): Promise<Metadata> {
   var slug = split[split.length - 1];
 
   var host = headers().get("host") ?? "";
-  url = "https://" + host + "/blog/";
+  url = "https://" + host + "/blog";
 
   const title = `Berita Game Terbaru Hari Ini - ${name}.`;
   const description = `Update berita game terbaru  dan terlengkap di Blog ${name}. Temukan artikel informasi, event, tips & trik seputar game ML, FF, PUBG, Roblox dan masih banyak lagi.`;
