@@ -19,7 +19,7 @@ function GTM() {
     });
   }, [pathname, searchParams]);
 
-  return <GoogleTagManager gtmId="GTM-P25S2QGV" />;
+  return <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID ?? ""} />;
 }
 
 export default GTM;
