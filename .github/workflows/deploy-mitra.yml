@@ -38,7 +38,11 @@ on:
         required: true
         default: "url website"
         type: string
-
+      NEXT_PUBLIC_GTM_ID:
+        description: "GTM ID"
+        required: true
+        default: "GTM Website"
+        type: string
 env:
   NODE_ENV: "production"
   IMAGE_NAME_STG: "astrology-hub.vcg.my.id/vcgamers/staging/${{ github.event.inputs.MITRA_NAME }}"
@@ -62,6 +66,7 @@ jobs:
           echo "NEXT_API_URL=https://${{ github.event.inputs.NEXT_API_URL }}" >> .env
           echo "NEXT_URL=https://${{ github.event.inputs.NEXT_URL }}" >> .env
           echo "NODE_ENV=${{ env.NODE_ENV }}" >> .env
+          echo "NEXT_PUBLIC_GTM_ID=${{ env.NODE_ENV }}" >> .env
 
       - name: Build Docker Image
         run: |
