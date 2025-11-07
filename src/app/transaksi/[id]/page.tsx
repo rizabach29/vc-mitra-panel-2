@@ -82,8 +82,9 @@ async function DetailPage({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <Head>
+      <head>
         <script
+          id="detail-transaksi-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -115,7 +116,7 @@ async function DetailPage({ params }: { params: { id: string } }) {
             }),
           }}
         />
-      </Head>
+      </head>
       <BackHeader title="Detail Transaksi" />
       <div className="pt-4 px-2 flex w-full justify-center">
         <div className="max-w-7xl w-full flex flex-col justify-center items-center">

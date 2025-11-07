@@ -29,7 +29,7 @@ export type TransactionSetPromo = {
 };
 export type TransactionSetForm = {
   action: "SET_FORM";
-  payload: LooseObject;
+  payload?: LooseObject;
 };
 export type TransactionSetPayment = {
   action: "SET_PAYMENT_METHOD";

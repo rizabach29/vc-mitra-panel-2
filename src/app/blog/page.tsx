@@ -7,12 +7,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import Head from "next/head";
 import { headers } from "next/headers";
 import React from "react";
 import { GetCredHeader } from "../api/api-utils";
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
+import Head from "next/head";
 
 async function fetchBlogPosts(
   pageNumber = 1,
@@ -52,6 +53,45 @@ async function fetchBlogPosts(
   return response.json();
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  var logo_url = headers().get("x-logo") ?? "";
+  var keywords = headers().get("x-keywords") ?? "";
+  var name = headers().get("x-name") ?? "";
+
+  var url = headers().get("x-url") ?? "";
+  var split = url.split("/");
+  var slug = split[split.length - 1];
+
+  var host = headers().get("host") ?? "";
+  url = "https://" + host + "/blog";
+
+  const title = `Berita Game Terbaru Hari Ini - ${name}.`;
+  const description = `Update berita game terbaru  dan terlengkap di Blog ${name}. Temukan artikel informasi, event, tips & trik seputar game ML, FF, PUBG, Roblox dan masih banyak lagi.`;
+
+  return {
+    manifest: "/api/manifest.json",
+    title,
+    description,
+    keywords: keywords,
+    openGraph: {
+      images: [logo_url],
+      title,
+      url,
+      type: "website",
+    },
+    icons: {
+      icon: logo_url,
+    },
+    alternates: {
+      canonical: url,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
 async function Page({
   searchParams,
 }: {
@@ -67,8 +107,9 @@ async function Page({
 
   return (
     <>
-      <Head>
+      <head>
         <script
+          id="blog-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -92,7 +133,7 @@ async function Page({
             }),
           }}
         />
-      </Head>
+      </head>
       <BackHeader title="Blog" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
@@ -108,7 +149,7 @@ async function Page({
             </BreadcrumbList>
           </Breadcrumb>
           <div className="max-w-5xl w-full space-y-4">
-            <h1 className="text-2xl font-semibold mb-4">Blog Posts</h1>
+            <h1 className="text-2xl font-semibold mb-4">Artikel Terkini</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {blogPosts.data.map((post: any) => (
                 <div

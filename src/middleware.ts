@@ -23,6 +23,14 @@ export default async function middleware(
     res.headers.set("X-Timestamp", credentials.timestamp.toString());
     res.headers.set("Authorization", `Bearer ${token?.token}`);
 
+    if (!token) {
+      // Clear next-auth session cookie
+      res.cookies.set("next-auth.session-token", "", { maxAge: 0 });
+      res.cookies.set("__Secure-next-auth.session-token", "", {
+        maxAge: 0,
+      });
+    }
+
     return res;
   }
 
@@ -62,6 +70,8 @@ export default async function middleware(
     res.headers.set("x-logo", setting.logo_url);
     res.headers.set("x-meta-title", setting?.meta_title ?? "");
     res.headers.set("x-meta-description", setting?.meta_description ?? "");
+    res.headers.set("x-seo-title", setting?.seo_title ?? "");
+    res.headers.set("x-seo-description", setting?.seo_description ?? "");
   }
 
   if (

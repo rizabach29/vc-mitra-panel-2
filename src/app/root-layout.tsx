@@ -20,6 +20,7 @@ export default function RootTemplateLayout({
 }) {
   const [profile, setProfile] = useState<ISiteProfile>();
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   const get = async () => {
     setLoading(true);
@@ -32,6 +33,7 @@ export default function RootTemplateLayout({
   };
 
   useEffect(() => {
+    setMounted(true);
     get();
     if (
       process.env.NEXT_PUBLIC_QONTAK_ID &&
@@ -56,13 +58,45 @@ export default function RootTemplateLayout({
     }
   }, []);
 
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return null;
+  }
+
   return (
     <>
       <style
         dangerouslySetInnerHTML={{
           __html: ` :root {
                       --primary: ${HexToHSL(profile?.theme_color ?? "#000")};
-                    }`,
+                    }
+                      
+                    .article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6, .article-content ul, .article-content ol {
+                      margin-top: 20px;
+                      line-height: 1.25;
+                    }
+
+                    .article-content h1 { font-size: 1.875rem; }
+                    .article-content h2 { font-size: 1.5rem; }
+                    .article-content h3 { font-size: 1.25rem; }
+                    .article-content h4 { font-size: 1.125rem; }
+                    .article-content h5 { font-size: 1rem; }
+                    .article-content h6 { font-size: 0.875rem; }
+              
+                    .article-content p {
+                      margin-top: 8px;
+                      line-height: 1.5;
+                    }
+              
+                    .article-content li {
+                      margin-top: 2px;
+                    }
+            
+                    .article-content li.child {
+                      padding-left: 2em;
+                    }
+                  </style>
+                `,
         }}
       />
       <SessionProvider>

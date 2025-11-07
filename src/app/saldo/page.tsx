@@ -12,8 +12,8 @@ import { thousandMask } from "@/Helpers";
 import InfoTooltip from "@/components/info-tooltip";
 import { getServerSession } from "next-auth";
 import { options } from "../api/auth/[...nextauth]/options";
-import Head from "next/head";
 import { headers } from "next/headers";
+import Head from "next/head";
 
 async function Page() {
   const session = await getServerSession(options);
@@ -21,8 +21,9 @@ async function Page() {
 
   return (
     <>
-      <Head>
+      <head>
         <script
+          id="saldo-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -46,7 +47,7 @@ async function Page() {
             }),
           }}
         />
-      </Head>
+      </head>
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
           <Breadcrumb className="mb-4 hidden md:inline-flex justify-start w-full">

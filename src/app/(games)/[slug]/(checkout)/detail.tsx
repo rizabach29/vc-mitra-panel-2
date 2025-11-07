@@ -22,10 +22,10 @@ import { useSession } from "next-auth/react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { sendGTMEvent } from "@next/third-parties/google";
 import TransactionContext, {
   ITransactionContext,
 } from "@/infrastructures/context/transaction/transaction.context";
-import { sendGTMEvent } from "@next/third-parties/google";
 
 interface IDetailProp {
   isOpen: boolean;
@@ -87,11 +87,11 @@ export function Purchase({ isOpen, onOpenChange }: IDetailProp) {
     sendGTMEvent({
       event: "transaction",
       transaction: {
-        product_key: transaction.product.key,
-        category_key: transaction.category.key,
-        payment_method: transaction.payment.payment_method,
-        payment_channel: transaction.payment.payment_channel,
-        email: transaction.account?.email,
+        product_key: transaction?.product.key,
+        category_key: transaction?.category.key,
+        payment_method: transaction?.payment.payment_method,
+        payment_channel: transaction?.payment.payment_channel,
+        email: transaction?.account?.email,
       },
     });
     var data = await res.json();

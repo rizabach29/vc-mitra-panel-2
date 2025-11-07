@@ -7,6 +7,7 @@ import ProductAction from "./product-action";
 interface IProductList {
   products?: TProductItemWithTags;
   nextRef: string;
+  selected?: string | string[] | undefined;
 }
 
 function ProductList(prop: IProductList) {
@@ -37,7 +38,7 @@ function ProductList(prop: IProductList) {
                   {item.products.map((val) => (
                     <div className="h-full" key={val.key}>
                       <ProductAction nextRef={prop.nextRef} val={val}>
-                        <ProductCard data={val} />
+                        <ProductCard data={val} selected={prop.selected} />
                       </ProductAction>
                     </div>
                   ))}

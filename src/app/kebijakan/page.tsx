@@ -12,6 +12,7 @@ import { ISiteProfile } from "@/types/utils";
 import BackHeader from "@/components/header/back-header";
 import Head from "next/head";
 import { headers } from "next/headers";
+import { Metadata } from "next";
 
 const getData = async () => {
   const credentialHeader = GetCredHeader();
@@ -36,14 +37,50 @@ const getData = async () => {
   return undefined;
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  var url = headers().get("host") ?? "";
+  url = "https://" + url;
+  var logo_url = headers().get("x-logo") ?? "";
+  var keywords = headers().get("x-keywords") ?? "";
+  var name = headers().get("x-name") ?? "";
+  var meta_title = headers().get("x-meta-title") ?? "";
+  var meta_description = headers().get("x-meta-description") ?? "";
+
+  return {
+    manifest: "/api/manifest.json",
+    title: `Kebijakan - ${name}`,
+    description:
+      meta_description ??
+      `${name} tempat top up game termurah & beli voucher game terlengkap. Cuma di ${name} top up ML, HoK, FF, PUBG & lainnya jadi makin mudah dan cepat`,
+    keywords: keywords,
+    openGraph: {
+      images: [logo_url],
+      title: `Kebijakan - ${name}`,
+      url,
+      type: "website",
+    },
+    icons: {
+      icon: logo_url,
+    },
+    alternates: {
+      canonical: url,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
 async function Page() {
   var data: ISiteProfile | undefined = await getData();
   var url = headers().get("host") ?? "";
 
   return (
     <>
-      <Head>
+      <head>
         <script
+          id="kebijakan-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -67,7 +104,7 @@ async function Page() {
             }),
           }}
         />
-      </Head>
+      </head>
       <BackHeader title="Kebijakan Privasi" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
@@ -86,12 +123,13 @@ async function Page() {
             <div className="bg-background rounded-lg p-4 w-full">
               <div className="w-full space-y-4">
                 <div className="bg-background rounded-lg w-full hidden md:block">
-                  <h3 className="font-semibold text-primary">
+                  <h1 className="font-semibold text-primary">
                     Kebijakan Privasi
-                  </h3>
+                  </h1>
                 </div>
                 {data ? (
                   <div
+                    className="article-content"
                     dangerouslySetInnerHTML={{
                       __html: data?.privacy_policy,
                     }}

@@ -16,7 +16,7 @@ function ProductCardDetail(props: prop) {
       className={`min-h-[4.2rem] overflow-clip flex items-center p-2 relative h-full bg-white hover:bg-slate-50 rounded-xl cursor-pointer`}
     >
       {props.discountedPrice ? (
-        <div className="absolute right-0 top-0 py-0.5 px-1 bg-amber-300 rounded-bl-lg">
+        <div className="absolute right-0 top-0 py-0.5 px-1 text-black bg-amber-300 rounded-bl-lg">
           <p className="font-bold text-xs">
             {Math.ceil(
               ((props.price - props.discountedPrice) / props.price) * 100
@@ -28,7 +28,7 @@ function ProductCardDetail(props: prop) {
       <div className="p-0 flex flex-col m-0">
         <div className="flex h-full items-start">
           <div className="w-full pl-1 ">
-            <h4 className={`text-xs font-semibold`}>{props.name}</h4>
+            <h3 className={`text-xs font-semibold`}>{props.name}</h3>
             <div className="flex justify-between items-end">
               {props.discountedPrice && props.discountedPrice > 0 ? (
                 <div className="md:flex items-center gap-1">

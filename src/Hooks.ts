@@ -21,7 +21,10 @@ export const useCountdown = (
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCountDown(countDownDate - new Date().getTime());
+      const target = new Date(targetDate);
+      const now = new Date();
+      const diff = target.getTime() - now.getTime();
+      setCountDown(diff > 0 ? diff : 0);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -44,9 +47,9 @@ const getReturnValues = (countDown: number): ICountdownResponse => {
 
   return {
     days,
-    hours: (hours + days * 24).toString().padStart(2, "0"),
-    minutes: minutes.toString().padStart(2, "0"),
-    seconds: seconds.toString().padStart(2, "0"),
+    hours: (hours + days * 24).toString(),
+    minutes: minutes.toString(),
+    seconds: seconds.toString(),
     isExpired,
   };
 };

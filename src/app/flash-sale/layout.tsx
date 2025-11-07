@@ -7,8 +7,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Head>
+      <head>
         <script
+          id="flash-sale-schema"
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
@@ -32,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             }),
           }}
         />
-      </Head>
+      </head>
       {children}
     </>
   );

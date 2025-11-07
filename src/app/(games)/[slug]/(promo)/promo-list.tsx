@@ -114,6 +114,28 @@ function Promo({ categoryUuid }: { categoryUuid: string }) {
   }, [data.product, categoryUuid]);
 
   const selectPromo = (promo?: IPromo) => {
+    if (promo) {
+      let price = data?.product?.discounted_price || data?.product?.price || 0;
+      let discount = promo.discount_amount ?? promo.discount_percent * price;
+      let totalPrice = price - discount;
+
+      if (totalPrice < promo.minimal_amount) {
+        toast({
+          title: "Promo Tidak Valid",
+          description: "Promo tidak memenuhi syarat minimal.",
+          variant: "destructive",
+        });
+        return;
+      } else if (discount > promo.maximum_discount_amount) {
+        toast({
+          title: "Promo Tidak Valid",
+          description: "Promo melebihi syarat maksimal.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     setSelectedPromo(promo);
     onPromoSelected(promo);
     setOpen(false);
@@ -130,8 +152,12 @@ function Promo({ categoryUuid }: { categoryUuid: string }) {
         />
       ) : (
         <div
-          onClick={() => setOpen(true)}
-          className="rounded-full cursor-pointer hover:bg-zinc-50 py-1.5 px-4 border-2 flex justify-between items-center"
+          onClick={() => data.product?.key && categoryUuid && setOpen(true)}
+          className={`rounded-full ${
+            !data.product?.key || !categoryUuid
+              ? "cursor-not-allowed"
+              : "cursor-pointer"
+          } hover:bg-zinc-50 py-1.5 px-4 border-2 flex justify-between items-center`}
         >
           <p className="p-0 m-0 text-sm">Pilih Promo</p>
           <ChevronRightIcon />

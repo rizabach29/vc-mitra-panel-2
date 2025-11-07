@@ -149,12 +149,19 @@ function FormAccount({ forms, isCheckRequired, isPostpaid }: Prop) {
           const resData = await res.json();
           if (resData.data.is_valid) {
             setNickName(resData.data.nickname);
-          } else
+          } else {
             toast({
               title: "Failed",
               description: "Akun tidak ditemukan",
               variant: "destructive",
             });
+            setCheckIdLoading(false);
+            dispatch({
+              action: "SET_FORM",
+              payload: undefined,
+            });
+            return;
+          }
         }
 
         setCheckIdLoading(false);

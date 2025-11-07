@@ -32,6 +32,18 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
       // style={{ backgroundImage: 'url("/assets/illustration/v1/footer.svg")' }}
       className="bg-no-repeat bg-right bg-background w-full"
     >
+      {profile?.seo_description ? (
+        <div
+          className="pt-4 px-4 md:px-14 md:container article-content"
+          dangerouslySetInnerHTML={{ __html: profile?.seo_description }}
+        ></div>
+      ) : (
+        <p className="pt-4 px-4 md:px-14 md:container">
+          {profile?.name} tempat top up game termurah & beli voucher game
+          terlengkap. Cuma di {profile?.name} top up ML, HoK, FF, PUBG & lainnya
+          jadi makin mudah dan cepat
+        </p>
+      )}
       {true ? (
         <>
           {!path.includes("/transaksi/") &&
@@ -58,7 +70,7 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
                             {profile.name} - {profile.title}
                           </p>
                           <p
-                            className="text-muted-foreground text-xs leading-5"
+                            className="text-muted-foreground text-xs leading-5 article-content"
                             dangerouslySetInnerHTML={{
                               __html: profile?.description,
                             }}
@@ -174,7 +186,7 @@ function Footer({ profile }: { profile?: ISiteProfile }) {
                           {profile.name} - {profile.title}
                         </p>
                         <p
-                          className="text-muted-foreground text-xs leading-5"
+                          className="text-muted-foreground text-xs leading-5 article-content"
                           dangerouslySetInnerHTML={{
                             __html: profile?.description,
                           }}

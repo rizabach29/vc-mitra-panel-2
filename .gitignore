@@ -15,7 +15,7 @@
 
 # production
 /build
-.env*
+.env
 .env.development
 .env.production
 

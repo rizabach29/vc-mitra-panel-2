@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import RootTemplateLayout from "./root-layout";
 import Loading from "./loading";
 import GTM from "./gtm";
@@ -21,9 +20,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-repeat antialiased bg-zinc-50">
-        <Suspense fallback={<Loading />}>
-          <RootTemplateLayout>{children}</RootTemplateLayout>
-        </Suspense>
+        <RootTemplateLayout>{children}</RootTemplateLayout>
         <GTM />
       </body>
     </html>

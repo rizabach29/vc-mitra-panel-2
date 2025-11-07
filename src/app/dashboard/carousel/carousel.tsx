@@ -14,7 +14,15 @@ import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-function CarouselV2({ data, name }: { data: IBanner[]; name: string }) {
+function CarouselV2({
+  data,
+  name,
+  title,
+}: {
+  data: IBanner[];
+  name: string;
+  title: string;
+}) {
   const router = useRouter();
 
   const onClickItem = (item: IBanner) => {
@@ -63,8 +71,7 @@ function CarouselV2({ data, name }: { data: IBanner[]; name: string }) {
                 <Image
                   key={index}
                   src={item.image_url}
-                  alt={`promo diskon/cashback ${name}`}
-                  title={`promo diskon/cashback ${name}`}
+                  alt={item.name ?? title}
                   height={2000}
                   width={6000}
                   style={{ aspectRatio: 3 / 1 }}

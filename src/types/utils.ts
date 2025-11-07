@@ -40,6 +40,8 @@ export interface IBlogDetail {
   banner_url: string;
   content: string;
   created_at: string;
+  meta_title: string;
+  meta_description: string;
 }
 
 export interface ISosmed {
@@ -59,6 +61,8 @@ export interface ISiteProfile {
   privacy_policy: string;
   theme_color: string;
   manifest: any;
+  seo_title: string;
+  seo_description: string;
   meta_title?: string;
   meta_description?: string;
 }

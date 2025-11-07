@@ -78,7 +78,7 @@ function PromoDetail({
                     alt={promo.name}
                   />
                   <div
-                    className="text-xs text-muted-foreground"
+                    className="text-xs text-muted-foreground article-content"
                     dangerouslySetInnerHTML={{
                       __html: promo?.description,
                     }}

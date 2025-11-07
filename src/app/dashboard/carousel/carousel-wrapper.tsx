@@ -22,11 +22,17 @@ async function getData() {
   return result.data;
 }
 
-const CarouselWrapper = async ({ name }: { name: string }) => {
+const CarouselWrapper = async ({
+  name,
+  title,
+}: {
+  name: string;
+  title: string;
+}) => {
   var banners: IBanner[] = await getData();
 
   if (banners && banners.length > 0) {
-    return <Carousel data={banners} name={name} />;
+    return <Carousel data={banners} name={name} title={title} />;
   }
 };
 

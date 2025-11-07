@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { GetCredHeader } from "../../api/api-utils";
-import { IBannerDetail, IBlogDetail } from "@/types/utils";
+import { IBlogDetail } from "@/types/utils";
 import BackHeader from "@/components/header/back-header";
 import { headers } from "next/headers";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import { Metadata } from "next";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import { notFound } from "next/navigation";
+import Head from "next/head";
 
 const getData = async (id: string) => {
   const credentialHeader = GetCredHeader();
@@ -56,23 +57,25 @@ export async function generateMetadata(): Promise<Metadata> {
   var keywords = headers().get("x-keywords") ?? "";
   var name = headers().get("x-name") ?? "";
 
-  var banner: IBannerDetail | undefined = undefined;
+  var blog: IBlogDetail | undefined = undefined;
   var url = headers().get("x-url") ?? "";
   var split = url.split("/");
   var slug = split[split.length - 1];
 
   var host = headers().get("host") ?? "";
-  url = "https://" + host + "/banner/" + slug;
+  url = "https://" + host + "/blog/" + slug;
 
-  banner = await getData(slug);
+  blog = await getData(slug);
 
   const date = new Date();
   const month = format(new Date(date), "MMMM", {
     locale: id,
   });
 
-  const description = `Daftar harga voucher/top up termurah ${month} ${date.getFullYear()} di ${name}. Transaksi cepat, aman, dan banyak pilihan metode pembayaran.`;
-  const title = `Beli/Top Up Termurah ${month} ${date.getFullYear()} | ${name}`;
+  const title = blog?.meta_title ?? `Terbaru Hari Ini - ${name}.`;
+  const description =
+    blog?.meta_description ??
+    `Update berita game terbaru  dan terlengkap di Blog ${name}. Temukan artikel informasi, event, tips & trik seputar game ML, FF, PUBG, Roblox dan masih banyak lagi.`;
 
   return {
     manifest: "/api/manifest.json",
@@ -80,7 +83,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description,
     keywords: keywords,
     openGraph: {
-      images: [banner?.image_url || logo_url],
+      images: [blog?.banner_url || logo_url],
       title,
       url,
       type: "website",
@@ -99,11 +102,85 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function Page({ params }: { params: { id: string } }) {
-  var data: IBlogDetail = await getData(params.id);
+  var name = headers().get("x-name") ?? "";
+  var host = headers().get("host") ?? "";
+  var logo = headers().get("x-logo") ?? "";
+
+  // fetch data
+  var res = await getData(params.id);
+  var data: IBlogDetail | undefined = res;
   if (!data) return notFound();
 
   return (
     <>
+      <head>
+        <script
+          id="breadcrumb-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  item: { "@id": `https://${host}`, name: "Home" },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  item: {
+                    "@id": `https://${host}/blog`,
+                    name: "Blog",
+                  },
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  item: {
+                    "@id": `https://${host}/blog/${data.slug}`,
+                    name: data.title,
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+        <script
+          id="blog-posts-schema"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Article",
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": "diisi dengan url artikel terkait",
+              },
+              headline: data.title,
+              description: data.meta_description,
+              image: data.banner_url,
+              author: {
+                "@type": "Person",
+                name,
+                url: `https://${host}`,
+              },
+              publisher: {
+                "@type": "Organization",
+                name,
+                logo: {
+                  "@type": "ImageObject",
+                  url: logo,
+                },
+              },
+              datePublished: new Date(data.created_at).toISOString(),
+              articleSection: "Berita Game",
+              url: `https://${host}/blog/${data.slug}`,
+            }),
+          }}
+        />
+      </head>
       <BackHeader title="Blog" />
       <div className="flex justify-center w-full px-2">
         <div className="max-w-7xl w-full md:mt-4 mb-4 flex flex-col justify-center items-center">
@@ -148,7 +225,7 @@ async function Page({ params }: { params: { id: string } }) {
                 </div>
                 {data ? (
                   <div
-                    className="mt-8"
+                    className="mt-8 article-content"
                     dangerouslySetInnerHTML={{
                       __html: data?.content,
                     }}
